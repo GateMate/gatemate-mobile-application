@@ -94,10 +94,35 @@ class _HomePageState extends State<HomePage> {
             },
           ),
           ListTile(
-            title: const Text('Settings'),
+            title: const Text('Action Center'),
             onTap: () {
               // Update the state of the app
               // ...
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const ActionCenterRoute()),
+              );
+              // Then close the drawer
+              // Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            title: const Text('Add Gate'),
+            onTap: () {
+              // Update the state of the app
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const AddGateRoute()),
+              );
+              // Then close the drawer
+              // Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            title: const Text('Settings'),
+            onTap: () {
+              // Update the state of the app
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const SettingsRoute()),
@@ -133,6 +158,48 @@ class SettingsRoute extends StatelessWidget {
             Navigator.pop(context);
           },
           child: const Text('Go back!'),
+        ),
+      ),
+    );
+  }
+}
+
+class ActionCenterRoute extends StatelessWidget {
+  const ActionCenterRoute({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Action Center'),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text('Action center'),
+        ),
+      ),
+    );
+  }
+}
+
+class AddGateRoute extends StatelessWidget {
+  const AddGateRoute({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Add Gate'),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text('adding a gate'),
         ),
       ),
     );
