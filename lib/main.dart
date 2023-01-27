@@ -85,21 +85,25 @@ class _HomePageState extends State<HomePage> {
             child: Text('Drawer Header'),
           ),
           ListTile(
-            title: const Text('Item 1'),
+            title: const Text('Home'),
             onTap: () {
               // Update the state of the app
-              // ...
+
               // Then close the drawer
               Navigator.pop(context);
             },
           ),
           ListTile(
-            title: const Text('Item 2'),
+            title: const Text('Settings'),
             onTap: () {
               // Update the state of the app
               // ...
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const SettingsRoute()),
+              );
               // Then close the drawer
-              Navigator.pop(context);
+              // Navigator.pop(context);
             },
           ),
         ],
@@ -114,6 +118,26 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
+class SettingsRoute extends StatelessWidget {
+  const SettingsRoute({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Settings'),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text('Go back!'),
+        ),
+      ),
+    );
+  }
+}
 // class ExampleCounterPage extends StatelessWidget {
 //   const ExampleCounterPage({super.key});
 
