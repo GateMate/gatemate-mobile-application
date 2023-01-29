@@ -113,16 +113,7 @@ class _FieldSelectionDropdown extends State<FieldSelectionDropdown> {
   Widget build(BuildContext context) {
     return DropdownButton<String>(
       value: dropdownValue,
-
-      items: fieldNamesPlaceholder.map<DropdownMenuItem<String>>(
-        (String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-          );
-        }
-      ).toList(),
-
+      items: _mapDropdownMenuItems(fieldNamesPlaceholder),
       onChanged: (String? value) {
         setState(() {
           dropdownValue = value ?? fieldNamesPlaceholder.first;
@@ -147,16 +138,7 @@ class _NotificationSettingDropdown extends State<NotificationSettingDropdown> {
   Widget build(BuildContext context) {
     return DropdownButton(
       value: dropdownValue,
-
-      items: _notificationOptionsPlaceholder.map<DropdownMenuItem<String>>(
-        (String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-          );
-        }
-      ).toList(),
-
+      items: _mapDropdownMenuItems(_notificationOptionsPlaceholder),
       onChanged: (String? value) {
         setState(() {
           dropdownValue = value ?? _notificationOptionsPlaceholder.first;
@@ -164,4 +146,18 @@ class _NotificationSettingDropdown extends State<NotificationSettingDropdown> {
       },
     );
   }
+}
+
+// Takes a list of strings meant to be dropdown menu options and returns
+// a list of dropdown menu items, which can be given as the `items` parameter
+// to a `DropdownButton`.
+List<DropdownMenuItem<String>> _mapDropdownMenuItems(List<String> items) {
+  return items.map<DropdownMenuItem<String>>(
+    (String value) {
+      return DropdownMenuItem<String>(
+        value: value,
+        child: Text(value),
+      );
+    }
+  ).toList();
 }
