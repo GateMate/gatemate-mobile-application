@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'action_center/action_center_view.dart' show ActionCenterRoute;
 import 'add_gate/add_gate_view.dart' show AddGateRoute;
 import 'settings/settings_view.dart' show SettingsRoute;
+import 'gate_management/gate_management_view.dart' show GateManagementRoute;
 
 void main() {
   runApp(const GateMateApp());
@@ -35,11 +36,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
+      appBar: AppBar(title: Text(widget.title)),
       body: const Placeholder(), // TODO
-      drawer: const Drawer(
+      drawer: Drawer(
         child: NavigationDrawer(),
       ),
     );
@@ -71,14 +70,27 @@ class NavigationDrawer extends StatelessWidget {
           },
         ),
         ListTile(
+          title: const Text('Gate Management'),
+          onTap: () {
+            // Update the state of the app
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => GateManagementRoute()),
+            );
+            // Then close the drawer
+            // Navigator.pop(context);
+          },
+        ),
+        ListTile(
           title: const Text('Action Center'),
           onTap: () {
             // Update the state of the app
             // ...
+            Navigator.pop(context);
             Navigator.push(
               context,
-              MaterialPageRoute(
-                  builder: (context) => const ActionCenterRoute()),
+              MaterialPageRoute(builder: (context) => ActionCenterRoute()),
             );
             // Then close the drawer
             // Navigator.pop(context);
@@ -88,6 +100,7 @@ class NavigationDrawer extends StatelessWidget {
           title: const Text('Add Gate'),
           onTap: () {
             // Update the state of the app
+            Navigator.pop(context);
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => AddGateRoute()),
@@ -100,6 +113,7 @@ class NavigationDrawer extends StatelessWidget {
           title: const Text('Settings'),
           onTap: () {
             // Update the state of the app
+            Navigator.pop(context);
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const SettingsRoute()),
