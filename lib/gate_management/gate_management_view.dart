@@ -23,11 +23,12 @@ class GateManagementRoute extends StatelessWidget {
             point: markerPosition,
             width: 40,
             height: 40,
-            builder: (_) => const Icon(Icons.location_on, size: 40),
+            builder: (_) => const Icon(Icons.roller_shades_outlined, size: 40),
             anchorPos: AnchorPos.align(AnchorAlign.top),
           ),
         )
         .toList();
+
     return Scaffold(
         appBar: AppBar(title: Text('Gate Management')),
         body: Container(
@@ -58,23 +59,6 @@ class GateManagementRoute extends StatelessWidget {
                       ExamplePopup(marker),
                 ),
               ),
-              // MarkerLayer(
-              //   markers: [
-              //     Marker(
-              //       width: 30.0,
-              //       height: 30.0,
-              //       point: LatLng(36.083, -94.216),
-              //       builder: (ctx) => Container(
-              //           child: Container(
-              //         child: Icon(
-              //           Icons.roller_shades_outlined,
-              //           color: Colors.blueAccent,
-              //           size: 40,
-              //         ),
-              //       )),
-              //     ),
-              //   ],
-              // ),
             ])));
   }
 }

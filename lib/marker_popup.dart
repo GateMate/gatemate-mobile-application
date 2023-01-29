@@ -1,3 +1,7 @@
+//used https://github.com/rorystephenson/flutter_map_marker_popup/blob/master/example/lib/example_popup.dart
+
+// import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 
@@ -11,28 +15,29 @@ class ExamplePopup extends StatefulWidget {
 }
 
 class _ExamplePopupState extends State<ExamplePopup> {
-  final List<IconData> _icons = [
-    Icons.star_border,
-    Icons.star_half,
-    Icons.star
-  ];
-  int _currentIcon = 0;
-
   @override
   Widget build(BuildContext context) {
     return Card(
       child: InkWell(
-        onTap: () => setState(() {
-          _currentIcon = (_currentIcon + 1) % _icons.length;
-        }),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(left: 20, right: 10),
-              child: Icon(_icons[_currentIcon]),
-            ),
             _cardDescription(context),
+            IconButton(
+              icon: Icon(Icons.arrow_upward),
+              onPressed: () {
+                print("ion button");
+              },
+              tooltip: "Raise Gates",
+            ),
+            IconButton(
+              padding: EdgeInsets.zero,
+              icon: Icon(Icons.arrow_downward),
+              onPressed: () {
+                print("ion button");
+              },
+              tooltip: "Lower Gates",
+            ),
           ],
         ),
       ),
@@ -50,7 +55,7 @@ class _ExamplePopupState extends State<ExamplePopup> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             const Text(
-              'Popup for a marker!',
+              'Gate Information',
               overflow: TextOverflow.fade,
               softWrap: false,
               style: TextStyle(
@@ -64,7 +69,7 @@ class _ExamplePopupState extends State<ExamplePopup> {
               style: const TextStyle(fontSize: 12.0),
             ),
             Text(
-              'Marker size: ${widget.marker.width}, ${widget.marker.height}',
+              'Current Water Levels:',
               style: const TextStyle(fontSize: 12.0),
             ),
           ],
