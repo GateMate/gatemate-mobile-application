@@ -90,7 +90,7 @@ class NavigationDrawer extends StatelessWidget {
             // Update the state of the app
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const AddGateRoute()),
+              MaterialPageRoute(builder: (context) => AddGateRoute()),
             );
             // Then close the drawer
             // Navigator.pop(context);
