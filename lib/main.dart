@@ -73,7 +73,7 @@ class NavigationDrawer extends StatelessWidget {
           title: const Text('Gate Management'),
           onTap: () {
             // Update the state of the app
-            Navigator.pop(context);
+            // Navigator.pop(context);
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => GateManagementRoute()),
@@ -87,7 +87,7 @@ class NavigationDrawer extends StatelessWidget {
           onTap: () {
             // Update the state of the app
             // ...
-            Navigator.pop(context);
+            // Navigator.pop(context);
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => ActionCenterRoute()),
@@ -100,7 +100,7 @@ class NavigationDrawer extends StatelessWidget {
           title: const Text('Add Gate'),
           onTap: () {
             // Update the state of the app
-            Navigator.pop(context);
+            // Navigator.pop(context);
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => AddGateRoute()),
@@ -113,7 +113,7 @@ class NavigationDrawer extends StatelessWidget {
           title: const Text('Settings'),
           onTap: () {
             // Update the state of the app
-            Navigator.pop(context);
+            // Navigator.pop(context);
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const SettingsRoute()),
