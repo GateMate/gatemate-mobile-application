@@ -4,6 +4,11 @@
         android:label="gatemate_mobile"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
+        <uses-permission android:name="android.permission.INTERNET"/>
+
+        <!-- <meta-data android:name="com.mapbox.token" android:value="pk.eyJ1IjoiY3BhdHRvbiIsImEiOiJjbGRpODF1ODkwMWFpM3BvaDBhOWRyYWgzIn0.oW6om9jo0s-ZWAWcLiuaRw" /> -->
+        
         <activity
             android:name=".MainActivity"
             android:exported="true"
