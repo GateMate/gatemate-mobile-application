@@ -35,7 +35,6 @@ class GateManagementRoute extends StatelessWidget {
             child: FlutterMap(
                 options: MapOptions(
                     center: LatLng(36.06, -94.16),
-                    zoom: 10,
                     onTap: (_, __) => _popupController.hideAllPopups()),
                 nonRotatedChildren: [
               AttributionWidget.defaultWidget(
@@ -45,9 +44,10 @@ class GateManagementRoute extends StatelessWidget {
             ],
                 children: [
               TileLayer(
-                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                userAgentPackageName: 'com.example.app',
-              ),
+                  urlTemplate: 'https://tile.opentopomap.org/{z}/{x}/{y}.png',
+                  userAgentPackageName: 'com.example.app',
+                  maxNativeZoom: 19, // OSM max available zoom is at 19.
+                  maxZoom: 22),
               PopupMarkerLayerWidget(
                 options: PopupMarkerLayerOptions(
                   popupController: _popupController,

@@ -40,6 +40,8 @@ dependencies:
   latlong2: ^0.8.1
   flutter_map_marker_cluster: any
   flutter_map: any
+  flutter_map_marker_popup: ^4.0.0
+  mapbox_gl: ^0.16.0
 
 dev_dependencies:
   flutter_test:
