@@ -21,23 +21,25 @@ class ActionCenterRoute extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Action Center'),
       ),
-      body: Container(
-        color: theme.colorScheme.secondaryContainer,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
-          child: ListView.builder(
-            itemCount: actionItems.length,
-            itemBuilder: (context, index) {
-              return Card(
-                color: theme.colorScheme.primaryContainer,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(actionItems[index], style: style),
-                ),
-              );
-            },
-          ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
+        child: ListView.builder(
+          itemCount: actionItems.length,
+          itemBuilder: (context, index) {
+            return Card(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(actionItems[index], style: style),
+              ),
+            );
+          },
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // TODO: Schedule action
+        },
+        child: Icon(Icons.add_rounded, color: theme.colorScheme.onTertiary),
       ),
     );
   }

@@ -14,12 +14,24 @@ class GateMateApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    var colorScheme = ColorScheme.fromSeed(
+      seedColor: Colors.green[400] ?? Colors.green,
+    );
+
     return MaterialApp(
       title: appTitle,
       home: const HomePage(title: appTitle),
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.green[700] ?? Colors.green
+        colorScheme: colorScheme,
+        cardTheme: CardTheme(
+          color: Colors.lightBlueAccent[100],
+          elevation: 2,
+        ),
+        scaffoldBackgroundColor: colorScheme.secondaryContainer,
+        backgroundColor: colorScheme.secondaryContainer,
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+          backgroundColor: colorScheme.tertiary,
         ),
       ),
     );
