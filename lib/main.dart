@@ -28,11 +28,11 @@ class GateMateApp extends StatelessWidget {
           color: Colors.lightBlueAccent[100],
           elevation: 2,
         ),
-        scaffoldBackgroundColor: colorScheme.secondaryContainer,
-        backgroundColor: colorScheme.secondaryContainer,
         floatingActionButtonTheme: FloatingActionButtonThemeData(
           backgroundColor: colorScheme.tertiary,
         ),
+        backgroundColor: colorScheme.secondaryContainer,
+        scaffoldBackgroundColor: colorScheme.secondaryContainer,
       ),
     );
   }

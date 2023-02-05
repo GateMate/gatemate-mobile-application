@@ -39,7 +39,11 @@ class ActionCenterRoute extends StatelessWidget {
         onPressed: () {
           // TODO: Schedule action
         },
-        child: Icon(Icons.add_rounded, color: theme.colorScheme.onTertiary),
+        child: Icon(
+          Icons.add_rounded,
+          color: theme.colorScheme.onTertiary,
+          size: 36,
+        ),
       ),
     );
   }
