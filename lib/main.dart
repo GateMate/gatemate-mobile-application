@@ -14,9 +14,26 @@ class GateMateApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+
+    var colorScheme = ColorScheme.fromSeed(
+      seedColor: Colors.green[400] ?? Colors.green,
+    );
+
+    return MaterialApp(
       title: appTitle,
-      home: HomePage(title: appTitle),
+      home: const HomePage(title: appTitle),
+      theme: ThemeData(
+        colorScheme: colorScheme,
+        cardTheme: CardTheme(
+          color: Colors.lightBlueAccent[100],
+          elevation: 2,
+        ),
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+          backgroundColor: colorScheme.tertiary,
+        ),
+        backgroundColor: colorScheme.secondaryContainer,
+        scaffoldBackgroundColor: colorScheme.secondaryContainer,
+      ),
     );
   }
 }
@@ -56,11 +73,11 @@ class NavigationDrawer extends StatelessWidget {
       // Important: Remove any padding from the ListView.
       padding: EdgeInsets.zero,
       children: [
-        const DrawerHeader(
+        DrawerHeader(
           decoration: BoxDecoration(
-            color: Colors.blue,
+            color: Theme.of(context).colorScheme.primary,
           ),
-          child: Text('Drawer Header'),
+          child: const Text('Drawer Header'),
         ),
         ListTile(
           title: const Text('Home'),
