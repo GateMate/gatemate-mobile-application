@@ -14,28 +14,18 @@ class SettingsRoute extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Settings'),
       ),
-      body: const Center(
-        child: SettingsPageBody(),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const [
+          FieldSelectionRow(),
+          SizedBox(height: 20),
+          // TODO: The way this row is structured could be improved
+          WaterLevelRow(),
+          SizedBox(height: 20),
+          NotificationSettingsRow(),
+          // TODO: User login options (sign out, etc.)
+        ],
       ),
-    );
-  }
-}
-
-class SettingsPageBody extends StatelessWidget {
-  const SettingsPageBody({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
-        FieldSelectionRow(),
-        SizedBox(height: 20),
-        // TODO: The way this row is structured could be improved
-        WaterLevel(),
-        SizedBox(height: 20),
-        NotificationSettingDropdown(),
-      ],
     );
   }
 }
@@ -47,12 +37,15 @@ class FieldSelectionRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    var theme = Theme.of(context);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const FieldSelectionDropdown(),
         IconButton(
-          icon: const Icon(Icons.add_rounded),
+          icon: Icon(Icons.add_circle, color: theme.colorScheme.primary,),
           onPressed: () {
             // TODO
             print('DEBUG: Add field button pressed!');
@@ -63,8 +56,8 @@ class FieldSelectionRow extends StatelessWidget {
   }
 }
 
-class WaterLevel extends StatelessWidget {
-  const WaterLevel({
+class WaterLevelRow extends StatelessWidget {
+  const WaterLevelRow({
     Key? key,
   }) : super(key: key);
 
@@ -98,6 +91,26 @@ class WaterLevel extends StatelessWidget {
   }
 }
 
+class NotificationSettingsRow extends StatelessWidget {
+  const NotificationSettingsRow({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: const [
+        Padding(
+          padding: EdgeInsets.only(right: 12.0),
+          child: Text('Notification Settings:'),  // TODO: Beautify text
+        ),
+        NotificationSettingDropdown(),
+      ],
+    );
+  }
+}
+
 class FieldSelectionDropdown extends StatefulWidget {
   const FieldSelectionDropdown({super.key});
 
@@ -107,10 +120,13 @@ class FieldSelectionDropdown extends StatefulWidget {
 
 class _FieldSelectionDropdown extends State<FieldSelectionDropdown> {
 
-  String dropdownValue = fieldNamesPlaceholder.first;
+  var dropdownValue = fieldNamesPlaceholder.first;
 
   @override
   Widget build(BuildContext context) {
+
+    var theme = Theme.of(context);
+
     return DropdownButton<String>(
       value: dropdownValue,
       items: _mapDropdownMenuItems(fieldNamesPlaceholder),
@@ -119,6 +135,11 @@ class _FieldSelectionDropdown extends State<FieldSelectionDropdown> {
           dropdownValue = value ?? fieldNamesPlaceholder.first;
         });
       },
+      iconSize: 28,
+      underline: Container(
+        height: 2,
+        color: theme.colorScheme.primary,
+      ),
     );
   }
 }
@@ -136,6 +157,9 @@ class _NotificationSettingDropdown extends State<NotificationSettingDropdown> {
 
   @override
   Widget build(BuildContext context) {
+
+    var theme = Theme.of(context);
+
     return DropdownButton(
       value: dropdownValue,
       items: _mapDropdownMenuItems(_notificationOptionsPlaceholder),
@@ -144,6 +168,11 @@ class _NotificationSettingDropdown extends State<NotificationSettingDropdown> {
           dropdownValue = value ?? _notificationOptionsPlaceholder.first;
         });
       },
+      iconSize: 28,
+      underline: Container(
+        height: 2,
+        color: theme.colorScheme.primary,
+      ),
     );
   }
 }
