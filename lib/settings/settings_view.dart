@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gatemate_mobile/model/fields_view_model.dart';
 import 'package:provider/provider.dart';
 
-// TODO: Consider replacing with an Enum or Dart equivalent
+// TODO: Consider replacing with an Enum
 List<String> _notificationOptionsPlaceholder = ['Low', 'Med', 'High'];
 
 class SettingsRoute extends StatelessWidget {
@@ -40,7 +40,6 @@ class FieldSelectionRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     // TODO: Pass this to widget builders instead of doing this each time
     var theme = Theme.of(context);
 
@@ -49,7 +48,10 @@ class FieldSelectionRow extends StatelessWidget {
       children: [
         const FieldSelectionDropdown(),
         IconButton(
-          icon: Icon(Icons.add_circle, color: theme.colorScheme.primary,),
+          icon: Icon(
+            Icons.add_circle,
+            color: theme.colorScheme.primary,
+          ),
           onPressed: () {
             // TODO
             print('DEBUG: Add field button pressed!');
@@ -107,7 +109,7 @@ class NotificationSettingsRow extends StatelessWidget {
       children: const [
         Padding(
           padding: EdgeInsets.only(right: 12.0),
-          child: Text('Notification Settings:'),  // TODO: Beautify text
+          child: Text('Notification Settings:'), // TODO: Beautify text
         ),
         NotificationSettingDropdown(),
       ],
@@ -115,34 +117,21 @@ class NotificationSettingsRow extends StatelessWidget {
   }
 }
 
-class FieldSelectionDropdown extends StatefulWidget {
+class FieldSelectionDropdown extends StatelessWidget {
   const FieldSelectionDropdown({super.key});
 
   @override
-  State<FieldSelectionDropdown> createState() => _FieldSelectionDropdown();
-}
-
-class _FieldSelectionDropdown extends State<FieldSelectionDropdown> {
-
-  // TODO: This does not exactly result in desired behavior
-  // FIX: Store separate `selected field` variable in view-model
-
-  // var dropdownValue = fieldNamesPlaceholder.first;
-  String? dropdownValue;
-
-  @override
   Widget build(BuildContext context) {
-
-    var fieldsList = context.watch<FieldsViewModel>().fieldNamesPlaceholder;
     var theme = Theme.of(context);
+    var fieldsViewModel = context.watch<FieldsViewModel>();
 
     return DropdownButton<String>(
-      value: dropdownValue,
-      items: _mapDropdownMenuItems(fieldsList),
+      value: fieldsViewModel.currentFieldSelection,
+      items: _mapSetToDropdownMenu(fieldsViewModel.fieldNamesPlaceholder),
       onChanged: (String? value) {
-        setState(() {
-          dropdownValue = value ?? fieldsList.first;
-        });
+        if (value != null) {
+          fieldsViewModel.selectField(value);
+        }
       },
       iconSize: 28,
       underline: Container(
@@ -157,21 +146,20 @@ class NotificationSettingDropdown extends StatefulWidget {
   const NotificationSettingDropdown({super.key});
 
   @override
-  State<NotificationSettingDropdown> createState() => _NotificationSettingDropdown();
+  State<NotificationSettingDropdown> createState() =>
+      _NotificationSettingDropdown();
 }
 
 class _NotificationSettingDropdown extends State<NotificationSettingDropdown> {
-
   String dropdownValue = _notificationOptionsPlaceholder.first;
 
   @override
   Widget build(BuildContext context) {
-
     var theme = Theme.of(context);
 
     return DropdownButton(
       value: dropdownValue,
-      items: _mapDropdownMenuItems(_notificationOptionsPlaceholder),
+      items: _mapListToDropdownMenu(_notificationOptionsPlaceholder),
       onChanged: (String? value) {
         setState(() {
           dropdownValue = value ?? _notificationOptionsPlaceholder.first;
@@ -189,13 +177,20 @@ class _NotificationSettingDropdown extends State<NotificationSettingDropdown> {
 // Takes a list of strings meant to be dropdown menu options and returns
 // a list of dropdown menu items, which can be given as the `items` parameter
 // to a `DropdownButton`.
-List<DropdownMenuItem<String>> _mapDropdownMenuItems(List<String> items) {
-  return items.map<DropdownMenuItem<String>>(
-    (String value) {
-      return DropdownMenuItem<String>(
-        value: value,
-        child: Text(value),
-      );
-    }
-  ).toList();
+List<DropdownMenuItem<String>> _mapListToDropdownMenu(List<String> items) {
+  return items.map<DropdownMenuItem<String>>((String value) {
+    return DropdownMenuItem<String>(
+      value: value,
+      child: Text(value),
+    );
+  }).toList();
+}
+
+List<DropdownMenuItem<String>> _mapSetToDropdownMenu(Set<String> items) {
+  return items.map<DropdownMenuItem<String>>((String value) {
+    return DropdownMenuItem<String>(
+      value: value,
+      child: Text(value),
+    );
+  }).toList();
 }
