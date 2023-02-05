@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:gatemate_mobile/model/fields_view_model.dart';
+import 'package:provider/provider.dart';
 
-// TODO: Replace this with remote data
-List<String> fieldNamesPlaceholder = ['Field 1', 'Field B', 'Field of Real Numbers'];
 // TODO: Consider replacing with an Enum or Dart equivalent
 List<String> _notificationOptionsPlaceholder = ['Low', 'Med', 'High'];
 
@@ -10,21 +10,24 @@ class SettingsRoute extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Settings'),
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
-          FieldSelectionRow(),
-          SizedBox(height: 20),
-          // TODO: The way this row is structured could be improved
-          WaterLevelRow(),
-          SizedBox(height: 20),
-          NotificationSettingsRow(),
-          // TODO: User login options (sign out, etc.)
-        ],
+    return ChangeNotifierProvider(
+      create: (context) => FieldsViewModel(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Settings'),
+        ),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            FieldSelectionRow(),
+            SizedBox(height: 20),
+            // TODO: The way this row is structured could be improved
+            WaterLevelRow(),
+            SizedBox(height: 20),
+            NotificationSettingsRow(),
+            // TODO: User login options (sign out, etc.)
+          ],
+        ),
       ),
     );
   }
@@ -38,6 +41,7 @@ class FieldSelectionRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+    // TODO: Pass this to widget builders instead of doing this each time
     var theme = Theme.of(context);
 
     return Row(
@@ -120,19 +124,24 @@ class FieldSelectionDropdown extends StatefulWidget {
 
 class _FieldSelectionDropdown extends State<FieldSelectionDropdown> {
 
-  var dropdownValue = fieldNamesPlaceholder.first;
+  // TODO: This does not exactly result in desired behavior
+  // FIX: Store separate `selected field` variable in view-model
+
+  // var dropdownValue = fieldNamesPlaceholder.first;
+  String? dropdownValue;
 
   @override
   Widget build(BuildContext context) {
 
+    var fieldsList = context.watch<FieldsViewModel>().fieldNamesPlaceholder;
     var theme = Theme.of(context);
 
     return DropdownButton<String>(
       value: dropdownValue,
-      items: _mapDropdownMenuItems(fieldNamesPlaceholder),
+      items: _mapDropdownMenuItems(fieldsList),
       onChanged: (String? value) {
         setState(() {
-          dropdownValue = value ?? fieldNamesPlaceholder.first;
+          dropdownValue = value ?? fieldsList.first;
         });
       },
       iconSize: 28,
