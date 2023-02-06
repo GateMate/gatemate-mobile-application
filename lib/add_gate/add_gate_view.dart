@@ -21,13 +21,11 @@ class AddGateRoute extends StatelessWidget {
     double long = -94.17477200170791;
     // setState(() {
     _markers.clear();
-    _markers.add(
-      Marker(
-          markerId: MarkerId('$lat, $long'),
-          position: LatLng(lat, long),
-          infoWindow: InfoWindow(
-              title: 'Gate Information', snippet: 'Position: $lat, $long')),
-    );
+    _markers.add(Marker(
+        markerId: MarkerId('$lat, $long'),
+        position: LatLng(lat, long),
+        infoWindow: InfoWindow(
+            title: 'Gate Information', snippet: 'Position: $lat, $long')));
     // });
   }
 

@@ -21,7 +21,7 @@ class GateManagementRoute extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Gate'),
+        title: const Text('Gate Management'),
         backgroundColor: Colors.green[700],
       ),
       body: GoogleMap(
