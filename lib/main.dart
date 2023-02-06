@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'action_center/action_center_view.dart' show ActionCenterRoute;
 import 'add_gate/add_gate_view.dart' show AddGateRoute;
+import 'gate_management/gate_management.dart' show GateManagementRoute;
 import 'settings/settings_view.dart' show SettingsRoute;
 
 void main() {
@@ -52,64 +53,138 @@ class NavigationDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      // Important: Remove any padding from the ListView.
-      padding: EdgeInsets.zero,
-      children: [
-        const DrawerHeader(
-          decoration: BoxDecoration(
-            color: Colors.blue,
-          ),
-          child: Text('Drawer Header'),
-        ),
-        ListTile(
-          title: const Text('Home'),
-          onTap: () {
-            // Update the state of the app
+    return _drawer(context);
+  }
 
-            // Then close the drawer
-            Navigator.pop(context);
-          },
-        ),
-        ListTile(
-          title: const Text('Action Center'),
-          onTap: () {
-            // Update the state of the app
-            // ...
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const ActionCenterRoute()),
-            );
-            // Then close the drawer
-            // Navigator.pop(context);
-          },
-        ),
-        ListTile(
-          title: const Text('Add Gate'),
-          onTap: () {
-            // Update the state of the app
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => AddGateRoute()),
-            );
-            // Then close the drawer
-            // Navigator.pop(context);
-          },
-        ),
-        ListTile(
-          title: const Text('Settings'),
-          onTap: () {
-            // Update the state of the app
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const SettingsRoute()),
-            );
-            // Then close the drawer
-            // Navigator.pop(context);
-          },
-        ),
-      ],
+  Widget _drawer(BuildContext context) {
+    return Drawer(
+      elevation: 16.0,
+      child: Column(
+        children: <Widget>[
+          UserAccountsDrawerHeader(
+              accountName: Text("xyz"),
+              accountEmail: Text("xyz@gmail.com"),
+              currentAccountPicture: CircleAvatar(
+                backgroundColor: Colors.white,
+                child: Text("xyz"),
+              )),
+          ListTile(
+            title: const Text('Action Center'),
+            onTap: () {
+              // Update the state of the app
+              // ...
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const ActionCenterRoute()),
+              );
+            },
+            trailing: new Icon(Icons.arrow_forward_ios),
+          ),
+          ListTile(
+            title: const Text('Add Gate'),
+            onTap: () {
+              // Update the state of the app
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AddGateRoute()),
+              );
+              // Then close the drawer
+              // Navigator.pop(context);
+            },
+            trailing: new Icon(Icons.arrow_forward_ios),
+          ),
+          ListTile(
+            title: const Text('Gate Management'),
+            onTap: () {
+              // Update the state of the app
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => GateManagementRoute()),
+              );
+              // Then close the drawer
+              // Navigator.pop(context);
+            },
+            trailing: new Icon(Icons.arrow_forward_ios),
+          ),
+          ListTile(
+            title: const Text('Settings'),
+            onTap: () {
+              // Update the state of the app
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const SettingsRoute()),
+              );
+              // Then close the drawer
+              // Navigator.pop(context);
+            },
+            trailing: new Icon(Icons.arrow_forward_ios),
+          )
+        ],
+      ),
     );
   }
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   return ListView(
+  //     // Important: Remove any padding from the ListView.
+  //     padding: EdgeInsets.zero,
+  //     children: [
+  //       const DrawerHeader(
+  //         decoration: BoxDecoration(
+  //           color: Colors.blue,
+  //         ),
+  //         child: Text('Drawer Header'),
+  //       ),
+  //       ListTile(
+  //         title: const Text('Home'),
+  //         onTap: () {
+  //           // Update the state of the app
+
+  //           // Then close the drawer
+  //           Navigator.pop(context);
+  //         },
+  //       ),
+  //       ListTile(
+  //         title: const Text('Action Center'),
+  //         onTap: () {
+  //           // Update the state of the app
+  //           // ...
+  //           Navigator.push(
+  //             context,
+  //             MaterialPageRoute(
+  //                 builder: (context) => const ActionCenterRoute()),
+  //           );
+  //           // Then close the drawer
+  //           // Navigator.pop(context);
+  //         },
+  //       ),
+  //       ListTile(
+  //         title: const Text('Add Gate'),
+  //         onTap: () {
+  //           // Update the state of the app
+  //           Navigator.push(
+  //             context,
+  //             MaterialPageRoute(builder: (context) => AddGateRoute()),
+  //           );
+  //           // Then close the drawer
+  //           // Navigator.pop(context);
+  //         },
+  //       ),
+  //       ListTile(
+  //         title: const Text('Settings'),
+  //         onTap: () {
+  //           // Update the state of the app
+  //           Navigator.push(
+  //             context,
+  //             MaterialPageRoute(builder: (context) => const SettingsRoute()),
+  //           );
+  //           // Then close the drawer
+  //           // Navigator.pop(context);
+  //         },
+  //       ),
+  //     ],
+  //   );
+  // }
 }

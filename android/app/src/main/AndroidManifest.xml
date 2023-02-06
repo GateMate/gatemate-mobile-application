@@ -5,6 +5,9 @@
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
 
+        <!-- TODO: Add your Google Maps API key here -->
+        <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyDh5B5gBL-Syj0cWd73QPa1_FsEmdIUGWo"/>
 
         <activity
             android:name=".MainActivity"
@@ -18,7 +21,6 @@
                  the Android process has started. This theme is visible to the user
                  while the Flutter UI initializes. After that, this theme continues
                  to determine the Window background behind the Flutter UI. -->
-            <uses-permission android:name="android.permission.INTERNET"/>
 
             <meta-data android:name="com.mapbox.token" android:value="pk.eyJ1IjoiY3BhdHRvbiIsImEiOiJjbGRpODF1ODkwMWFpM3BvaDBhOWRyYWgzIn0.oW6om9jo0s-ZWAWcLiuaRw" />
         
