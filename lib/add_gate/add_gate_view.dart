@@ -1,95 +1,139 @@
 import 'package:flutter/material.dart';
+import 'package:gatemate_mobile/main.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:gatemate_mobile/model/add_gate_model.dart';
 
-import '../app_constants.dart';
+Set<Marker> _markers = <Marker>{};
+int markerId = 0;
 
-class AddGateRoute extends StatelessWidget {
-  AddGateRoute({super.key});
+class AddGateRoute extends StatefulWidget {
+  @override
+  _AddGateState createState() => _AddGateState();
+}
 
-  late GoogleMapController mapController;
-  final Set<Marker> _markers = Set();
-  final LatLng _center = const LatLng(36.06889761358809, -94.17477200170791);
+class _AddGateState extends State<AddGateRoute> {
+  AddGateModel addGateModel = AddGateModel();
 
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
-  }
+  @override
+  void initState() {
+    super.initState();
+    // addGateModel = Provider.of<AddGateModel>(context, listen: true);
+    // addGateModel.addListener(() => mounted ? setState(() {}) : null);
 
-  Future<void> _addMarkers() async {
-    double lat = 36.06889761358809;
-    double long = -94.17477200170791;
-    // setState(() {
-    _markers.clear();
-    _markers.add(Marker(
-        markerId: MarkerId('$lat, $long'),
-        position: LatLng(lat, long),
-        infoWindow: InfoWindow(
-            title: 'Gate Information', snippet: 'Position: $lat, $long')));
-    // });
+    // initialization goes here
   }
 
   @override
-  Widget build(BuildContext context) {
-    _addMarkers();
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('Add Gate'),
-          backgroundColor: Colors.green[700],
-        ),
-        body: GoogleMap(
-          onMapCreated: _onMapCreated,
-          mapType: MapType.terrain,
-          markers: _markers,
-          initialCameraPosition: CameraPosition(
-            target: _center,
-            zoom: 10.0,
-          ),
+  void dispose() {
+    // teardown goes here
+    super.dispose();
+  }
 
-          // Stack(
-          //   children: [
-          //     FlutterMap(
-          //       options: MapOptions(
-          //           minZoom: 5,
-          //           maxZoom: 18,
-          //           zoom: 13,
-          //           center: AppConstants.myLocation),
-          //       layers: [
-          //         TileLayerOptions(
-          //           urlTemplate:
-          //               "https://api.mapbox.com/styles/v1/cpatton/cldievrq0000301o10nbx1zvu/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiY3BhdHRvbiIsImEiOiJjbGRodG1pZ3kweWFyM3ZvM2trcjY5d3liIn0.Th1u92jVxkdhJp1-pcJpdA",
-          //           // "https://api.mapbox.com/styles/v1/dhruv25/{mapStyleId}/tiles/256/{z}/{x}/{y}@2x?access_token={accessToken}",
-          //           additionalOptions: {
-          //             'mapStyleId': 'mapbox.mapbox-outdoors-v11',
-          //             'accessToken': AppConstants.mapBoxAccessToken,
-          //           },
-          //         ),
-          //       ],
-          //     )
-          //   ],
-          // )
-          // child: FlutterMap(
-          //   options: MapOptions(
-          //     minZoom: 5,
-          //     maxZoom: 18,
-          //     zoom: 13,
-          //     center: AppConstants.myLocation,
-          //   ),
-          //   layers: [
-          //     TileLayerOptions(
-          //       urlTemplate:
-          //           "https://api.mapbox.com/styles/v1/cpatton/cldievrq0000301o10nbx1zvu/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiY3BhdHRvbiIsImEiOiJjbGRodG1pZ3kweWFyM3ZvM2trcjY5d3liIn0.Th1u92jVxkdhJp1-pcJpdA",
-          //       additionalOptions: {
-          //         'mapStyleId': AppConstants.mapBoxStyleId,
-          //         'accessToken': AppConstants.mapBoxAccessToken,
-          //       },
-          //     ),
-          //   ],
-          // ),
-          // child: ElevatedButton(
-          //   onPressed: () {
-          //     Navigator.pop(context);
-          //   },
-          //   child: const Text('adding a gate'),
-          // ),
-        ));
+  late GoogleMapController mapController;
+  // final Set<Marker> _markers = Set();
+  final LatLng _center = const LatLng(36.06889761358809, -94.17477200170791);
+
+  // void _onMapCreated(GoogleMapController controller) {
+  //   mapController = controller;
+  //   AddGateModel().addListener(() {
+  //     print('markers ${AddGateModel().markers.toString()}');
+  //   });
+  // }
+
+  @override
+  Widget build(BuildContext context) {
+    // var addGateModelMarkers = context.watch<AddGateModel>().markers;
+    // addGateModel = Provider.of<AddGateModel>(context, listen: true);
+    markerId++;
+    return ChangeNotifierProvider(
+        create: (context) => AddGateModel(),
+        child: Scaffold(
+            appBar: AppBar(
+              title: const Text('Add Gate'),
+              backgroundColor: Colors.green[700],
+            ),
+            body: GoogleMap(
+              onMapCreated: (GoogleMapController controller) {
+                mapController = controller;
+              },
+              mapType: MapType.terrain,
+              onLongPress: (latLng) => {
+                _addNewMarkers(latLng),
+                AddGateModel().setMarkers(
+                    Marker(markerId: MarkerId('$markerId'), position: latLng))
+              },
+              initialCameraPosition: CameraPosition(
+                target: _center,
+                zoom: 15.0,
+              ),
+              markers: _markers,
+            )));
+  }
+
+  void _addNewMarkers(LatLng latLng) {
+    markerId++;
+    var lat = latLng.latitude;
+    var long = latLng.longitude;
+    var formatLat = lat.toStringAsFixed(3);
+    var formatLong = long.toStringAsFixed(3);
+    setState(() {
+      _markers.add(Marker(
+          markerId: MarkerId('$markerId'),
+          position: LatLng(lat, long),
+          infoWindow: InfoWindow(
+              title: 'Gate Information',
+              snippet: 'Position: $formatLat, $formatLong')));
+      // AddMarkers().addMarkerToVM(_markers, context);
+    });
   }
 }
+
+// class AddMarkers extends StatelessWidget {
+//   AddMarkers(int id, LatLng latLng, {super.key});
+
+//   AddGateModel addGateModel = AddGateModel();
+
+//  AddGateModel().setMarkers(
+//                     Marker(markerId: MarkerId('$markerId'), position: latLng))
+
+//   @override
+//   Widget build(BuildContext context) {
+//     AddGateModel().setMarkers(Marker(markerId: MarkerId('$markerId'), position: latLng))
+    
+//   }
+// }
+
+//   double get latitude => 0.0;
+//   double get longitude => 0.0;
+
+//   void addMarkerToVM(Set<Marker> setMarkers, BuildContext context) {
+//     AddGateModel().markers.clear();
+//     for (Marker marker in setMarkers) {
+//       AddGateModel().markers.add(marker);
+//     }
+//     print(AddGateModel().markers.toList().toString());
+
+//     var savedMarkers = context.watch<AddGateModel>().markers;
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     AddGateModel().markers = _markers;
+//     print('addmarkers: $AddGateModel().markers.toList().toString()');
+
+//     var savedMarkers = context.watch<AddGateModel>().markers;
+
+//     return Text(savedMarkers.toString());
+//     // _markers = context.watch<AddGaxxteModel>().markers;
+//   }
+// }
+
+// class AddMarkers extends StatelessWidget {
+//   AddMarkers({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     _markers = context.watch<AddGateModel>().markers;
+//   }
+// }

@@ -69,24 +69,24 @@ class NavigationDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      // Important: Remove any padding from the ListView.
-      padding: EdgeInsets.zero,
-      children: [
-        DrawerHeader(
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primary,
-          ),
-          child: const Text('Drawer Header'),
-        ),
-        ListTile(
-            title: const Text('Home'),
-            onTap: () {
-              Navigator.pop(context);
-            })
-      ],
-    );
-    // drawer: _drawer(context)
+    // return ListView(
+    //   // Important: Remove any padding from the ListView.
+    //   padding: EdgeInsets.zero,
+    //   children: [
+    //     DrawerHeader(
+    //       decoration: BoxDecoration(
+    //         color: Theme.of(context).colorScheme.primary,
+    //       ),
+    //       child: const Text('Drawer Header'),
+    //     ),
+    //     ListTile(
+    //         title: const Text('Home'),
+    //         onTap: () {
+    //           Navigator.pop(context);
+    //         })
+    //   ],
+    // );
+    return _drawer(context);
   }
 
   Widget _drawer(BuildContext context) {
@@ -95,6 +95,9 @@ class NavigationDrawer extends StatelessWidget {
       child: Column(
         children: <Widget>[
           UserAccountsDrawerHeader(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary,
+              ),
               accountName: Text("xyz"),
               accountEmail: Text("xyz@gmail.com"),
               currentAccountPicture: CircleAvatar(

@@ -7,7 +7,6 @@ class ActionCenterRoute extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     var theme = Theme.of(context);
     var style = theme.textTheme.titleLarge?.copyWith(
       color: theme.colorScheme.onPrimaryContainer,
@@ -48,7 +47,6 @@ class NotificationsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     var notifications = context.watch<ActionCenterViewModel>().actionItems;
 
     return ListView.builder(
