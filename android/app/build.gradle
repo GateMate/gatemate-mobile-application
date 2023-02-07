@@ -67,5 +67,6 @@ flutter {
 }
 
 dependencies {
+    implementation "com.mapbox.mapboxsdk:mapbox-android-sdk:9.6.1"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
