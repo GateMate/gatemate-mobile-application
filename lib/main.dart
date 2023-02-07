@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:gatemate_mobile/model/fields_view_model.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:provider/provider.dart';
 
 import 'action_center/action_center_view.dart' show ActionCenterRoute;
 import 'add_gate/add_gate_view.dart' show AddGateRoute;
@@ -86,7 +89,8 @@ class NavigationDrawer extends StatelessWidget {
     //         })
     //   ],
     // );
-    return _drawer(context);
+    return ChangeNotifierProvider(
+        create: (context) => FieldsViewModel(), child: _drawer(context));
   }
 
   Widget _drawer(BuildContext context) {
@@ -104,6 +108,13 @@ class NavigationDrawer extends StatelessWidget {
                 backgroundColor: Colors.white,
                 child: Text("xyz"),
               )),
+          Text('Current Field Selection: ',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          FieldSelectionDropdown(),
+          Divider(
+            color: Colors.green[700],
+            thickness: 2.0,
+          ),
           ListTile(
             title: const Text('Action Center'),
             onTap: () {
@@ -160,6 +171,42 @@ class NavigationDrawer extends StatelessWidget {
       ),
     );
   }
+}
+
+class FieldSelectionDropdown extends StatelessWidget {
+  const FieldSelectionDropdown({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    var theme = Theme.of(context);
+    var fieldsViewModel = context.watch<FieldsViewModel>();
+
+    return DropdownButton<String>(
+      value: fieldsViewModel.currentFieldSelection,
+      items: _mapSetToDropdownMenu(fieldsViewModel.fieldNamesPlaceholder),
+      onChanged: (String? value) {
+        if (value != null) {
+          fieldsViewModel.selectField(value);
+        }
+      },
+      iconSize: 28,
+      underline: Container(
+        height: 2,
+        color: theme.colorScheme.primary,
+      ),
+    );
+  }
+}
+
+List<DropdownMenuItem<String>> _mapSetToDropdownMenu(Set<String> items) {
+  return items.map<DropdownMenuItem<String>>((String value) {
+    return DropdownMenuItem<String>(
+      value: value,
+      child: Text(value),
+    );
+  }).toList();
+}
+
 
   // @override
   // Widget build(BuildContext context) {
@@ -223,4 +270,3 @@ class NavigationDrawer extends StatelessWidget {
   //     ],
   //   );
   // }
-}
