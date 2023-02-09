@@ -14,7 +14,6 @@ class GateMateApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     var colorScheme = ColorScheme.fromSeed(
       seedColor: Colors.green[400] ?? Colors.green,
     );
@@ -49,14 +48,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: const Placeholder(),  // TODO
+      body: const Placeholder(), // TODO
       drawer: const Drawer(
         child: NavigationDrawer(),
       ),
@@ -96,7 +94,7 @@ class NavigationDrawer extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const ActionCenterRoute()
+                builder: (context) => const ActionCenterRoute(),
               ),
             );
             // Then close the drawer
