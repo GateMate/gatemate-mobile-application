@@ -42,3 +42,7 @@ app.*.map.json
 # Could later include necessary launch configurations or tasks, so may
 # need to eventually remove this line.
 /.vscode/
+
+# Unnecessary dependency tracking files
+package-lock.json
+package.json
