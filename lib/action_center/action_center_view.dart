@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:gatemate_mobile/model/action_center_view_model.dart';
 import 'package:provider/provider.dart';
 
+import '../model/data/to_do_item.dart';
+
 class ActionCenterRoute extends StatelessWidget {
   const ActionCenterRoute({super.key});
 
@@ -52,11 +54,24 @@ class NotificationsList extends StatelessWidget {
     return ListView.builder(
       itemCount: notifications.length,
       itemBuilder: (context, index) {
-        return Card(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(notifications[index], style: style),
-          ),
+        return FutureBuilder<ToDoItem>(
+          future: notifications[index],
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(snapshot.data!.title, style: style),
+                ),
+              );
+            } else if (snapshot.hasError) {
+              // TODO: Handle this
+              print('Error moment: ${snapshot.error}');
+            }
+
+            // Shows a loading spinner by default
+            return const CircularProgressIndicator();
+          },
         );
       },
     );
