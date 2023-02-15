@@ -17,6 +17,7 @@ class AddGateModel extends ChangeNotifier {
     print('markers: ${this.markers}');
     return this.markers;
   }
+
   // Marker(
   //   markerId: MarkerId('$markerId'),
   //   position:

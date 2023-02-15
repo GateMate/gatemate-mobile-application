@@ -41,6 +41,9 @@ dependencies:
   flutter_lints: ^2.0.0
   custom_info_window: ^1.0.1
   clippy_flutter: ^1.1.1
+  map_elevation: ^2.0.0
+  google_maps_services_dart: ^1.17.1
+  http: ^0.13.5
 
 dev_dependencies:
   flutter_test:

@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:gatemate_mobile/model/add_gate_model.dart';
 import 'package:custom_info_window/custom_info_window.dart';
 // import 'package:clippy_flutter/triangle.dart';
+import 'package:http/http.dart' as http;
 
 Set<Marker> _markers = <Marker>{};
 int markerId = 0;
@@ -64,6 +65,29 @@ class _AddGateState extends State<AddGateRoute> {
                 },
                 mapType: MapType.terrain,
                 onLongPress: (latLng) => {
+                  // <Widget>[
+                  //   AlertDialog(
+                  //     title: Text(
+                  //         'Welcome'), // To display the title it is optional
+                  //     content: Text(
+                  //         'GeeksforGeeks'), // Message which will be pop up on the screen
+                  //     actions: [
+                  //       // Action widget which will provide the user to acknowledge the choice
+                  //       TextButton(
+                  //         // FlatButton widget is used to make a text to work like a button
+                  //         // textColor: Colors.black,
+                  //         onPressed:
+                  //             () {}, // function used to perform after pressing the button
+                  //         child: Text('CANCEL'),
+                  //       ),
+                  //       TextButton(
+                  //         // textColor: Colors.black,
+                  //         onPressed: () {},
+                  //         child: Text('ACCEPT'),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ],
                   _addNewMarkers(latLng),
                   AddGateModel().setMarkers(
                       Marker(markerId: MarkerId('$markerId'), position: latLng))
@@ -74,7 +98,6 @@ class _AddGateState extends State<AddGateRoute> {
                 ),
                 markers: _markers,
               ),
-
               Container(
                   alignment: Alignment.bottomCenter,
                   child: Text('Press and hold at a location to add a gate',
@@ -96,6 +119,8 @@ class _AddGateState extends State<AddGateRoute> {
     var long = latLng.longitude;
     var formatLat = lat.toStringAsFixed(3);
     var formatLong = long.toStringAsFixed(3);
+    var elevation = fetchElevation(latLng);
+
     setState(() {
       _markers.add(Marker(
           markerId: MarkerId('$markerId'),
@@ -151,8 +176,14 @@ class _AddGateState extends State<AddGateRoute> {
           // },
           infoWindow: InfoWindow(
               title: 'Gate Information',
-              snippet: 'Position: $formatLat, $formatLong')));
+              snippet:
+                  'Position: $formatLat, $formatLong, Elevation: $elevation')));
       // AddMarkers().addMarkerToVM(_markers, context);
     });
+  }
+
+  Future<http.Response> fetchElevation(LatLng latLng) {
+    return http.get(Uri.parse(
+        'https://api.open-elevation.com/api/v1/lookup?locations=$latLng'));
   }
 }
