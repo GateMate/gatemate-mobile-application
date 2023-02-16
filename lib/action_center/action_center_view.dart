@@ -25,7 +25,15 @@ class ActionCenterRoute extends StatelessWidget {
           child: NotificationsList(style: style),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () => _showNewActionWidget(context),
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: ((context) {
+                return const NewActionDialog();
+              }),
+              barrierDismissible: true,
+            );
+          },
           child: Icon(
             Icons.add_rounded,
             color: theme.colorScheme.onTertiary,
@@ -35,38 +43,59 @@ class ActionCenterRoute extends StatelessWidget {
       ),
     );
   }
+}
 
-  Future<void> _showNewActionWidget(BuildContext context) async {
-    var inputTextController = TextEditingController();
+class NewActionDialog extends StatefulWidget {
+  const NewActionDialog({
+    Key? key,
+  }) : super(key: key);
 
-    return showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Enter something:'),
-          content: TextField(
-            decoration: const InputDecoration(
-              hintText: 'New action...',
-            ),
-            controller: inputTextController,
-            keyboardType: TextInputType.multiline,
-            maxLines: null,
-          ),
-          actions: [
-            ElevatedButton(
-              onPressed: () {
-                // TODO: Send data to server
-                var inputText = inputTextController.text;
-                print(inputText);
+  @override
+  State<NewActionDialog> createState() => _NewActionDialogState();
+}
 
-                Navigator.pop(context);
-              },
-              child: const Text('Submit'),
-            ),
-          ],
-        );
-      },
+class _NewActionDialogState extends State<NewActionDialog> {
+  final _inputTextController = TextEditingController();
+  var _submitting = false;
+
+  @override
+  void dispose() {
+    _inputTextController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Create new action:'),
+      content: TextField(
+        decoration: const InputDecoration(
+          hintText: 'Enter description...',
+        ),
+        controller: _inputTextController,
+        keyboardType: TextInputType.multiline,
+        maxLines: null,
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Cancel'),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            // TODO: Send data to server
+            // var inputText = _inputTextController.text;
+            // print(inputText);
+            createToDoItem(_inputTextController.text);
+            setState(() {
+              _submitting = true;
+            });
+
+            Navigator.pop(context);
+          },
+          child: const Text('Submit'),
+        ),
+      ],
     );
   }
 }

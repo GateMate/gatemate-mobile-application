@@ -16,13 +16,45 @@ class ActionCenterViewModel extends ChangeNotifier {
   ];
 }
 
+Future<ToDoItem> createToDoItem(String title) async {
+  // TODO: Generating id? Should the server handle that?
+  const id = 67;
+  final response = await http.post(
+    Uri.parse('https://todo-proukhgi3a-uc.a.run.app/add?id=$id'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{
+      'id': id.toString(),
+      'title': title,
+    }),
+  );
+
+  // TODO: Change this to 201 once the backend is fixed
+  if (response.statusCode == 200) {
+    // TODO: Return item using id generated from backend
+    return ToDoItem(id: id.toString(), title: title);
+  } else {
+    // TODO: Handle this?
+    throw Exception(
+      'Failed to create to do item!'
+      'Response status code: ${response.statusCode}',
+    );
+  }
+}
+
 Future<ToDoItem> fetchToDoItem(int id) async {
-  final response = await http
-      .get(Uri.parse('https://todo-proukhgi3a-uc.a.run.app/list?id=$id'));
+  final response = await http.get(
+    Uri.parse('https://todo-proukhgi3a-uc.a.run.app/list?id=$id'),
+  );
 
   if (response.statusCode == 200) {
     return ToDoItem.fromJson(jsonDecode(response.body));
   } else {
-    throw Exception('Failed to load user data');
+    // TODO: Handle this?
+    throw Exception(
+      'Failed to load user data!'
+      'Response status code: ${response.statusCode}',
+    );
   }
 }
