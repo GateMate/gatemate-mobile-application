@@ -25,9 +25,7 @@ class ActionCenterRoute extends StatelessWidget {
           child: NotificationsList(style: style),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            // TODO: Schedule action
-          },
+          onPressed: () => _showNewActionWidget(context),
           child: Icon(
             Icons.add_rounded,
             color: theme.colorScheme.onTertiary,
@@ -57,6 +55,7 @@ class NotificationsList extends StatelessWidget {
         return FutureBuilder<ToDoItem>(
           future: notifications[index],
           builder: (context, snapshot) {
+            // Wait for data or error
             if (snapshot.hasData) {
               return Card(
                 child: Padding(
@@ -68,7 +67,6 @@ class NotificationsList extends StatelessWidget {
               // TODO: Handle this
               print('Error moment: ${snapshot.error}');
             }
-
             // Shows a loading spinner by default
             return const CircularProgressIndicator();
           },
@@ -76,4 +74,31 @@ class NotificationsList extends StatelessWidget {
       },
     );
   }
+}
+
+Future<void> _showNewActionWidget(BuildContext context) async {
+  return showDialog(
+    context: context,
+    barrierDismissible: true,
+    builder: (context) {
+      return AlertDialog(
+        title: const Text('Enter something:'),
+        content: const TextField(
+          decoration: InputDecoration(
+            hintText: 'New action...',
+          ),
+          keyboardType: TextInputType.multiline,
+          maxLines: null,
+        ),
+        actions: [
+          ElevatedButton(
+            onPressed: () {
+              // TODO
+            },
+            child: Text('Submit'),
+          ),
+        ],
+      );
+    },
+  );
 }
