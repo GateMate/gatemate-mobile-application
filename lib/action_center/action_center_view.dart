@@ -35,6 +35,40 @@ class ActionCenterRoute extends StatelessWidget {
       ),
     );
   }
+
+  Future<void> _showNewActionWidget(BuildContext context) async {
+    var inputTextController = TextEditingController();
+
+    return showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Enter something:'),
+          content: TextField(
+            decoration: const InputDecoration(
+              hintText: 'New action...',
+            ),
+            controller: inputTextController,
+            keyboardType: TextInputType.multiline,
+            maxLines: null,
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                // TODO: Send data to server
+                var inputText = inputTextController.text;
+                print(inputText);
+
+                Navigator.pop(context);
+              },
+              child: const Text('Submit'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
 
 class NotificationsList extends StatelessWidget {
@@ -74,31 +108,4 @@ class NotificationsList extends StatelessWidget {
       },
     );
   }
-}
-
-Future<void> _showNewActionWidget(BuildContext context) async {
-  return showDialog(
-    context: context,
-    barrierDismissible: true,
-    builder: (context) {
-      return AlertDialog(
-        title: const Text('Enter something:'),
-        content: const TextField(
-          decoration: InputDecoration(
-            hintText: 'New action...',
-          ),
-          keyboardType: TextInputType.multiline,
-          maxLines: null,
-        ),
-        actions: [
-          ElevatedButton(
-            onPressed: () {
-              // TODO
-            },
-            child: Text('Submit'),
-          ),
-        ],
-      );
-    },
-  );
 }
