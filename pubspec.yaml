@@ -49,6 +49,10 @@ dependencies:
   url_launcher: ^6.1.9
   flutter_map_arcgis: any
   dio: any
+  email_validator: ^2.1.17
+  firebase_auth: ^4.2.2
+  hexcolor: ^3.0.1
+  google_fonts: ^4.0.3
 
 
 dev_dependencies:
