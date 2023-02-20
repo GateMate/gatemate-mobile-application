@@ -44,6 +44,12 @@ dependencies:
   map_elevation: ^2.0.0
   google_maps_services_dart: ^1.17.1
   http: ^0.13.5
+  flutter_map: any
+  turf: ^0.0.7
+  url_launcher: ^6.1.9
+  flutter_map_arcgis: any
+  dio: any
+
 
 dev_dependencies:
   flutter_test:
