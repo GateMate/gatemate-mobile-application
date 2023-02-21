@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter_map/flutter_map.dart';
 
 int markerId = 0;
 
 class AddGateModel extends ChangeNotifier {
   // int markerId = 0;
-  Set<Marker> markers = {};
+  List<Marker> markers = [];
 
   setMarkers(Marker m) {
     this.markers.add(m);
