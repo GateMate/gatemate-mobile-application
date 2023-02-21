@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:gatemate_mobile/marker_popup.dart';
 import 'dart:async';
 
 import 'package:http/http.dart' as http;

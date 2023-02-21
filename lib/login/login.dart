@@ -1,12 +1,13 @@
 // utilized https://github.com/jumainahkhan/LogIn
 
-import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:gatemate_mobile/my_button.dart';
-import 'package:gatemate_mobile/my_textfield.dart';
+import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
+
+import '../ui-primatives/my_button.dart';
+import '../ui-primatives/my_textfield.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

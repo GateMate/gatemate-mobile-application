@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gatemate_mobile/action_center/action_center_view.dart';
 import 'package:gatemate_mobile/add_gate/add_gate_view.dart';
-import 'package:gatemate_mobile/gate_management/gate_management.dart';
+import 'package:gatemate_mobile/gate_management/gate_management_view.dart';
 import 'package:gatemate_mobile/model/fields_view_model.dart';
 import 'package:gatemate_mobile/settings/settings_view.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {

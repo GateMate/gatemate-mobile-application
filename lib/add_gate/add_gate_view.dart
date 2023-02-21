@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_arcgis/flutter_map_arcgis.dart';
 import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
-import 'package:gatemate_mobile/my_button.dart';
-
-import 'package:provider/provider.dart';
 import 'package:gatemate_mobile/model/add_gate_model.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:flutter_map_arcgis/flutter_map_arcgis.dart';
-import 'package:gatemate_mobile/marker_popup.dart';
+import 'package:provider/provider.dart';
+
+import '../ui-primatives/marker_popup.dart';
+import '../ui-primatives/my_button.dart';
 
 // Set<Marker> markers = <Marker>{};
 List<Marker> markers = [];

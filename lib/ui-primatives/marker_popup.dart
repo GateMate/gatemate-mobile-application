@@ -2,7 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:gatemate_mobile/my_button.dart';
+
+import 'my_button.dart';
 
 class ExamplePopup extends StatefulWidget {
   final Marker marker;

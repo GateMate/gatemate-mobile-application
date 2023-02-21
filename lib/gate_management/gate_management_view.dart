@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:gatemate_mobile/model/gate_management_view_model.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
 import 'package:flutter_map_arcgis/flutter_map_arcgis.dart';
-import 'package:gatemate_mobile/marker_popup.dart';
 import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
+import 'package:gatemate_mobile/model/gate_management_view_model.dart';
+import 'package:latlong2/latlong.dart';
+
+import '../ui-primatives/marker_popup.dart';
 
 late int _markerIdValue;
 // Set<Marker> _markers = HashSet<Marker>();
@@ -40,18 +41,19 @@ class _GateManagementState extends State<GateManagementRoute> {
       body: Stack(
         children: [
           Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
                 Flexible(
                   child: FlutterMap(
                     options: MapOptions(
-                        center: LatLng(36.133512, -94.121556),
-                        // center: LatLng(47.925812, 106.919831),
-                        maxZoom: 18,
-                        zoom: 9.0,
-                        plugins: [EsriPlugin()],
-                        onTap: (_, __) => _popupController.hideAllPopups()),
+                      center: LatLng(36.133512, -94.121556),
+                      // center: LatLng(47.925812, 106.919831),
+                      maxZoom: 18,
+                      zoom: 9.0,
+                      plugins: [EsriPlugin()],
+                      onTap: (_, __) => _popupController.hideAllPopups(),
+                    ),
                     nonRotatedChildren: [
                       AttributionWidget.defaultWidget(
                         source: '',
@@ -98,12 +100,13 @@ class _GateManagementState extends State<GateManagementRoute> {
                   ),
                 ),
                 Container(
-                    alignment: Alignment.bottomCenter,
-                    child: Text(
-                      'Click an existing marker to view details',
-                      style: const TextStyle(fontSize: 20),
-                      textAlign: TextAlign.center,
-                    ))
+                  alignment: Alignment.bottomCenter,
+                  child: const Text(
+                    'Click an existing marker to view details',
+                    style: TextStyle(fontSize: 20),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               ],
             ),
           ),
