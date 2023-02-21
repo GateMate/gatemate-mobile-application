@@ -4,9 +4,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:gatemate_mobile/my_button.dart';
+import 'package:latlong2/latlong.dart';
 
 class ExamplePopup extends StatefulWidget {
   final Marker marker;
+  // final LatLng latLng;
 
   const ExamplePopup(this.marker, {Key? key}) : super(key: key);
 
@@ -17,7 +20,9 @@ class ExamplePopup extends StatefulWidget {
 class _ExamplePopupState extends State<ExamplePopup> {
   @override
   Widget build(BuildContext context) {
+    print("in popup");
     return Card(
+      color: Colors.green[400],
       child: InkWell(
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -26,7 +31,37 @@ class _ExamplePopupState extends State<ExamplePopup> {
             IconButton(
               icon: Icon(Icons.arrow_upward),
               onPressed: () {
-                print("ion button");
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return Dialog(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(40)),
+                        elevation: 16,
+                        child: Container(
+                          child: ListView(
+                            shrinkWrap: true,
+                            children: <Widget>[
+                              SizedBox(height: 20),
+                              Center(
+                                  child: Text(
+                                      'Are you sure you want to raise this gate?',
+                                      style: const TextStyle(fontSize: 20),
+                                      textAlign: TextAlign.center)),
+                              Column(children: [
+                                MyButton(
+                                    buttonText: "Yes, Raise Gate",
+                                    onPressed: () => Navigator.pop(context)),
+                                MyButton(
+                                    buttonText: 'No, Don\'t Raise the gate',
+                                    onPressed: () => Navigator.pop(context))
+                              ]),
+                              SizedBox(height: 20),
+                            ],
+                          ),
+                        ),
+                      );
+                    });
               },
               tooltip: "Raise Gates",
             ),
@@ -34,7 +69,37 @@ class _ExamplePopupState extends State<ExamplePopup> {
               padding: EdgeInsets.zero,
               icon: Icon(Icons.arrow_downward),
               onPressed: () {
-                print("ion button");
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return Dialog(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(40)),
+                        elevation: 16,
+                        child: Container(
+                          child: ListView(
+                            shrinkWrap: true,
+                            children: <Widget>[
+                              SizedBox(height: 20),
+                              Center(
+                                  child: Text(
+                                      'Are you sure you want to lower this gate?',
+                                      style: const TextStyle(fontSize: 20),
+                                      textAlign: TextAlign.center)),
+                              Column(children: [
+                                MyButton(
+                                    buttonText: 'Yes, Lower Gate',
+                                    onPressed: () => Navigator.pop(context)),
+                                MyButton(
+                                    buttonText: 'No, Don\'t Lower the Gate',
+                                    onPressed: () => Navigator.pop(context))
+                              ]),
+                              SizedBox(height: 20),
+                            ],
+                          ),
+                        ),
+                      );
+                    });
               },
               tooltip: "Lower Gates",
             ),
@@ -65,6 +130,7 @@ class _ExamplePopupState extends State<ExamplePopup> {
             ),
             const Padding(padding: EdgeInsets.symmetric(vertical: 4.0)),
             Text(
+              // 'Position: ${widget.marker.point.latitude}, ${widget.marker.point.longitude}',
               'Position: ${widget.marker.point.latitude}, ${widget.marker.point.longitude}',
               style: const TextStyle(fontSize: 12.0),
             ),

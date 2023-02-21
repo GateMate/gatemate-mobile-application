@@ -53,6 +53,8 @@ dependencies:
   firebase_auth: ^4.2.2
   hexcolor: ^3.0.1
   google_fonts: ^4.0.3
+  flutter_map_marker_popup: ^3.2.0
+  flutter_map_marker_cluster: ^0.5.4
 
 
 dev_dependencies:

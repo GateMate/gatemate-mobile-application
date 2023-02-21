@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
 import 'package:gatemate_mobile/main.dart';
 import 'package:gatemate_mobile/my_button.dart';
 
@@ -25,6 +26,7 @@ class AddGateRoute extends StatefulWidget {
 class _AddGateState extends State<AddGateRoute> {
   AddGateModel addGateModel = AddGateModel();
   final LatLng _center = LatLng(36.06889761358809, -94.17477200170791);
+  final PopupController _popupController = PopupController();
 
   @override
   void initState() {
@@ -82,7 +84,10 @@ class _AddGateState extends State<AddGateRoute> {
                                         SizedBox(height: 20),
                                         Center(
                                             child: Text(
-                                                'Are you sure you want to add a marker at ${latlng.latitude.toStringAsFixed(3)}, ${latlng.longitude.toStringAsFixed(3)}?')),
+                                                'Are you sure you want to add a marker at ${latlng.latitude.toStringAsFixed(3)}, ${latlng.longitude.toStringAsFixed(3)}?',
+                                                style: const TextStyle(
+                                                    fontSize: 20),
+                                                textAlign: TextAlign.center)),
                                         Column(children: [
                                           MyButton(
                                               buttonText: 'Yes, Add Marker',
@@ -113,43 +118,56 @@ class _AddGateState extends State<AddGateRoute> {
                             );
                           },
                         ),
-                        layers: [
-                          TileLayerOptions(
-                            urlTemplate:
-                                'https://services.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}?apiKey=AAPK9832e94d28094f39a7c33300e31ddd28P3dyFrvyoHAnYo3etV-ZrnsdZdCGXg2nG7HmfduCx6PE8v2IAVVOnSbtncioU578',
-                            subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
-                            tileProvider: NonCachingNetworkTileProvider(),
-                            backgroundColor: Colors.transparent,
+                        children: [
+                          TileLayerWidget(
+                            options: TileLayerOptions(
+                              urlTemplate:
+                                  'https://services.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}?apiKey=AAPK9832e94d28094f39a7c33300e31ddd28P3dyFrvyoHAnYo3etV-ZrnsdZdCGXg2nG7HmfduCx6PE8v2IAVVOnSbtncioU578',
+                              subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+                              tileProvider: NonCachingNetworkTileProvider(),
+                              backgroundColor: Colors.transparent,
+                            ),
                           ),
-                          MarkerLayerOptions(
-                            markers: [
-                              for (int i = 0;
-                                  i < addGateModel.markers.length;
-                                  i++)
-                                addGateModel.markers[i]
-                            ],
+                          PopupMarkerLayerWidget(
+                            options: PopupMarkerLayerOptions(
+                              popupController: _popupController,
+                              markers: [
+                                for (int i = 0;
+                                    i < addGateModel.markers.length;
+                                    i++)
+                                  addGateModel.markers[i]
+                              ],
+                              // markerRotateAlignment:
+                              //     PopupMarkerLayerOptions.rotationAlignmentFor(
+                              //         AnchorAlign.top),
+                              popupBuilder:
+                                  (BuildContext context, Marker marker) =>
+                                      ExamplePopup(marker),
+                            ),
                           ),
+                          // MarkerLayerOptions(
+                          //   markers: [
+                          //     for (int i = 0;
+                          //         i < addGateModel.markers.length;
+                          //         i++)
+                          //       addGateModel.markers[i]
+                          //   ],
+                          // ),
                         ],
                       ),
                     ),
                     Container(
                         alignment: Alignment.bottomCenter,
-                        child: Text('Tap at a location to add a gate',
-                            style: const TextStyle(fontSize: 20)))
+                        child: Text(
+                            'Tap at a location to add a gate or click an existing marker to view details',
+                            style: const TextStyle(fontSize: 20),
+                            textAlign: TextAlign.center))
                   ],
                 ),
               ),
             ],
           ),
         ));
-
-    // CustomInfoWindow(
-    //   controller: _customInfoWindowController,
-    //   height: 75,
-    //   width: 150,
-    //   offset: 50,
-    // ),
-    // ])));
   }
 
   Future<http.Response> fetchElevation(LatLng latLng) {

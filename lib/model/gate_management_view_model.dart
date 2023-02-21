@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:gatemate_mobile/marker_popup.dart';
 import 'dart:async';
 
 import 'package:http/http.dart' as http;
@@ -12,8 +13,15 @@ class GateManagementViewModel extends ChangeNotifier {
 
   List<Marker> markers = [
     Marker(
-        point: LatLng(36.07, -94.174),
-        builder: (_) => const Icon(Icons.roller_shades_outlined, size: 25)),
+      point: LatLng(36.07, -94.174),
+      builder: (_) =>
+          // IconButton(
+          //     onPressed: () {
+          //       print('tapped');
+          //     },
+          //     icon: Icon(Icons.roller_shades_outlined, size: 25))
+          const Icon(Icons.roller_shades_outlined, size: 25),
+    ),
     Marker(
         point: LatLng(36.3, -94.3),
         builder: (_) => const Icon(Icons.roller_shades_outlined, size: 25)),
