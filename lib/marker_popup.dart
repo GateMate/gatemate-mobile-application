@@ -1,11 +1,8 @@
 //used https://github.com/rorystephenson/flutter_map_marker_popup/blob/master/example/lib/example_popup.dart
 
-// import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:gatemate_mobile/my_button.dart';
-import 'package:latlong2/latlong.dart';
 
 class ExamplePopup extends StatefulWidget {
   final Marker marker;
@@ -20,6 +17,7 @@ class ExamplePopup extends StatefulWidget {
 class _ExamplePopupState extends State<ExamplePopup> {
   @override
   Widget build(BuildContext context) {
+    // TODO: Remove this
     print("in popup");
     return Card(
       color: Colors.green[400],
@@ -29,77 +27,89 @@ class _ExamplePopupState extends State<ExamplePopup> {
           children: <Widget>[
             _cardDescription(context),
             IconButton(
-              icon: Icon(Icons.arrow_upward),
+              icon: const Icon(Icons.arrow_upward),
               onPressed: () {
                 showDialog(
-                    context: context,
-                    builder: (context) {
-                      return Dialog(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(40)),
-                        elevation: 16,
-                        child: Container(
-                          child: ListView(
-                            shrinkWrap: true,
-                            children: <Widget>[
-                              SizedBox(height: 20),
-                              Center(
-                                  child: Text(
-                                      'Are you sure you want to raise this gate?',
-                                      style: const TextStyle(fontSize: 20),
-                                      textAlign: TextAlign.center)),
-                              Column(children: [
-                                MyButton(
-                                    buttonText: "Yes, Raise Gate",
-                                    onPressed: () => Navigator.pop(context)),
-                                MyButton(
-                                    buttonText: 'No, Don\'t Raise the gate',
-                                    onPressed: () => Navigator.pop(context))
-                              ]),
-                              SizedBox(height: 20),
+                  context: context,
+                  builder: (context) {
+                    return Dialog(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(40),
+                      ),
+                      elevation: 16,
+                      child: ListView(
+                        shrinkWrap: true,
+                        children: <Widget>[
+                          const SizedBox(height: 20),
+                          const Center(
+                            child: Text(
+                              'Are you sure you want to raise this gate?',
+                              style: TextStyle(fontSize: 20),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          Column(
+                            children: [
+                              MyButton(
+                                buttonText: "Yes, Raise Gate",
+                                onPressed: () => Navigator.pop(context),
+                              ),
+                              MyButton(
+                                buttonText: 'No, Don\'t Raise the gate',
+                                onPressed: () => Navigator.pop(context),
+                              )
                             ],
                           ),
-                        ),
-                      );
-                    });
+                          const SizedBox(height: 20),
+                        ],
+                      ),
+                    );
+                  },
+                );
               },
               tooltip: "Raise Gates",
             ),
             IconButton(
               padding: EdgeInsets.zero,
-              icon: Icon(Icons.arrow_downward),
+              icon: const Icon(Icons.arrow_downward),
               onPressed: () {
                 showDialog(
-                    context: context,
-                    builder: (context) {
-                      return Dialog(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(40)),
-                        elevation: 16,
-                        child: Container(
-                          child: ListView(
-                            shrinkWrap: true,
-                            children: <Widget>[
-                              SizedBox(height: 20),
-                              Center(
-                                  child: Text(
-                                      'Are you sure you want to lower this gate?',
-                                      style: const TextStyle(fontSize: 20),
-                                      textAlign: TextAlign.center)),
-                              Column(children: [
-                                MyButton(
-                                    buttonText: 'Yes, Lower Gate',
-                                    onPressed: () => Navigator.pop(context)),
-                                MyButton(
-                                    buttonText: 'No, Don\'t Lower the Gate',
-                                    onPressed: () => Navigator.pop(context))
-                              ]),
-                              SizedBox(height: 20),
+                  context: context,
+                  builder: (context) {
+                    return Dialog(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(40),
+                      ),
+                      elevation: 16,
+                      child: ListView(
+                        shrinkWrap: true,
+                        children: <Widget>[
+                          const SizedBox(height: 20),
+                          const Center(
+                            child: Text(
+                              'Are you sure you want to lower this gate?',
+                              style: TextStyle(fontSize: 20),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          Column(
+                            children: [
+                              MyButton(
+                                buttonText: 'Yes, Lower Gate',
+                                onPressed: () => Navigator.pop(context),
+                              ),
+                              MyButton(
+                                buttonText: 'No, Don\'t Lower the Gate',
+                                onPressed: () => Navigator.pop(context),
+                              ),
                             ],
                           ),
-                        ),
-                      );
-                    });
+                          const SizedBox(height: 20),
+                        ],
+                      ),
+                    );
+                  },
+                );
               },
               tooltip: "Lower Gates",
             ),
@@ -130,13 +140,12 @@ class _ExamplePopupState extends State<ExamplePopup> {
             ),
             const Padding(padding: EdgeInsets.symmetric(vertical: 4.0)),
             Text(
-              // 'Position: ${widget.marker.point.latitude}, ${widget.marker.point.longitude}',
               'Position: ${widget.marker.point.latitude}, ${widget.marker.point.longitude}',
               style: const TextStyle(fontSize: 12.0),
             ),
-            Text(
+            const Text(
               'Current Water Levels:',
-              style: const TextStyle(fontSize: 12.0),
+              style: TextStyle(fontSize: 12.0),
             ),
           ],
         ),
