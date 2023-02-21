@@ -56,7 +56,7 @@ class NewActionDialog extends StatefulWidget {
 
 class _NewActionDialogState extends State<NewActionDialog> {
   final _inputTextController = TextEditingController();
-  var _submitting = false;
+  var _submitting = false;  // TODO: ?
 
   @override
   void dispose() {
@@ -83,13 +83,11 @@ class _NewActionDialogState extends State<NewActionDialog> {
         ),
         ElevatedButton(
           onPressed: () {
-            // TODO: Send data to server
-            // var inputText = _inputTextController.text;
-            // print(inputText);
             createToDoItem(_inputTextController.text);
             setState(() {
               _submitting = true;
             });
+            // TODO: Loading animation
 
             Navigator.pop(context);
           },
@@ -110,31 +108,32 @@ class NotificationsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var notifications = context.watch<ActionCenterViewModel>().actionItems;
+    var actionItems = context.watch<ActionCenterViewModel>().actionItems;
 
-    return ListView.builder(
-      itemCount: notifications.length,
-      itemBuilder: (context, index) {
-        return FutureBuilder<ToDoItem>(
-          future: notifications[index],
-          builder: (context, snapshot) {
-            // Wait for data or error
-            if (snapshot.hasData) {
+    return FutureBuilder(
+      future: actionItems,
+      builder: (context, snapshot) {
+        // Wait for data or error
+        if (snapshot.hasData) {
+          return ListView.builder(
+            itemCount: snapshot.data!.length,
+            itemBuilder: (context, index) {
               return Card(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text(snapshot.data!.title, style: style),
+                  child: Text(snapshot.data![index].title, style: style),
                 ),
               );
-            } else if (snapshot.hasError) {
-              // TODO: Handle this
-              print('Error moment: ${snapshot.error}');
-            }
-            // Shows a loading spinner by default
-            return const CircularProgressIndicator();
-          },
-        );
-      },
+            },
+          );
+        } else if (snapshot.hasError) {
+          // TODO: Handle erros
+          throw Exception('Action items data error!');
+        }
+        // While loading, show loading indicator
+        return const Center(child: CircularProgressIndicator());
+      }
     );
+
   }
 }

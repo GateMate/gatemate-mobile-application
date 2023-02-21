@@ -7,13 +7,7 @@ import 'data/to_do_item.dart';
 
 class ActionCenterViewModel extends ChangeNotifier {
   // TODO: Read up on StreamBuilder for this!
-  var actionItems = [
-    fetchToDoItem(1),
-    fetchToDoItem(3),
-    fetchToDoItem(4),
-    fetchToDoItem(6),
-    fetchToDoItem(437),
-  ];
+  var actionItems = fetchToDoItems();
 }
 
 Future<ToDoItem> createToDoItem(String title) async {
@@ -43,7 +37,30 @@ Future<ToDoItem> createToDoItem(String title) async {
   }
 }
 
-Future<ToDoItem> fetchToDoItem(int id) async {
+Future<List<ToDoItem>> fetchToDoItems() async {
+  final response = await http.get(
+    Uri.parse('https://todo-proukhgi3a-uc.a.run.app/list'),
+  );
+
+  if (response.statusCode == 200) {
+    List<dynamic> rawDataList = jsonDecode(response.body);
+    List<ToDoItem> toDoItemList = [];
+
+    for (var i = 0; i < rawDataList.length; i++) {
+      toDoItemList.add(ToDoItem.fromJson(rawDataList[i]));
+    }
+
+    return toDoItemList;
+  } else {
+    // TODO: Handle this
+    throw Exception(
+      'Failed to fetch to do items!'
+      'Response status code: ${response.statusCode}',
+    );
+  }
+}
+
+Future<ToDoItem> fetchToDoItemById(int id) async {
   final response = await http.get(
     Uri.parse('https://todo-proukhgi3a-uc.a.run.app/list?id=$id'),
   );
