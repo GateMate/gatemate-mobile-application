@@ -2,22 +2,19 @@ import 'dart:collection';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:gatemate_mobile/data.dart';
-import 'package:gatemate_mobile/map_pin_pill/map_pin_pill.dart';
-import 'package:gatemate_mobile/map_pin_pill/map_pin_pill_model.dart';
 import 'package:gatemate_mobile/model/gate_management_view_model.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google_maps_services_dart/googles_maps_services_dart.dart';
-import 'package:map_elevation/map_elevation.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:gatemate_mobile/my_button.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_map_arcgis/flutter_map_arcgis.dart';
+import 'package:gatemate_mobile/marker_popup.dart';
 
 import '../app_constants.dart';
 import 'package:http/http.dart' as http;
 
-final api = GooglesMapsServicesDart().getElevationAPIApi();
-PinInformation currentlySelectedPin = PinInformation(
-    location: LatLng(0, 0), locationName: '', labelColor: Colors.grey);
 late int _markerIdValue;
-Set<Marker> _markers = HashSet<Marker>();
+// Set<Marker> _markers = HashSet<Marker>();
 
 class GateManagementRoute extends StatefulWidget {
   GateManagementRoute({super.key});
@@ -27,54 +24,75 @@ class GateManagementRoute extends StatefulWidget {
 }
 
 class _GateManagementState extends State<GateManagementRoute> {
-  late ElevationPoint hoverPoint;
   // GateManagementRoute({super.key});
 
-  late GoogleMapController mapController;
-  PinInformation currentlySelectedPin = PinInformation(
-      location: LatLng(0, 0), locationName: '', labelColor: Colors.grey);
   GateManagementViewModel _gateManagementViewModel = GateManagementViewModel();
-  final Set<Marker> _markers = Set();
+  // final Set<Marker> markers = Set();
   int polyId = 0;
 
-  final LatLng _center = const LatLng(36.06889761358809, -94.17477200170791);
-
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
-  }
+  final LatLng _center = LatLng(36.06889761358809, -94.17477200170791);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Gate Management'),
-          backgroundColor: Colors.green[700],
-        ),
-        body: Stack(children: <Widget>[
-          GoogleMap(
-            onMapCreated: _onMapCreated,
-            mapType: MapType.terrain,
-            markers: _gateManagementViewModel.markers,
-            initialCameraPosition: CameraPosition(
-              target: _center,
-              zoom: 10.0,
+      appBar: AppBar(
+        title: const Text('Gate Management'),
+        backgroundColor: Colors.green[700],
+      ),
+      body: Stack(
+        children: [
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                Flexible(
+                  child: FlutterMap(
+                    options: MapOptions(
+                      center: LatLng(36.133512, -94.121556),
+                      // center: LatLng(47.925812, 106.919831),
+                      maxZoom: 18,
+                      zoom: 9.0,
+                      plugins: [EsriPlugin()],
+                    ),
+                    layers: [
+                      TileLayerOptions(
+                        urlTemplate:
+                            'https://services.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}?apiKey=AAPK9832e94d28094f39a7c33300e31ddd28P3dyFrvyoHAnYo3etV-ZrnsdZdCGXg2nG7HmfduCx6PE8v2IAVVOnSbtncioU578',
+                        subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+                        tileProvider: NonCachingNetworkTileProvider(),
+                        backgroundColor: Colors.transparent,
+                      ),
+                      MarkerLayerOptions(
+                        markers: [
+                          for (int i = 0;
+                              i < _gateManagementViewModel.markers.length;
+                              i++)
+                            _gateManagementViewModel.markers[i]
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            onTap: (latLng) {
-              _setMarkers(latLng);
-            },
           ),
-        ]));
-  }
+        ],
+      ),
 
-  void _setMarkers(LatLng point) {
-    final String markerId = 'marked_id_$_markerIdValue';
-    _markerIdValue++;
-    var lat = point.latitude;
-    var long = point.longitude;
-    var formatLat = lat.toStringAsFixed(3);
-    var formatLong = long.toStringAsFixed(3);
-    setState(() {
-      _markers.add(Marker(markerId: MarkerId(markerId), position: point));
-    });
+      // Stack(children: <Widget>[
+      //   GoogleMap(
+      //     onMapCreated: _onMapCreated,
+      //     mapType: MapType.terrain,
+      //     markers: _gateManagementViewModel.markers,
+      //     initialCameraPosition: CameraPosition(
+      //       target: _center,
+      //       zoom: 10.0,
+      //     ),
+      //     onTap: (latLng) {
+      //       _setMarkers(latLng);
+      //     },
+      //   ),
+      // ]
+    );
   }
 }
