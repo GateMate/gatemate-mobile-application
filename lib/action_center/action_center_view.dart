@@ -56,7 +56,7 @@ class NewActionDialog extends StatefulWidget {
 
 class _NewActionDialogState extends State<NewActionDialog> {
   final _inputTextController = TextEditingController();
-  var _submitting = false;  // TODO: ?
+  var _submitting = false;
 
   @override
   void dispose() {
@@ -68,32 +68,72 @@ class _NewActionDialogState extends State<NewActionDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text('Create new action:'),
-      content: TextField(
+      content: _getDialogBody(),
+      actions: [
+        _getCancelButton(),
+        _getSubmitButton(),
+      ],
+    );
+  }
+
+  // Returns a text field if nothing has been submitted
+  // Otherwise, returns a loading progress indicator
+  Widget _getDialogBody() {
+    if (_submitting) {
+      return const CircularProgressIndicator();
+    } else {
+      return TextField(
         decoration: const InputDecoration(
           hintText: 'Enter description...',
         ),
         controller: _inputTextController,
         keyboardType: TextInputType.multiline,
         maxLines: null,
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text('Cancel'),
-        ),
-        ElevatedButton(
-          onPressed: () {
-            createToDoItem(_inputTextController.text);
-            setState(() {
-              _submitting = true;
-            });
-            // TODO: Loading animation
+      );
+    }
+  }
 
-            Navigator.pop(context);
-          },
-          child: const Text('Submit'),
-        ),
-      ],
+  // Returns a normal button if nothing has been submitted
+  // Otherwise, returns a disabled button
+  Widget _getCancelButton() {
+    void Function()? onCancel;
+    if (!_submitting) {
+      onCancel = () => Navigator.pop(context);
+    }
+
+    return TextButton(
+      onPressed: onCancel,
+      child: const Text('Cancel'),
+    );
+  }
+
+  // Returns a normal button if nothing has been submitted
+  // Otherwise, returns a disabled button
+  Widget _getSubmitButton() {
+    void Function()? onSubmit;
+    if (!_submitting) {
+      onSubmit = () {
+        if (_inputTextController.text.trim().isNotEmpty) {
+          createToDoItem(_inputTextController.text);
+          setState(() {
+            _submitting = true;
+          });
+          // TODO: Loading animation
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('Content empty: nothing saved!'),
+          ));
+        }
+
+        // Don't need to use set state here since nothing needs to be redrawn
+        _submitting = false;
+        Navigator.pop(context);
+      };
+    }
+
+    return ElevatedButton(
+      onPressed: onSubmit,
+      child: const Text('Submit'),
     );
   }
 }
@@ -132,8 +172,7 @@ class NotificationsList extends StatelessWidget {
         }
         // While loading, show loading indicator
         return const Center(child: CircularProgressIndicator());
-      }
+      },
     );
-
   }
 }
