@@ -24,8 +24,7 @@ Future<ToDoItem> createToDoItem(String title) async {
     }),
   );
 
-  // TODO: Change this to 201 once the backend is fixed
-  if (response.statusCode == 200) {
+  if (response.statusCode == 201) {
     // TODO: Return item using id generated from backend
     return ToDoItem(id: id.toString(), title: title);
   } else {

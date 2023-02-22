@@ -32,15 +32,15 @@
   <title>gatemate_mobile</title>
   <link rel="manifest" href="manifest.json">
 
-  <script>
-    // The value below is injected by flutter build, do not touch.
-    var serviceWorkerVersion = null;
-  </script>
+   <!-- TODO: Add your Google Maps API key here -->
+   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDh5B5gBL-Syj0cWd73QPa1_FsEmdIUGWo&callback=Function.prototype">
+  </script> 
   <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js" defer></script>
 </head>
 <body>
   <script>
+    var serviceWorkerVersion = null;
     window.addEventListener('load', function(ev) {
       // Download main.dart.js
       _flutter.loader.loadEntrypoint({
