@@ -167,8 +167,8 @@ class NotificationsList extends StatelessWidget {
             },
           );
         } else if (snapshot.hasError) {
-          // TODO: Handle erros
-          throw Exception('Action items data error!');
+          // TODO: Handle errors
+          throw Exception('Error from server: ${snapshot.error}');
         }
         // While loading, show loading indicator
         return const Center(child: CircularProgressIndicator());
