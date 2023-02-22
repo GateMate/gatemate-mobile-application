@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gatemate_mobile/home/home.dart';
+import 'package:gatemate_mobile/view/home/home.dart';
 
 void main() {
   runApp(const GateMateApp());
