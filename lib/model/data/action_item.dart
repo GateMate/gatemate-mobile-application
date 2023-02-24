@@ -1,14 +1,14 @@
-class ToDoItem {
+class ActionItem {
   final String id;
   final String title;
 
-  const ToDoItem({
+  const ActionItem({
     required this.id,
     required this.title,
   });
 
-  factory ToDoItem.fromJson(Map<String, dynamic> json) {
-    return ToDoItem(
+  factory ActionItem.fromJson(Map<String, dynamic> json) {
+    return ActionItem(
       id: json['id'],
       title: json['title'],
     );
