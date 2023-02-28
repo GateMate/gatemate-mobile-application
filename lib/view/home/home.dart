@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gatemate_mobile/view/action_center/action_center_view.dart';
 import 'package:gatemate_mobile/view/add_gate/add_gate_view.dart';
+import 'package:gatemate_mobile/view/draw_field/draw_field.dart';
 import 'package:gatemate_mobile/view/gate_management/gate_management_view.dart';
 import 'package:gatemate_mobile/model/fields_view_model.dart';
 import 'package:gatemate_mobile/view/settings/settings_view.dart';
@@ -113,7 +114,20 @@ class NavigationDrawer extends StatelessWidget {
               // Navigator.pop(context);
             },
             trailing: const Icon(Icons.arrow_forward_ios),
-          )
+          ),
+          ListTile(
+            title: const Text('Add Field'),
+            onTap: () {
+              // Update the state of the app
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const AddFieldRoute()),
+              );
+              // Then close the drawer
+              // Navigator.pop(context);
+            },
+            trailing: const Icon(Icons.arrow_forward_ios),
+          ),
         ],
       ),
     );
