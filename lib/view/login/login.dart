@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
 
-import '../ui-primatives/my_button.dart';
-import '../ui-primatives/my_textfield.dart';
+import '../ui_primatives/my_button.dart';
+import '../ui_primatives/my_textfield.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

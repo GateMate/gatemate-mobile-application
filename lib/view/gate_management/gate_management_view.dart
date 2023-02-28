@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_arcgis/flutter_map_arcgis.dart';
 import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
-import 'package:gatemate_mobile/model/gate_management_view_model.dart';
 import 'package:latlong2/latlong.dart';
 
-import '../ui-primatives/marker_popup.dart';
+import '../../model/gate_management_view_model.dart';
+import '../ui_primatives/marker_popup.dart';
 
 late int _markerIdValue;
 // Set<Marker> _markers = HashSet<Marker>();

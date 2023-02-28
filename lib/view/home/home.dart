@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:gatemate_mobile/action_center/action_center_view.dart';
-import 'package:gatemate_mobile/add_gate/add_gate_view.dart';
-import 'package:gatemate_mobile/gate_management/gate_management_view.dart';
+import 'package:gatemate_mobile/view/action_center/action_center_view.dart';
+import 'package:gatemate_mobile/view/add_gate/add_gate_view.dart';
+import 'package:gatemate_mobile/view/gate_management/gate_management_view.dart';
 import 'package:gatemate_mobile/model/fields_view_model.dart';
-import 'package:gatemate_mobile/settings/settings_view.dart';
+import 'package:gatemate_mobile/view/settings/settings_view.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -49,15 +49,15 @@ class NavigationDrawer extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.primary,
               ),
-              accountName: Text("xyz"),
-              accountEmail: Text("xyz@gmail.com"),
-              currentAccountPicture: CircleAvatar(
+              accountName: const Text("xyz"),
+              accountEmail: const Text("xyz@gmail.com"),
+              currentAccountPicture: const CircleAvatar(
                 backgroundColor: Colors.white,
                 child: Text("xyz"),
               )),
-          Text('Current Field Selection: ',
+          const Text('Current Field Selection: ',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          FieldSelectionDropdown(),
+          const FieldSelectionDropdown(),
           Divider(
             color: Colors.green[700],
             thickness: 2.0,
@@ -73,7 +73,7 @@ class NavigationDrawer extends StatelessWidget {
                     builder: (context) => const ActionCenterRoute()),
               );
             },
-            trailing: new Icon(Icons.arrow_forward_ios),
+            trailing: const Icon(Icons.arrow_forward_ios),
           ),
           ListTile(
             title: const Text('Add Gate'),
@@ -81,12 +81,12 @@ class NavigationDrawer extends StatelessWidget {
               // Update the state of the app
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => AddGateRoute()),
+                MaterialPageRoute(builder: (context) => const AddGateRoute()),
               );
               // Then close the drawer
               // Navigator.pop(context);
             },
-            trailing: new Icon(Icons.arrow_forward_ios),
+            trailing: const Icon(Icons.arrow_forward_ios),
           ),
           ListTile(
             title: const Text('Gate Management'),
@@ -99,7 +99,7 @@ class NavigationDrawer extends StatelessWidget {
               // Then close the drawer
               // Navigator.pop(context);
             },
-            trailing: new Icon(Icons.arrow_forward_ios),
+            trailing: const Icon(Icons.arrow_forward_ios),
           ),
           ListTile(
             title: const Text('Settings'),
@@ -112,7 +112,7 @@ class NavigationDrawer extends StatelessWidget {
               // Then close the drawer
               // Navigator.pop(context);
             },
-            trailing: new Icon(Icons.arrow_forward_ios),
+            trailing: const Icon(Icons.arrow_forward_ios),
           )
         ],
       ),

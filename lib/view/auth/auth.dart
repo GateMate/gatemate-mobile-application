@@ -1,8 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:gatemate_mobile/home/home.dart';
-import 'package:gatemate_mobile/login/login.dart';
-import 'package:gatemate_mobile/main.dart';
+import 'package:gatemate_mobile/view/home/home.dart';
+import 'package:gatemate_mobile/view/login/login.dart';
 
 class AuthPage extends StatelessWidget {
   const AuthPage({super.key});
