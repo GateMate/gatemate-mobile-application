@@ -10,6 +10,8 @@ import 'package:provider/provider.dart';
 import '../../model/add_gate_model.dart';
 import '../ui_primatives/marker_popup.dart';
 import '../ui_primatives/my_button.dart';
+import 'package:flutter_map_line_editor/polyeditor.dart';
+import 'package:flutter_map_dragmarker/dragmarker.dart';
 
 // Set<Marker> markers = <Marker>{};
 List<Marker> markers = [];
@@ -27,24 +29,232 @@ class _AddFieldRoute extends State<AddFieldRoute> {
   final LatLng _center = LatLng(36.06889761358809, -94.17477200170791);
   final PopupController _popupController = PopupController();
   late List<LatLng> polygonList = <LatLng>[];
-  final poly1Controller = TextEditingController();
-  final poly2Controller = TextEditingController();
-  final poly3Controller = TextEditingController();
-  final poly4Controller = TextEditingController();
+  final polyLat1Controller = TextEditingController();
+  final polyLong1Controller = TextEditingController();
+  final polyLat2Controller = TextEditingController();
+  final polyLong2Controller = TextEditingController();
+  final polyLat3Controller = TextEditingController();
+  final polyLong3Controller = TextEditingController();
+  final polyLat4Controller = TextEditingController();
+  final polyLong4Controller = TextEditingController();
+  late PolyEditor polyEditor;
+
+  List<Polygon> polygons = [];
+  var testPolygon =
+      Polygon(color: Colors.deepOrange, isFilled: true, points: []);
 
   @override
   void initState() {
     super.initState();
+    Future(showOptions);
     // addGateModel = Provider.of<AddGateModel>(context, listen: true);
     // addGateModel.addListener(() => mounted ? setState(() {}) : null);
 
     // initialization goes here
+    polyEditor = PolyEditor(
+      addClosePathMarker: true,
+      points: testPolygon.points,
+      pointIcon: const Icon(Icons.crop_square, size: 23),
+      intermediateIcon: const Icon(Icons.lens, size: 15, color: Colors.grey),
+      callbackRefresh: () => {setState(() {})},
+    );
+
+    polygons.add(testPolygon);
   }
 
   @override
   void dispose() {
     // teardown goes here
     super.dispose();
+  }
+
+  void showOptions() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(40),
+          ),
+          elevation: 16,
+          child: ListView(
+            shrinkWrap: true,
+            children: <Widget>[
+              const SizedBox(height: 20),
+              Column(
+                children: [
+                  const Text(
+                    'Draw Your Field on the Map or Enter Coordinates',
+                    style: TextStyle(fontSize: 20),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+              Column(
+                children: [
+                  MyButton(
+                    buttonText: 'Draw Field on Map',
+                    onPressed: () => setState(
+                      () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                  MyButton(
+                    buttonText: 'Enter Coordinates',
+                    onPressed: () => setState(
+                      () {
+                        Navigator.pop(context);
+                        Future(dialogCoordinates);
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void dialogCoordinates() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(40),
+          ),
+          elevation: 16,
+          child: ListView(
+            shrinkWrap: true,
+            children: <Widget>[
+              const SizedBox(height: 20),
+              Column(
+                children: [
+                  const Text(
+                    'Enter Latitude and Longitude Values for 4 Points to Create a Field Within Those Points:',
+                    style: TextStyle(fontSize: 20),
+                    textAlign: TextAlign.center,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ListTile(
+                          subtitle: MyTextField(
+                            controller: polyLat1Controller,
+                            hintText: "Enter Latitude 1",
+                            obscureText: false,
+                            prefixIcon: Icon(Icons.my_location),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 5),
+                      Expanded(
+                          child: ListTile(
+                        subtitle: MyTextField(
+                          controller: polyLong1Controller,
+                          hintText: "Enter Longitude 1",
+                          obscureText: false,
+                          prefixIcon: Icon(Icons.my_location),
+                        ),
+                      ))
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ListTile(
+                          subtitle: MyTextField(
+                            controller: polyLat2Controller,
+                            hintText: "Enter Latitude 2",
+                            obscureText: false,
+                            prefixIcon: Icon(Icons.my_location),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 5),
+                      Expanded(
+                          child: ListTile(
+                        subtitle: MyTextField(
+                          controller: polyLong2Controller,
+                          hintText: "Enter Longitude 2",
+                          obscureText: false,
+                          prefixIcon: Icon(Icons.my_location),
+                        ),
+                      ))
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ListTile(
+                          subtitle: MyTextField(
+                            controller: polyLat3Controller,
+                            hintText: "Enter Latitude 3",
+                            obscureText: false,
+                            prefixIcon: Icon(Icons.my_location),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 5),
+                      Expanded(
+                          child: ListTile(
+                        subtitle: MyTextField(
+                          controller: polyLong3Controller,
+                          hintText: "Enter Longitude 3",
+                          obscureText: false,
+                          prefixIcon: Icon(Icons.my_location),
+                        ),
+                      ))
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ListTile(
+                          subtitle: MyTextField(
+                            controller: polyLat4Controller,
+                            hintText: "Enter Latitude 4",
+                            obscureText: false,
+                            prefixIcon: Icon(Icons.my_location),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 5),
+                      Expanded(
+                          child: ListTile(
+                        subtitle: MyTextField(
+                          controller: polyLong4Controller,
+                          hintText: "Enter Longitude 4",
+                          obscureText: false,
+                          prefixIcon: Icon(Icons.my_location),
+                        ),
+                      ))
+                    ],
+                  ),
+                ],
+              ),
+              Column(
+                children: [
+                  MyButton(
+                    buttonText: 'Add Field',
+                    onPressed: () => setState(
+                      () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -67,75 +277,31 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                     child: FlutterMap(
                       options: MapOptions(
                         center: LatLng(36.133512, -94.121556),
+                        allowPanningOnScrollingParent: false,
                         // center: LatLng(47.925812, 106.919831),
                         maxZoom: 18,
                         zoom: 9.0,
-                        plugins: [EsriPlugin()],
+                        plugins: [EsriPlugin(), DragMarkerPlugin()],
                         onTap: (tapPos, latlng) {
-                          // setState(() => polygonList.add(latlng));
-                          // polygonList.add(latlng);
-                          // print(polygonList);
+                          polyEditor.add(testPolygon.points, latlng);
+                          setState(() => {
+                                // polygonList.add(latlng);
+                                markers.add(Marker(
+                                  builder: (_) => const Icon(
+                                    Icons.circle,
+                                    size: 25,
+                                  ),
+                                  point: latlng,
+                                )),
 
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return Dialog(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(40),
-                                ),
-                                elevation: 16,
-                                child: ListView(
-                                  shrinkWrap: true,
-                                  children: <Widget>[
-                                    const SizedBox(height: 20),
-                                    Center(
-                                      child: MyTextField(
-                                        controller: poly1Controller,
-                                        hintText:
-                                            "Enter Latitude and Longitude",
-                                        obscureText: false,
-                                        prefixIcon: Icon(Icons.my_location),
-                                      ),
-                                    ),
-                                    Column(
-                                      children: [
-                                        MyButton(
-                                          buttonText: 'Add Field',
-                                          onPressed: () => setState(
-                                            () {
-                                              // var newMarker = Marker(
-                                              //   builder: (_) => const Icon(
-                                              //     Icons.roller_shades_outlined,
-                                              //     size: 25,
-                                              //   ),
-                                              //   point: latlng,
-                                              // );
-                                              // markers.add(newMarker);
-                                              // addGateModel
-                                              //     .setMarkers(newMarker);
-                                              Navigator.pop(context);
-                                            },
-                                          ),
-                                        ),
-                                        // MyButton(
-                                        //   buttonText: 'No, Don\'t Add Marker',
-                                        //   onPressed: () =>
-                                        //       Navigator.pop(context),
-                                        // ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 20),
-                                  ],
-                                ),
-                              );
-                            },
-                          );
+                                polygonList.add(latlng),
+                                print(polygonList),
+                              });
                         },
                       ),
+                      //   )
+                      // ],
                       children: [
-                        // PolygonLayerWidget(
-                        //     options: PolygonLayerOptions(
-                        //         polygons: [Polygon(points: polygonList)])),
                         TileLayerWidget(
                           options: TileLayerOptions(
                             urlTemplate:
@@ -146,9 +312,9 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                           ),
                         ),
                         PolygonLayerWidget(
-                            options: PolygonLayerOptions(polygons: [
-                          Polygon(points: polygonList, color: Colors.black)
-                        ]))
+                            options: PolygonLayerOptions(polygons: polygons)),
+                        MarkerLayerWidget(
+                            options: MarkerLayerOptions(markers: markers)),
 
                         // PopupMarkerLayerWidget(
                         //   options: PopupMarkerLayerOptions(
@@ -170,7 +336,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                   Container(
                     alignment: Alignment.bottomCenter,
                     child: const Text(
-                      'Tap at a location to add a gate or click an existing marker to view details',
+                      'Tap at a location to add a coordinate',
                       style: TextStyle(fontSize: 20),
                       textAlign: TextAlign.center,
                     ),
