@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:gatemate_mobile/model/action_center_view_model.dart';
 import 'package:gatemate_mobile/view/home/home.dart';
+import 'package:get_it/get_it.dart';
 
 void main() {
+  // Register singleton classes for entire application
+  final getIt = GetIt.instance;
+  getIt.registerLazySingleton<ActionCenterViewModel>(
+    () => ActionCenterViewModel(),
+  );
+
+  // Start app
   runApp(const GateMateApp());
 }
 
