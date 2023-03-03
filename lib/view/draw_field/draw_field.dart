@@ -133,7 +133,6 @@ class _AddFieldRoute extends State<AddFieldRoute> {
     ));
 
     markers.add(poly4LatLng);
-    ;
   }
 
   void saveFieldDialog() {

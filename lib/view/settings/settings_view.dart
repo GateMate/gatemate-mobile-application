@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gatemate_mobile/model/fields_view_model.dart';
+import 'package:gatemate_mobile/view/draw_field/draw_field.dart';
 import 'package:provider/provider.dart';
 
 // TODO: Consider replacing with an Enum
@@ -54,6 +55,10 @@ class FieldSelectionRow extends StatelessWidget {
           ),
           onPressed: () {
             // TODO
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const AddFieldRoute()),
+            );
             print('DEBUG: Add field button pressed!');
           },
         ),
