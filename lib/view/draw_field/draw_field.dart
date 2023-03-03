@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_arcgis/flutter_map_arcgis.dart';
 import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
+import 'package:gatemate_mobile/model/add_field.dart';
 import 'package:gatemate_mobile/view/ui_primatives/my_textfield.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
@@ -10,10 +11,8 @@ import 'package:provider/provider.dart';
 import '../../model/add_gate_model.dart';
 import '../ui_primatives/marker_popup.dart';
 import '../ui_primatives/my_button.dart';
-import 'package:flutter_map_line_editor/polyeditor.dart';
-import 'package:flutter_map_dragmarker/dragmarker.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
-// Set<Marker> markers = <Marker>{};
 List<Marker> markers = [];
 int markerId = 0;
 
@@ -25,7 +24,7 @@ class AddFieldRoute extends StatefulWidget {
 }
 
 class _AddFieldRoute extends State<AddFieldRoute> {
-  AddGateModel addGateModel = AddGateModel();
+  AddFieldModel addFieldModel = AddFieldModel();
   final LatLng _center = LatLng(36.06889761358809, -94.17477200170791);
   final PopupController _popupController = PopupController();
   late List<LatLng> polygonList = <LatLng>[];
@@ -37,29 +36,39 @@ class _AddFieldRoute extends State<AddFieldRoute> {
   final polyLong3Controller = TextEditingController();
   final polyLat4Controller = TextEditingController();
   final polyLong4Controller = TextEditingController();
-  late PolyEditor polyEditor;
-
-  List<Polygon> polygons = [];
-  var testPolygon =
-      Polygon(color: Colors.deepOrange, isFilled: true, points: []);
+  late var poly1LatLng;
+  late var poly2LatLng;
+  late var poly3LatLng;
+  late var poly4LatLng;
 
   @override
   void initState() {
     super.initState();
-    Future(showOptions);
-    // addGateModel = Provider.of<AddGateModel>(context, listen: true);
-    // addGateModel.addListener(() => mounted ? setState(() {}) : null);
-
-    // initialization goes here
-    polyEditor = PolyEditor(
-      addClosePathMarker: true,
-      points: testPolygon.points,
-      pointIcon: const Icon(Icons.crop_square, size: 23),
-      intermediateIcon: const Icon(Icons.lens, size: 15, color: Colors.grey),
-      callbackRefresh: () => {setState(() {})},
+    Future(dialogCoordinates);
+    polyLat1Controller.addListener(
+      () {},
     );
-
-    polygons.add(testPolygon);
+    polyLat2Controller.addListener(
+      () {},
+    );
+    polyLat3Controller.addListener(
+      () {},
+    );
+    polyLat4Controller.addListener(
+      () {},
+    );
+    polyLong1Controller.addListener(
+      () {},
+    );
+    polyLong2Controller.addListener(
+      () {},
+    );
+    polyLong3Controller.addListener(
+      () {},
+    );
+    polyLong4Controller.addListener(
+      () {},
+    );
   }
 
   @override
@@ -68,55 +77,174 @@ class _AddFieldRoute extends State<AddFieldRoute> {
     super.dispose();
   }
 
-  void showOptions() {
+  void createPolygon() {
+    setState(() {
+      polygonList.clear();
+      markers.clear();
+    });
+    polygonList.add(LatLng(double.parse(polyLat1Controller.text),
+        double.parse(polyLong1Controller.text)));
+    poly1LatLng = (Marker(
+      builder: (_) => const Icon(
+        Icons.circle,
+        size: 15,
+      ),
+      point: LatLng(double.parse(polyLat1Controller.text),
+          double.parse(polyLong1Controller.text)),
+    ));
+
+    markers.add(poly1LatLng);
+
+    polygonList.add(LatLng(double.parse(polyLat2Controller.text),
+        double.parse(polyLong2Controller.text)));
+    poly2LatLng = (Marker(
+      builder: (_) => const Icon(
+        Icons.circle,
+        size: 15,
+      ),
+      point: LatLng(double.parse(polyLat2Controller.text),
+          double.parse(polyLong2Controller.text)),
+    ));
+
+    markers.add(poly2LatLng);
+
+    polygonList.add(LatLng(double.parse(polyLat3Controller.text),
+        double.parse(polyLong3Controller.text)));
+    poly3LatLng = (Marker(
+      builder: (_) => const Icon(
+        Icons.circle,
+        size: 15,
+      ),
+      point: LatLng(double.parse(polyLat3Controller.text),
+          double.parse(polyLong3Controller.text)),
+    ));
+
+    markers.add(poly3LatLng);
+
+    polygonList.add(LatLng(double.parse(polyLat4Controller.text),
+        double.parse(polyLong4Controller.text)));
+    poly4LatLng = (Marker(
+      builder: (_) => const Icon(
+        Icons.circle,
+        size: 15,
+      ),
+      point: LatLng(double.parse(polyLat4Controller.text),
+          double.parse(polyLong4Controller.text)),
+    ));
+
+    markers.add(poly4LatLng);
+    ;
+  }
+
+  void saveFieldDialog() {
     showDialog(
-      context: context,
-      builder: (context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(40),
-          ),
-          elevation: 16,
-          child: ListView(
-            shrinkWrap: true,
-            children: <Widget>[
-              const SizedBox(height: 20),
-              Column(
-                children: [
-                  const Text(
-                    'Draw Your Field on the Map or Enter Coordinates',
+        context: context,
+        builder: (context) {
+          return Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(40),
+              ),
+              elevation: 16,
+              child: ListView(shrinkWrap: true, children: <Widget>[
+                const SizedBox(height: 20),
+                const Center(
+                  child: Text(
+                    'Create this as a new field?',
                     style: TextStyle(fontSize: 20),
                     textAlign: TextAlign.center,
                   ),
-                ],
-              ),
-              Column(
-                children: [
-                  MyButton(
-                    buttonText: 'Draw Field on Map',
-                    onPressed: () => setState(
-                      () {
-                        Navigator.pop(context);
-                      },
+                ),
+                Column(
+                  children: [
+                    MyButton(
+                      buttonText: 'Yes, Create Field',
+                      onPressed: () => setState(
+                        () {
+                          setState(() {
+                            polygonList.clear();
+                            markers.clear();
+                            polyLat1Controller.clear();
+                            polyLat2Controller.clear();
+                            polyLat3Controller.clear();
+                            polyLat4Controller.clear();
+                            polyLong1Controller.clear();
+                            polyLong2Controller.clear();
+                            polyLong3Controller.clear();
+                            polyLong4Controller.clear();
+                          });
+                          addFieldModel.setMarkers(poly1LatLng);
+                          addFieldModel.setMarkers(poly2LatLng);
+                          addFieldModel.setMarkers(poly3LatLng);
+                          addFieldModel.setMarkers(poly4LatLng);
+                          Navigator.pop(context);
+                          Fluttertoast.showToast(
+                              msg: "Field Added Successfully!",
+                              toastLength: Toast.LENGTH_LONG,
+                              gravity: ToastGravity.CENTER,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.green[400],
+                              textColor: Colors.white,
+                              fontSize: 16.0);
+                        },
+                      ),
                     ),
-                  ),
-                  MyButton(
-                    buttonText: 'Enter Coordinates',
-                    onPressed: () => setState(
-                      () {
-                        Navigator.pop(context);
-                        Future(dialogCoordinates);
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-            ],
-          ),
-        );
-      },
-    );
+                    MyButton(
+                        buttonText: 'No, Don\'t Create Field',
+                        onPressed: () => {
+                              setState(() {
+                                polygonList.clear();
+                                markers.clear();
+                                polyLat1Controller.clear();
+                                polyLat2Controller.clear();
+                                polyLat3Controller.clear();
+                                polyLat4Controller.clear();
+                                polyLong1Controller.clear();
+                                polyLong2Controller.clear();
+                                polyLong3Controller.clear();
+                                polyLong4Controller.clear();
+                              }),
+                              Navigator.pop(context),
+                            }),
+                  ],
+                ),
+              ]));
+        });
+  }
+
+  Widget getText() {
+    if (polygonList.length == 4) {
+      return const Text(
+        'Tap the "+" to Add the Field',
+        style: TextStyle(fontSize: 20),
+        textAlign: TextAlign.center,
+      );
+    } else {
+      return const Text(
+        'Tap the Green Button to Add Coordinates To Make a Field',
+        style: TextStyle(fontSize: 20),
+        textAlign: TextAlign.center,
+      );
+    }
+  }
+
+  Widget _getFab() {
+    if (polygonList.length >= 4) {
+      return FloatingActionButton(
+        onPressed: () {
+          saveFieldDialog();
+        },
+        backgroundColor: Colors.green[400],
+        child: const Icon(Icons.add),
+      );
+    } else {
+      return FloatingActionButton(
+        onPressed: () {
+          Future(dialogCoordinates);
+        },
+        backgroundColor: Colors.green[400],
+        child: const Icon(Icons.add_location),
+      );
+    }
   }
 
   void dialogCoordinates() {
@@ -143,20 +271,26 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                     children: [
                       Expanded(
                         child: ListTile(
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                           subtitle: MyTextField(
                             controller: polyLat1Controller,
-                            hintText: "Enter Latitude 1",
+                            hintText: "Lat 1",
                             obscureText: false,
                             prefixIcon: Icon(Icons.my_location),
+                            onChanged: () {
+                              print(polyLat1Controller.text);
+                            },
                           ),
                         ),
                       ),
-                      SizedBox(width: 5),
                       Expanded(
                           child: ListTile(
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                         subtitle: MyTextField(
                           controller: polyLong1Controller,
-                          hintText: "Enter Longitude 1",
+                          hintText: "Long 1",
                           obscureText: false,
                           prefixIcon: Icon(Icons.my_location),
                         ),
@@ -167,20 +301,22 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                     children: [
                       Expanded(
                         child: ListTile(
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                           subtitle: MyTextField(
-                            controller: polyLat2Controller,
-                            hintText: "Enter Latitude 2",
-                            obscureText: false,
-                            prefixIcon: Icon(Icons.my_location),
-                          ),
+                              controller: polyLat2Controller,
+                              hintText: "Lat 2",
+                              obscureText: false,
+                              prefixIcon: Icon(Icons.my_location)),
                         ),
                       ),
-                      SizedBox(width: 5),
                       Expanded(
                           child: ListTile(
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                         subtitle: MyTextField(
                           controller: polyLong2Controller,
-                          hintText: "Enter Longitude 2",
+                          hintText: "Long 2",
                           obscureText: false,
                           prefixIcon: Icon(Icons.my_location),
                         ),
@@ -191,20 +327,23 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                     children: [
                       Expanded(
                         child: ListTile(
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                           subtitle: MyTextField(
                             controller: polyLat3Controller,
-                            hintText: "Enter Latitude 3",
+                            hintText: "Lat 3",
                             obscureText: false,
                             prefixIcon: Icon(Icons.my_location),
                           ),
                         ),
                       ),
-                      SizedBox(width: 5),
                       Expanded(
                           child: ListTile(
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                         subtitle: MyTextField(
                           controller: polyLong3Controller,
-                          hintText: "Enter Longitude 3",
+                          hintText: "Long 3",
                           obscureText: false,
                           prefixIcon: Icon(Icons.my_location),
                         ),
@@ -215,20 +354,23 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                     children: [
                       Expanded(
                         child: ListTile(
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                           subtitle: MyTextField(
                             controller: polyLat4Controller,
-                            hintText: "Enter Latitude 4",
+                            hintText: "Lat 4",
                             obscureText: false,
                             prefixIcon: Icon(Icons.my_location),
                           ),
                         ),
                       ),
-                      SizedBox(width: 5),
                       Expanded(
                           child: ListTile(
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                         subtitle: MyTextField(
                           controller: polyLong4Controller,
-                          hintText: "Enter Longitude 4",
+                          hintText: "Long 4",
                           obscureText: false,
                           prefixIcon: Icon(Icons.my_location),
                         ),
@@ -243,6 +385,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                     buttonText: 'Add Field',
                     onPressed: () => setState(
                       () {
+                        createPolygon();
                         Navigator.pop(context);
                       },
                     ),
@@ -281,23 +424,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                         // center: LatLng(47.925812, 106.919831),
                         maxZoom: 18,
                         zoom: 9.0,
-                        plugins: [EsriPlugin(), DragMarkerPlugin()],
-                        onTap: (tapPos, latlng) {
-                          polyEditor.add(testPolygon.points, latlng);
-                          setState(() => {
-                                // polygonList.add(latlng);
-                                markers.add(Marker(
-                                  builder: (_) => const Icon(
-                                    Icons.circle,
-                                    size: 25,
-                                  ),
-                                  point: latlng,
-                                )),
-
-                                polygonList.add(latlng),
-                                print(polygonList),
-                              });
-                        },
+                        plugins: [EsriPlugin()],
                       ),
                       //   )
                       // ],
@@ -312,34 +439,30 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                           ),
                         ),
                         PolygonLayerWidget(
-                            options: PolygonLayerOptions(polygons: polygons)),
+                            options: PolygonLayerOptions(
+                                polygons: [Polygon(points: polygonList)])),
                         MarkerLayerWidget(
                             options: MarkerLayerOptions(markers: markers)),
-
-                        // PopupMarkerLayerWidget(
-                        //   options: PopupMarkerLayerOptions(
-                        //     popupController: _popupController,
-                        //     markers: [
-                        //       for (int i = 0;
-                        //           i < addGateModel.markers.length;
-                        //           i++)
-                        //         addGateModel.markers[i]
-                        //     ],
-                        //     popupBuilder:
-                        //         (BuildContext context, Marker marker) =>
-                        //             ExamplePopup(marker),
-                        //   ),
-                        // ),
+                        Container(
+                          alignment: Alignment.bottomRight,
+                          padding: const EdgeInsets.all(10.0),
+                          child: _getFab(),
+                        ),
+                        PopupMarkerLayerWidget(
+                          options: PopupMarkerLayerOptions(
+                            popupController: _popupController,
+                            markers: markers,
+                            popupBuilder:
+                                (BuildContext context, Marker marker) =>
+                                    ExamplePopup(marker),
+                          ),
+                        ),
                       ],
                     ),
                   ),
                   Container(
                     alignment: Alignment.bottomCenter,
-                    child: const Text(
-                      'Tap at a location to add a coordinate',
-                      style: TextStyle(fontSize: 20),
-                      textAlign: TextAlign.center,
-                    ),
+                    child: getText(),
                   ),
                 ],
               ),

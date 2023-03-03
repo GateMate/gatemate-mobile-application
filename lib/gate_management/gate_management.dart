@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gatemate_mobile/model/gate_management_view_model.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:gatemate_mobile/view/ui_primatives/marker_popup.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_map_arcgis/flutter_map_arcgis.dart';
-import 'package:gatemate_mobile/marker_popup.dart';
 import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
 
 late int _markerIdValue;
