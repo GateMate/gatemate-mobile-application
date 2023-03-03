@@ -29,6 +29,13 @@
             {
               "client_id": "375522224086-6lsk6gat2hu6anbens2oe2g8n48dmjlc.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "375522224086-vqf8ntm7qn4ujck10m9sgkubv1m61t6l.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.gatemateMobile"
+              }
             }
           ]
         }
