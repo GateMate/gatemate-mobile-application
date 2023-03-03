@@ -51,8 +51,6 @@ class _LoginPageState extends State<LoginPage> {
 
       //id will be passed into a service call to the server api and stored as a collection
       createUser(currentUser?.uid);
-
-
     }
     on FirebaseAuthException catch (e){
       showErrorMessage(e.code);
@@ -79,18 +77,15 @@ void signOut() async {
   await firebaseAuth.signOut();
 }
 
-
-
-
-  void showErrorMessage(String message) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text(message),
-          );
-        });
-  }
+void showErrorMessage(String message) {
+  showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(message),
+        );
+      });
+}
 
   String _errorMessage = "";
 
