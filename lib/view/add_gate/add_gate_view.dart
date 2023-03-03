@@ -239,9 +239,6 @@ class _AddGateState extends State<AddGateRoute> {
                                   i++)
                                 addGateModel.markers[i]
                             ],
-                            // markerRotateAlignment:
-                            //     PopupMarkerLayerOptions.rotationAlignmentFor(
-                            //         AnchorAlign.top),
                             popupBuilder:
                                 (BuildContext context, Marker marker) =>
                                     ExamplePopup(marker),
