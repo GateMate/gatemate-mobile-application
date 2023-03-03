@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gatemate_mobile/home/home.dart';
 
+import 'login/login.dart';
+
 void main() {
   runApp(const GateMateApp());
 }
@@ -16,8 +18,8 @@ class GateMateApp extends StatelessWidget {
     );
     return MaterialApp(
       title: appTitle,
-      // home: const LoginPage(),
-      home: const HomePage(title: appTitle),
+      home: const LoginPage(),
+      // home: const HomePage(title: appTitle),
       theme: ThemeData(
         colorScheme: colorScheme,
         cardTheme: CardTheme(

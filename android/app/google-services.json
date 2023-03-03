@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "375522224086",
+    "project_id": "gatemate-93f52",
+    "storage_bucket": "gatemate-93f52.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:375522224086:android:24cc9e4490e455f13ce677",
+        "android_client_info": {
+          "package_name": "com.example.gatemate_mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "375522224086-6lsk6gat2hu6anbens2oe2g8n48dmjlc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgOizunTF-nLZdpq-90ypg8GCcdnZ9HcI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "375522224086-6lsk6gat2hu6anbens2oe2g8n48dmjlc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
