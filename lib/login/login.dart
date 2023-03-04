@@ -38,6 +38,10 @@ class _LoginPageState extends State<LoginPage> {
     try {
       await firebaseAuth.signInWithEmailAndPassword(
           email: emailController.text, password: passwordController.text);
+      //TODO Implement service call to signin route with the currentUser
+
+
+
     } on FirebaseAuthException catch (e) {
       showErrorMessage(e.code);
     }
@@ -58,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
 
   }
   
-  //Network service call to create and log userID - still working on this - unknown network error with local url
+  //Network service call to create and log userID - still working on this - unknown network error with local url-TODO
   Future<http.Response> createUser(String? userID)  {
   log("MAKING HTTP REQUEST");
   return http.post(
