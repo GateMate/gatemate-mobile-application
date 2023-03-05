@@ -3,13 +3,13 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_arcgis/flutter_map_arcgis.dart';
 import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gatemate_mobile/view/ui_primatives/marker_popup_view.dart';
 import 'package:gatemate_mobile/view/ui_primatives/my_textfield.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 
 import '../../model/add_gate_model.dart';
-import '../ui_primatives/marker_popup.dart';
 import '../ui_primatives/my_button.dart';
 
 // Set<Marker> markers = <Marker>{};
@@ -241,7 +241,7 @@ class _AddGateState extends State<AddGateRoute> {
                             ],
                             popupBuilder:
                                 (BuildContext context, Marker marker) =>
-                                    ExamplePopup(marker),
+                                    viewPopup(marker),
                           ),
                         ),
                         Container(

@@ -27,7 +27,8 @@ class MyTextField extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hintText,
         fillColor: HexColor("#f0f3f1"),
-        contentPadding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+        // contentPadding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+        contentPadding: const EdgeInsets.all(0),
         hintStyle: GoogleFonts.poppins(
           fontSize: 15,
           color: HexColor("#8d8d8d"),

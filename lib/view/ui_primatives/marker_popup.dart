@@ -17,6 +17,7 @@ class ExamplePopup extends StatefulWidget {
 }
 
 class _ExamplePopupState extends State<ExamplePopup> {
+  final gateHeightController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -147,6 +148,11 @@ class _ExamplePopupState extends State<ExamplePopup> {
               'Current Water Levels:',
               style: TextStyle(fontSize: 12.0),
             ),
+            MyTextField(
+                controller: gateHeightController,
+                hintText: "Gate Height",
+                obscureText: false,
+                prefixIcon: const Icon(Icons.roller_shades_outlined, size: 15))
           ],
         ),
       ),
