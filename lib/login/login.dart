@@ -28,12 +28,24 @@ class LoginPage extends StatelessWidget {
                   topRight: Radius.circular(40),
                 ),
               ),
-              child: const Padding(
-                padding: EdgeInsets.symmetric(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
                   vertical: 20,
                   horizontal: 30,
                 ),
-                child: LoginMenu(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Text(
+                      'Log In',
+                      style: TextStyle(fontSize: 40),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(15, 20, 0, 20),
+                      child: LoginMenu(),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -63,6 +75,80 @@ class _LoginMenuState extends State<LoginMenu> {
   User? get _currentUser => _firebaseAuth.currentUser;
   Stream<User?> get _authStateChanges => _firebaseAuth.authStateChanges();
   var _errorMessage = "";
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Email',
+          style: TextStyle(fontSize: 18),
+        ),
+        const SizedBox(height: 10),
+        TextField(
+          controller: _emailInputController,
+          decoration: InputDecoration(
+            hintText: 'user@email.com',
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
+            prefixIcon: const Icon(Icons.mail_outline),
+          ),
+          onChanged: _validateEmail,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 8),
+          child: Text(
+            _errorMessage,
+            style: const TextStyle(
+              fontSize: 12,
+              color: Colors.red,
+            ),
+          ),
+        ),
+        const SizedBox(height: 10),
+        const Text(
+          'Password',
+          style: TextStyle(fontSize: 18),
+        ),
+        TextField(
+          controller: _passwordInputController,
+          obscureText: true,
+          decoration: InputDecoration(
+            hintText: '* * * * * * * * * *',
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
+            prefixIcon: const Icon(Icons.key),
+          ),
+        ),
+        const SizedBox(height: 10),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Row(
+            children: [
+              Expanded(
+                flex: 3,
+                child: ElevatedButton(
+                  onPressed: _signIn,
+                  child: const Text('Log In'),
+                ),
+              ),
+              const Spacer(flex: 2),
+              Expanded(
+                flex: 3,
+                child: ElevatedButton(
+                  onPressed: _signUp,
+                  child: const Text('Sign Up'),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 
   // Gets called when a user signs in
   void _signIn() async {
@@ -139,91 +225,5 @@ class _LoginMenuState extends State<LoginMenu> {
         _errorMessage = '';
       });
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Log In',
-          style: TextStyle(fontSize: 40),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(15, 20, 0, 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Email',
-                style: TextStyle(fontSize: 18),
-              ),
-              const SizedBox(height: 10),
-              TextField(
-                controller: _emailInputController,
-                decoration: InputDecoration(
-                  hintText: 'user@email.com',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  prefixIcon: const Icon(Icons.mail_outline),
-                ),
-                onChanged: _validateEmail,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8),
-                child: Text(
-                  _errorMessage,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.red,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-              const Text(
-                'Password',
-                style: TextStyle(fontSize: 18),
-              ),
-              TextField(
-                controller: _passwordInputController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  hintText: '* * * * * * * * * *',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  prefixIcon: const Icon(Icons.key),
-                ),
-              ),
-              const SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 3,
-                      child: ElevatedButton(
-                        onPressed: _signIn,
-                        child: const Text('Log In'),
-                      ),
-                    ),
-                    const Spacer(flex: 2),
-                    Expanded(
-                      flex: 3,
-                      child: ElevatedButton(
-                        onPressed: _signUp,
-                        child: const Text('Sign Up'),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
   }
 }
