@@ -37,7 +37,9 @@ class NavigationDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (context) => FieldsViewModel(), child: _drawer(context));
+      create: (context) => FieldsViewModel(),
+      child: _drawer(context),
+    );
   }
 
   Widget _drawer(BuildContext context) {
@@ -49,6 +51,7 @@ class NavigationDrawer extends StatelessWidget {
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.primary,
             ),
+            // TODO: Populate with data from Firebase authentication
             accountName: const Text("xyz"),
             accountEmail: const Text("xyz@gmail.com"),
             currentAccountPicture: const CircleAvatar(
