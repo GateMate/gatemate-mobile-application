@@ -46,18 +46,21 @@ class NavigationDrawer extends StatelessWidget {
       child: Column(
         children: <Widget>[
           UserAccountsDrawerHeader(
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary,
-              ),
-              accountName: Text("xyz"),
-              accountEmail: Text("xyz@gmail.com"),
-              currentAccountPicture: CircleAvatar(
-                backgroundColor: Colors.white,
-                child: Text("xyz"),
-              )),
-          Text('Current Field Selection: ',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          FieldSelectionDropdown(),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            accountName: const Text("xyz"),
+            accountEmail: const Text("xyz@gmail.com"),
+            currentAccountPicture: const CircleAvatar(
+              backgroundColor: Colors.white,
+              child: Text("xyz"),
+            ),
+          ),
+          const Text(
+            'Current Field Selection: ',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          const FieldSelectionDropdown(),
           Divider(
             color: Colors.green[700],
             thickness: 2.0,
@@ -70,10 +73,11 @@ class NavigationDrawer extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => const ActionCenterRoute()),
+                  builder: (context) => const ActionCenterRoute(),
+                ),
               );
             },
-            trailing: new Icon(Icons.arrow_forward_ios),
+            trailing: const Icon(Icons.arrow_forward_ios),
           ),
           ListTile(
             title: const Text('Add Gate'),
@@ -81,12 +85,14 @@ class NavigationDrawer extends StatelessWidget {
               // Update the state of the app
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => AddGateRoute()),
+                MaterialPageRoute(
+                  builder: (context) => const AddGateRoute(),
+                ),
               );
               // Then close the drawer
               // Navigator.pop(context);
             },
-            trailing: new Icon(Icons.arrow_forward_ios),
+            trailing: const Icon(Icons.arrow_forward_ios),
           ),
           ListTile(
             title: const Text('Gate Management'),
@@ -94,12 +100,14 @@ class NavigationDrawer extends StatelessWidget {
               // Update the state of the app
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => GateManagementRoute()),
+                MaterialPageRoute(
+                  builder: (context) => const GateManagementRoute(),
+                ),
               );
               // Then close the drawer
               // Navigator.pop(context);
             },
-            trailing: new Icon(Icons.arrow_forward_ios),
+            trailing: const Icon(Icons.arrow_forward_ios),
           ),
           ListTile(
             title: const Text('Settings'),
@@ -107,13 +115,15 @@ class NavigationDrawer extends StatelessWidget {
               // Update the state of the app
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const SettingsRoute()),
+                MaterialPageRoute(
+                  builder: (context) => const SettingsRoute(),
+                ),
               );
               // Then close the drawer
               // Navigator.pop(context);
             },
-            trailing: new Icon(Icons.arrow_forward_ios),
-          )
+            trailing: const Icon(Icons.arrow_forward_ios),
+          ),
         ],
       ),
     );
