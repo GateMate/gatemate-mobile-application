@@ -58,6 +58,7 @@ dependencies:
   flutter_map_marker_cluster: ^0.5.4
   flutter_map_line_editor: ^3.0.0
   fluttertoast: ^8.2.1
+  cloud_firestore: 
 
 dev_dependencies:
   flutter_test:

@@ -9,6 +9,7 @@ import '../ui_primatives/marker_popup.dart';
 
 late int _markerIdValue;
 // Set<Marker> _markers = HashSet<Marker>();
+late List<Marker> markers = [];
 
 class GateManagementRoute extends StatefulWidget {
   GateManagementRoute({super.key});
@@ -18,14 +19,12 @@ class GateManagementRoute extends StatefulWidget {
 }
 
 class _GateManagementState extends State<GateManagementRoute> {
+  GateManagementViewModel _gateManagementViewModel = GateManagementViewModel();
   @override
   void InitState() {
     super.initState();
   }
-  // GateManagementRoute({super.key});
 
-  GateManagementViewModel _gateManagementViewModel = GateManagementViewModel();
-  // final Set<Marker> markers = Set();
   int polyId = 0;
 
   final LatLng _center = LatLng(36.06889761358809, -94.17477200170791);
@@ -33,6 +32,12 @@ class _GateManagementState extends State<GateManagementRoute> {
 
   @override
   Widget build(BuildContext context) {
+    _gateManagementViewModel.getGates().then((value) {
+      setState(() {
+        markers = value;
+      });
+    });
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Gate Management'),
@@ -52,7 +57,9 @@ class _GateManagementState extends State<GateManagementRoute> {
                       maxZoom: 18,
                       zoom: 9.0,
                       plugins: [EsriPlugin()],
-                      onTap: (_, __) => _popupController.hideAllPopups(),
+                      onTap: (_, __) {
+                        _popupController.hideAllPopups();
+                      },
                     ),
                     nonRotatedChildren: [
                       AttributionWidget.defaultWidget(
@@ -84,10 +91,7 @@ class _GateManagementState extends State<GateManagementRoute> {
                         options: PopupMarkerLayerOptions(
                           popupController: _popupController,
                           markers: [
-                            for (int i = 0;
-                                i < _gateManagementViewModel.markers.length;
-                                i++)
-                              _gateManagementViewModel.markers[i]
+                            for (int i = 0; i < markers.length; i++) markers[i]
                           ],
                           // markerRotateAlignment:
                           //     PopupMarkerLayerOptions.rotationAlignmentFor(

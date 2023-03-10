@@ -13,10 +13,10 @@ class MyButton extends StatelessWidget {
     return GestureDetector(
       onTap: onPressed,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 10, 10, 10),
+        padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
         child: Container(
-          padding: const EdgeInsets.fromLTRB(0, 14, 0, 10),
-          height: 55,
+          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+          height: 40,
           width: 275,
           decoration: BoxDecoration(
             color: HexColor('#44564a'),
@@ -27,7 +27,7 @@ class MyButton extends StatelessWidget {
             textAlign: TextAlign.center,
             style: GoogleFonts.poppins(
               color: Colors.white,
-              fontSize: 18,
+              fontSize: 15,
               fontWeight: FontWeight.w600,
             ),
           ),
