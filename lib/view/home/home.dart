@@ -37,7 +37,9 @@ class NavigationDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (context) => FieldsViewModel(), child: _drawer(context));
+      create: (context) => FieldsViewModel(),
+      child: _drawer(context),
+    );
   }
 
   Widget _drawer(BuildContext context) {
@@ -46,17 +48,21 @@ class NavigationDrawer extends StatelessWidget {
       child: Column(
         children: <Widget>[
           UserAccountsDrawerHeader(
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary,
-              ),
-              accountName: const Text("xyz"),
-              accountEmail: const Text("xyz@gmail.com"),
-              currentAccountPicture: const CircleAvatar(
-                backgroundColor: Colors.white,
-                child: Text("xyz"),
-              )),
-          const Text('Current Field Selection: ',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            // TODO: Populate with data from Firebase authentication
+            accountName: const Text("xyz"),
+            accountEmail: const Text("xyz@gmail.com"),
+            currentAccountPicture: const CircleAvatar(
+              backgroundColor: Colors.white,
+              child: Text("xyz"),
+            ),
+          ),
+          const Text(
+            'Current Field Selection: ',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
           const FieldSelectionDropdown(),
           Divider(
             color: Colors.green[700],
@@ -70,7 +76,8 @@ class NavigationDrawer extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => const ActionCenterRoute()),
+                  builder: (context) => const ActionCenterRoute(),
+                ),
               );
             },
             trailing: const Icon(Icons.arrow_forward_ios),
@@ -81,7 +88,9 @@ class NavigationDrawer extends StatelessWidget {
               // Update the state of the app
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const AddGateRoute()),
+                MaterialPageRoute(
+                  builder: (context) => const AddGateRoute(),
+                ),
               );
               // Then close the drawer
               // Navigator.pop(context);
@@ -94,7 +103,9 @@ class NavigationDrawer extends StatelessWidget {
               // Update the state of the app
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => GateManagementRoute()),
+                MaterialPageRoute(
+                  builder: (context) => const GateManagementRoute(),
+                ),
               );
               // Then close the drawer
               // Navigator.pop(context);
@@ -107,13 +118,15 @@ class NavigationDrawer extends StatelessWidget {
               // Update the state of the app
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const SettingsRoute()),
+                MaterialPageRoute(
+                  builder: (context) => const SettingsRoute(),
+                ),
               );
               // Then close the drawer
               // Navigator.pop(context);
             },
             trailing: const Icon(Icons.arrow_forward_ios),
-          )
+          ),
         ],
       ),
     );

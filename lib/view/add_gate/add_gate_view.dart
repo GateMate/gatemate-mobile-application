@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_arcgis/flutter_map_arcgis.dart';
 import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
+import 'package:gatemate_mobile/model/add_gate_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 
 import '../../model/add_gate_model.dart';
-import '../ui_primatives/marker_popup.dart';
-import '../ui_primatives/my_button.dart';
+import '../ui-primatives/confirmation_popup.dart';
+import '../ui-primatives/confirmation_button.dart';
 
 // Set<Marker> markers = <Marker>{};
 List<Marker> markers = [];
@@ -89,7 +90,7 @@ class _AddGateState extends State<AddGateRoute> {
                                     ),
                                     Column(
                                       children: [
-                                        MyButton(
+                                        ConfirmationButton(
                                           buttonText: 'Yes, Add Marker',
                                           onPressed: () => setState(
                                             () {
@@ -107,7 +108,7 @@ class _AddGateState extends State<AddGateRoute> {
                                             },
                                           ),
                                         ),
-                                        MyButton(
+                                        ConfirmationButton(
                                           buttonText: 'No, Don\'t Add Marker',
                                           onPressed: () =>
                                               Navigator.pop(context),
@@ -146,7 +147,7 @@ class _AddGateState extends State<AddGateRoute> {
                             //         AnchorAlign.top),
                             popupBuilder:
                                 (BuildContext context, Marker marker) =>
-                                    ExamplePopup(marker),
+                                    ConfirmationPopup(marker),
                           ),
                         ),
                         // MarkerLayerOptions(

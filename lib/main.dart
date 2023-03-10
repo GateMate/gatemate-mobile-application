@@ -1,11 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:gatemate_mobile/view/home/home.dart';
 
-void main() {
+import 'package:gatemate_mobile/view/home/home.dart';
+import 'package:gatemate_mobile/view/login/login.dart';
+
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
+
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const GateMateApp());
 }
 
 class GateMateApp extends StatelessWidget {
+
   const GateMateApp({super.key});
   static const appTitle = 'GateMate App';
 
@@ -16,8 +27,8 @@ class GateMateApp extends StatelessWidget {
     );
     return MaterialApp(
       title: appTitle,
-      // home: const LoginPage(),
-      home: const HomePage(title: appTitle),
+      home: const LoginPage(),
+      // home: const HomePage(title: appTitle),
       theme: ThemeData(
         colorScheme: colorScheme,
         cardTheme: CardTheme(
@@ -29,7 +40,7 @@ class GateMateApp extends StatelessWidget {
         ),
         backgroundColor: colorScheme.secondaryContainer,
         scaffoldBackgroundColor: colorScheme.secondaryContainer,
-      ),
+      ), 
     );
   }
 }
