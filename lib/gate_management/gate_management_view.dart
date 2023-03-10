@@ -5,25 +5,20 @@ import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
 import 'package:gatemate_mobile/model/gate_management_view_model.dart';
 import 'package:latlong2/latlong.dart';
 
-import '../ui-primatives/marker_popup.dart';
+import '../ui-primatives/confirmation_popup.dart';
 
 late int _markerIdValue;
 // Set<Marker> _markers = HashSet<Marker>();
 
 class GateManagementRoute extends StatefulWidget {
-  GateManagementRoute({super.key});
+  const GateManagementRoute({super.key});
 
   @override
   _GateManagementState createState() => _GateManagementState();
 }
 
 class _GateManagementState extends State<GateManagementRoute> {
-  @override
-  void InitState() {
-    super.initState();
-  }
-  // GateManagementRoute({super.key});
-
+  // TODO: Use GetIt
   GateManagementViewModel _gateManagementViewModel = GateManagementViewModel();
   // final Set<Marker> markers = Set();
   int polyId = 0;
@@ -93,7 +88,7 @@ class _GateManagementState extends State<GateManagementRoute> {
                           //     PopupMarkerLayerOptions.rotationAlignmentFor(
                           //         AnchorAlign.top),
                           popupBuilder: (BuildContext context, Marker marker) =>
-                              ExamplePopup(marker),
+                              ConfirmationPopup(marker),
                         ),
                       ),
                     ],
