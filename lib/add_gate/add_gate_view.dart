@@ -7,8 +7,8 @@ import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 
-import '../ui-primatives/marker_popup.dart';
-import '../ui-primatives/my_button.dart';
+import '../ui-primatives/confirmation_popup.dart';
+import '../ui-primatives/confirmation_button.dart';
 
 // Set<Marker> markers = <Marker>{};
 List<Marker> markers = [];
@@ -89,7 +89,7 @@ class _AddGateState extends State<AddGateRoute> {
                                     ),
                                     Column(
                                       children: [
-                                        MyButton(
+                                        ConfirmationButton(
                                           buttonText: 'Yes, Add Marker',
                                           onPressed: () => setState(
                                             () {
@@ -107,7 +107,7 @@ class _AddGateState extends State<AddGateRoute> {
                                             },
                                           ),
                                         ),
-                                        MyButton(
+                                        ConfirmationButton(
                                           buttonText: 'No, Don\'t Add Marker',
                                           onPressed: () =>
                                               Navigator.pop(context),
@@ -146,7 +146,7 @@ class _AddGateState extends State<AddGateRoute> {
                             //         AnchorAlign.top),
                             popupBuilder:
                                 (BuildContext context, Marker marker) =>
-                                    ExamplePopup(marker),
+                                    ConfirmationPopup(marker),
                           ),
                         ),
                         // MarkerLayerOptions(

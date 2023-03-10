@@ -3,23 +3,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 
-import 'my_button.dart';
+import 'confirmation_button.dart';
 
-class ExamplePopup extends StatefulWidget {
+class ConfirmationPopup extends StatefulWidget {
   final Marker marker;
   // final LatLng latLng;
 
-  const ExamplePopup(this.marker, {Key? key}) : super(key: key);
+  const ConfirmationPopup(this.marker, {Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _ExamplePopupState();
+  State<StatefulWidget> createState() => _ConfirmationPopupState();
 }
 
-class _ExamplePopupState extends State<ExamplePopup> {
+class _ConfirmationPopupState extends State<ConfirmationPopup> {
   @override
   Widget build(BuildContext context) {
-    // TODO: Remove this
-    print("in popup");
     return Card(
       color: Colors.green[400],
       child: InkWell(
@@ -51,11 +49,11 @@ class _ExamplePopupState extends State<ExamplePopup> {
                           ),
                           Column(
                             children: [
-                              MyButton(
+                              ConfirmationButton(
                                 buttonText: "Yes, Raise Gate",
                                 onPressed: () => Navigator.pop(context),
                               ),
-                              MyButton(
+                              ConfirmationButton(
                                 buttonText: 'No, Don\'t Raise the gate',
                                 onPressed: () => Navigator.pop(context),
                               )
@@ -95,11 +93,11 @@ class _ExamplePopupState extends State<ExamplePopup> {
                           ),
                           Column(
                             children: [
-                              MyButton(
+                              ConfirmationButton(
                                 buttonText: 'Yes, Lower Gate',
                                 onPressed: () => Navigator.pop(context),
                               ),
-                              MyButton(
+                              ConfirmationButton(
                                 buttonText: 'No, Don\'t Lower the Gate',
                                 onPressed: () => Navigator.pop(context),
                               ),
