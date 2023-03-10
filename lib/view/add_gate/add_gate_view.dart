@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 
+import '../../model/add_gate_model.dart';
 import '../ui-primatives/confirmation_popup.dart';
 import '../ui-primatives/confirmation_button.dart';
 
