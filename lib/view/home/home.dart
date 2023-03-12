@@ -1,27 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:gatemate_mobile/model/viewmodels/fields_view_model.dart';
 import 'package:gatemate_mobile/view/action_center/action_center_view.dart';
 import 'package:gatemate_mobile/view/add_gate/add_gate_view.dart';
 import 'package:gatemate_mobile/view/gate_management/gate_management_view.dart';
-import 'package:gatemate_mobile/model/fields_view_model.dart';
 import 'package:gatemate_mobile/view/settings/settings_view.dart';
 import 'package:provider/provider.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({super.key, required this.title});
 
   // Title of the page (displayed in the appbar)
   final String title;
 
   @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(title),
       ),
       body: const Placeholder(), // TODO
       drawer: const Drawer(
@@ -37,6 +32,8 @@ class NavigationDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
+      // TODO: Should not be creating a new instance of viewmodel here
+      // TODO: Use GetIt
       create: (context) => FieldsViewModel(),
       child: _drawer(context),
     );

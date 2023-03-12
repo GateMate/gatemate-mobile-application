@@ -4,8 +4,8 @@ import 'package:flutter_map_arcgis/flutter_map_arcgis.dart';
 import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
 import 'package:latlong2/latlong.dart';
 
-import '../../model/gate_management_view_model.dart';
-import '../ui-primatives/confirmation_popup.dart';
+import '../../model/viewmodels/gate_management_view_model.dart';
+import '../ui_primatives/confirmation_popup.dart';
 
 
 late int _markerIdValue;
