@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gatemate_mobile/action_center/action_center_view.dart';
-import 'package:gatemate_mobile/gate_management/gate_management_view.dart';
 import 'package:gatemate_mobile/model/fields_view_model.dart';
 import 'package:gatemate_mobile/settings/settings_view.dart';
 import 'package:gatemate_mobile/view/add_gate/add_gate_view.dart';

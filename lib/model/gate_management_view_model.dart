@@ -1,11 +1,11 @@
-import 'dart:html';
+// import 'dart:html';
 
-import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:gatemate_mobile/model/data/gate.dart';
 import 'dart:async';
-import 'package:http/http.dart' as http;
+// import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 

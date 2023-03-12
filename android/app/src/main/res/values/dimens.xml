@@ -1,0 +1,8 @@
+<resources>
+<dimen name="abc_edit_text_inset_horizontal_material">16dp</dimen>
+<dimen name="abc_edit_text_inset_top_material">16dp</dimen>
+<dimen name="abc_edit_text_inset_bottom_material">16dp</dimen>
+<!-- <drawable name="abc_textfield_default_mtrl_alpha">16dp</drawable>
+<drawable name="abc_textfield_activated_mtrl_alpha">16dp</drawable> -->
+
+</resources>
