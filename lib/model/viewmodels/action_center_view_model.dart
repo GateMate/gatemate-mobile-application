@@ -14,6 +14,7 @@ Future<ToDoItem> createToDoItem(String title) async {
   // TODO: Generating id? Should the server handle that?
   const id = 67;
   final response = await http.post(
+    // TODO: Use an app constant to store the root path
     Uri.parse('https://todo-proukhgi3a-uc.a.run.app/add?id=$id'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',

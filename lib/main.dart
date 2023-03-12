@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:gatemate_mobile/view/home/home.dart';
+import 'package:gatemate_mobile/view/login/login.dart';
 
 import 'model/firebase/firebase_options.dart';
 
@@ -24,7 +25,7 @@ class GateMateApp extends StatelessWidget {
 
     return MaterialApp(
       title: appTitle,
-      home: const HomePage(title: appTitle),
+      home: const LoginPage(),
       // home: const HomePage(title: appTitle),
       theme: ThemeData(
         colorScheme: colorScheme,

@@ -42,7 +42,7 @@ class LoginPage extends StatelessWidget {
                     ),
                     Padding(
                       padding: EdgeInsets.fromLTRB(15, 20, 0, 20),
-                      child: LoginMenu(),
+                      child: _LoginMenu(),
                     ),
                   ],
                 ),
@@ -55,16 +55,16 @@ class LoginPage extends StatelessWidget {
   }
 }
 
-class LoginMenu extends StatefulWidget {
-  const LoginMenu({
+class _LoginMenu extends StatefulWidget {
+  const _LoginMenu({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<LoginMenu> createState() => _LoginMenuState();
+  State<_LoginMenu> createState() => _LoginMenuState();
 }
 
-class _LoginMenuState extends State<LoginMenu> {
+class _LoginMenuState extends State<_LoginMenu> {
   final _emailInputController = TextEditingController();
   final _passwordInputController = TextEditingController();
 
