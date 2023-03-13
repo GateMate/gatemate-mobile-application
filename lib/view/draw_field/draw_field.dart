@@ -7,9 +7,10 @@ import 'package:gatemate_mobile/view/ui_primatives/my_textfield.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
+import 'package:gatemate_mobile/view/ui_primatives/marker_popup_view.dart';
 
 import '../../model/add_gate_model.dart';
-import '../ui_primatives/marker_popup.dart';
+
 import '../ui_primatives/my_button.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -453,7 +454,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                             markers: markers,
                             popupBuilder:
                                 (BuildContext context, Marker marker) =>
-                                    ExamplePopup(marker),
+                                    viewPopup(marker),
                           ),
                         ),
                       ],
