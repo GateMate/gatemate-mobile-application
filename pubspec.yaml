@@ -51,10 +51,12 @@ dependencies:
   dio: any
   email_validator: ^2.1.17
   firebase_auth: ^4.2.2
+  firebase_core: ^2.7.0
   hexcolor: ^3.0.1
   google_fonts: ^4.0.3
   flutter_map_marker_popup: ^3.2.0
   flutter_map_marker_cluster: ^0.5.4
+  get_it: ^7.2.0
 
 
 dev_dependencies:

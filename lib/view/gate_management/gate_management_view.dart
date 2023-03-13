@@ -4,26 +4,22 @@ import 'package:flutter_map_arcgis/flutter_map_arcgis.dart';
 import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
 import 'package:latlong2/latlong.dart';
 
-import '../../model/gate_management_view_model.dart';
-import '../ui_primatives/marker_popup.dart';
+import '../../model/viewmodels/gate_management_view_model.dart';
+import '../ui_primatives/confirmation_popup.dart';
+
 
 late int _markerIdValue;
 // Set<Marker> _markers = HashSet<Marker>();
 
-class GateManagementRoute extends StatefulWidget {
-  GateManagementRoute({super.key});
+class GateManagementView extends StatefulWidget {
+  const GateManagementView({super.key});
 
   @override
   _GateManagementState createState() => _GateManagementState();
 }
 
-class _GateManagementState extends State<GateManagementRoute> {
-  @override
-  void InitState() {
-    super.initState();
-  }
-  // GateManagementRoute({super.key});
-
+class _GateManagementState extends State<GateManagementView> {
+  // TODO: Use GetIt
   GateManagementViewModel _gateManagementViewModel = GateManagementViewModel();
   // final Set<Marker> markers = Set();
   int polyId = 0;
@@ -93,7 +89,7 @@ class _GateManagementState extends State<GateManagementRoute> {
                           //     PopupMarkerLayerOptions.rotationAlignmentFor(
                           //         AnchorAlign.top),
                           popupBuilder: (BuildContext context, Marker marker) =>
-                              ExamplePopup(marker),
+                              ConfirmationPopup(marker),
                         ),
                       ),
                     ],

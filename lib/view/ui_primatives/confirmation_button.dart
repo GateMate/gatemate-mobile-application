@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
 
-class MyButton extends StatelessWidget {
+class ConfirmationButton extends StatelessWidget {
   final Function()? onPressed;
   final String buttonText;
-  const MyButton(
-      {super.key, required this.onPressed, required this.buttonText});
+
+  const ConfirmationButton({
+    super.key,
+    required this.onPressed,
+    required this.buttonText,
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onPressed,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 10, 10, 10),
+        padding: const EdgeInsets.all(8.0),
         child: Container(
-          padding: const EdgeInsets.fromLTRB(0, 14, 0, 10),
-          height: 55,
-          width: 275,
+          padding: const EdgeInsets.all(20),
+          width: double.infinity,
           decoration: BoxDecoration(
             color: HexColor('#44564a'),
             borderRadius: BorderRadius.circular(30),
@@ -25,7 +27,7 @@ class MyButton extends StatelessWidget {
           child: Text(
             buttonText,
             textAlign: TextAlign.center,
-            style: GoogleFonts.poppins(
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 18,
               fontWeight: FontWeight.w600,

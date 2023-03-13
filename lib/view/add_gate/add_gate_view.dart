@@ -2,26 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_arcgis/flutter_map_arcgis.dart';
 import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
+import 'package:gatemate_mobile/model/viewmodels/add_gate_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 
-import '../../model/add_gate_model.dart';
-import '../ui_primatives/marker_popup.dart';
-import '../ui_primatives/my_button.dart';
+import '../../model/viewmodels/add_gate_model.dart';
+import '../ui_primatives/confirmation_popup.dart';
+import '../ui_primatives/confirmation_button.dart';
 
 // Set<Marker> markers = <Marker>{};
 List<Marker> markers = [];
 int markerId = 0;
 
-class AddGateRoute extends StatefulWidget {
-  const AddGateRoute({super.key});
+class AddGateView extends StatefulWidget {
+  const AddGateView({super.key});
 
   @override
   _AddGateState createState() => _AddGateState();
 }
 
-class _AddGateState extends State<AddGateRoute> {
+class _AddGateState extends State<AddGateView> {
   AddGateModel addGateModel = AddGateModel();
   final LatLng _center = LatLng(36.06889761358809, -94.17477200170791);
   final PopupController _popupController = PopupController();
@@ -89,7 +90,7 @@ class _AddGateState extends State<AddGateRoute> {
                                     ),
                                     Column(
                                       children: [
-                                        MyButton(
+                                        ConfirmationButton(
                                           buttonText: 'Yes, Add Marker',
                                           onPressed: () => setState(
                                             () {
@@ -107,7 +108,7 @@ class _AddGateState extends State<AddGateRoute> {
                                             },
                                           ),
                                         ),
-                                        MyButton(
+                                        ConfirmationButton(
                                           buttonText: 'No, Don\'t Add Marker',
                                           onPressed: () =>
                                               Navigator.pop(context),
@@ -146,7 +147,7 @@ class _AddGateState extends State<AddGateRoute> {
                             //         AnchorAlign.top),
                             popupBuilder:
                                 (BuildContext context, Marker marker) =>
-                                    ExamplePopup(marker),
+                                    ConfirmationPopup(marker),
                           ),
                         ),
                         // MarkerLayerOptions(
