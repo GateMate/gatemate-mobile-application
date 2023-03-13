@@ -3,26 +3,77 @@ import 'package:gatemate_mobile/model/viewmodels/fields_view_model.dart';
 import 'package:gatemate_mobile/view/action_center/action_center_view.dart';
 import 'package:gatemate_mobile/view/add_gate/add_gate_view.dart';
 import 'package:gatemate_mobile/view/gate_management/gate_management_view.dart';
+import 'package:gatemate_mobile/view/login/login.dart';
 import 'package:gatemate_mobile/view/settings/settings_view.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key, required this.title});
+import '../../model/firebase/gatemate_auth.dart';
 
-  // Title of the page (displayed in the appbar)
-  final String title;
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final _authProvider = GetIt.I<GateMateAuth>();
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Manually check login status because the below listener will only trigger
+    // upon a change in status, which may not occur when this widget is
+    // initialized.
+    _checkLoginStatus();
+    _authProvider.addListener(_checkLoginStatus);
+  }
+
+  @override
+  void dispose() {
+    _authProvider.removeListener(_checkLoginStatus);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: const Text('GateMate Home'),
       ),
-      body: const Placeholder(), // TODO
+      body: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Center(
+            child: ElevatedButton(
+              onPressed: _authProvider.signOut,
+              child: const Text('Sign Out'),
+            ),
+          ),
+        ],
+      ),
       drawer: const Drawer(
         child: NavigationDrawer(),
       ),
     );
+  }
+
+  void _checkLoginStatus() {
+    // TODO: Ensure 'null' is the correct thing to check for
+    if (_authProvider.currentUser == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const LoginPage(),
+          ),
+        );
+      });
+    } else {
+      // TODO: Either do something here or remove "else"
+    }
   }
 }
 

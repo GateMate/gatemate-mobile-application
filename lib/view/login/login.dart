@@ -4,7 +4,11 @@ import 'dart:developer';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gatemate_mobile/view/home/home.dart';
+import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
+
+import '../../model/firebase/gatemate_auth.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -67,14 +71,25 @@ class _LoginMenu extends StatefulWidget {
 class _LoginMenuState extends State<_LoginMenu> {
   final _emailInputController = TextEditingController();
   final _passwordInputController = TextEditingController();
+  var _emailInputErrorMessage = "";
 
-  // TODO: Move these firebase things to a viewmodel
+  final _authProvider = GetIt.I<GateMateAuth>();
 
-  // Firebase Authentication
-  final _firebaseAuth = FirebaseAuth.instance;
-  User? get _currentUser => _firebaseAuth.currentUser;
-  Stream<User?> get _authStateChanges => _firebaseAuth.authStateChanges();
-  var _errorMessage = "";
+  @override
+  void initState() {
+    super.initState();
+
+    _authProvider.addListener(_checkLoginStatus);
+  }
+
+  @override
+  void dispose() {
+    _authProvider.removeListener(_checkLoginStatus);
+    _emailInputController.dispose();
+    _passwordInputController.dispose();
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +115,7 @@ class _LoginMenuState extends State<_LoginMenu> {
         Padding(
           padding: const EdgeInsets.only(left: 8),
           child: Text(
-            _errorMessage,
+            _emailInputErrorMessage,
             style: const TextStyle(
               fontSize: 12,
               color: Colors.red,
@@ -112,6 +127,7 @@ class _LoginMenuState extends State<_LoginMenu> {
           'Password',
           style: TextStyle(fontSize: 18),
         ),
+        const SizedBox(height: 10),
         TextField(
           controller: _passwordInputController,
           obscureText: true,
@@ -150,40 +166,37 @@ class _LoginMenuState extends State<_LoginMenu> {
     );
   }
 
-  // Gets called when a user signs in
+  /// Sign in through authorization provider
   void _signIn() async {
-    try {
-      await _firebaseAuth.signInWithEmailAndPassword(
-        email: _emailInputController.text,
-        password: _passwordInputController.text,
-      );
-      // TODO: Implement service call to signin route with the currentUser
-    } on FirebaseAuthException catch (e) {
-      _showErrorMessage(e.code);
+    var response = await _authProvider.signIn(
+      _emailInputController.text,
+      _passwordInputController.text,
+    );
+
+    // Successful sign-ins are handled by listening to changes in the
+    // AuthProvider, so we only handle errors here.
+    if (!response.successful) {
+      // TODO: Beautify message
+      _showErrorMessage(response.message);
     }
   }
 
-  // Gets called when the user signs up (happens when you click sign up)
+  // Sign up through the authorization provider
   void _signUp() async {
-    try {
-      await _firebaseAuth.createUserWithEmailAndPassword(
-        email: _emailInputController.text,
-        password: _passwordInputController.text,
-      );
+    var response = await _authProvider.signUp(
+      _emailInputController.text,
+      _passwordInputController.text,
+    );
 
-      /* Id will be passed into a service call to the server api and
-       * stored as a collection.
-       */
-    } on FirebaseAuthException catch (e) {
-      _showErrorMessage(e.code);
+    // Successful sign-ins are handled by listening to changes in the
+    // AuthProvider, so we only handle errors here.
+    if (!response.successful) {
+      // TODO: Beautify message
+      _showErrorMessage(response.message);
     }
   }
 
-  // Call this with a sign out button
-  void _signOut() async {
-    await _firebaseAuth.signOut();
-  }
-
+  // TODO: Update
   // Network service call to create and log userID - still working on this - unknown network error with local url-TODO
   Future<http.Response> _createUser(String? userId) {
     log("MAKING HTTP REQUEST");
@@ -200,6 +213,19 @@ class _LoginMenuState extends State<_LoginMenu> {
     );
   }
 
+  void _checkLoginStatus() {
+    if (_authProvider.currentUser != null) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const HomePage(),
+        ),
+      );
+    } else {
+      // TODO: Either do something here or remove "else"
+    }
+  }
+
   void _showErrorMessage(String message) {
     showDialog(
       context: context,
@@ -214,15 +240,15 @@ class _LoginMenuState extends State<_LoginMenu> {
   void _validateEmail(String email) {
     if (email.isEmpty) {
       setState(() {
-        _errorMessage = 'Email cannot be empty!';
+        _emailInputErrorMessage = 'Email cannot be empty!';
       });
     } else if (!EmailValidator.validate(email, true)) {
       setState(() {
-        _errorMessage = 'Invalid email address!';
+        _emailInputErrorMessage = 'Invalid email address!';
       });
     } else {
       setState(() {
-        _errorMessage = '';
+        _emailInputErrorMessage = '';
       });
     }
   }
