@@ -1,11 +1,15 @@
 // import 'dart:html';
 
 // import 'package:firebase_core/firebase_core.dart';
+import 'dart:convert';
+import 'dart:developer';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:gatemate_mobile/model/data/gate.dart';
 import 'dart:async';
-// import 'package:http/http.dart' as http;
+import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -36,6 +40,8 @@ class GateManagementViewModel extends ChangeNotifier {
       });
     });
 
+    createAlbum(gateHeight);
+
     // DocumentSnapshot snapshot = (await _db
     //     .collection("gates_test")
     //     .where('lat', isEqualTo: latitude)
@@ -57,6 +63,21 @@ class GateManagementViewModel extends ChangeNotifier {
     //     .data()
     //     .update({gateHeight: gateHeight}).then((value) => print("updated"));
   }
+  Future<http.Response> createAlbum(String height) async {
+  if (kDebugMode) {
+    // ignore: prefer_interpolation_to_compose_strings
+    print("HEIGHT" + height);
+  }
+   return await http.post(
+    Uri.parse('http://10.0.2.2:5000/setGateHeight'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{
+      'height': height,
+    }),
+  );
+}
 
   Future<List<Marker>> getGates() async {
     final snapshot = await _db.collection("gates_test").get();
