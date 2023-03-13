@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:gatemate_mobile/view/home/home.dart';
+import 'package:gatemate_mobile/view/ui_primatives/custom_input_field.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 
@@ -100,6 +101,7 @@ class _LoginMenuState extends State<_LoginMenu> {
           style: TextStyle(fontSize: 18),
         ),
         const SizedBox(height: 10),
+        // TODO: Utilize `CustomInputField` once it can use `onChanged`
         TextField(
           controller: _emailInputController,
           decoration: InputDecoration(
@@ -127,16 +129,11 @@ class _LoginMenuState extends State<_LoginMenu> {
           style: TextStyle(fontSize: 18),
         ),
         const SizedBox(height: 10),
-        TextField(
-          controller: _passwordInputController,
+        CustomInputField(
+          inputController: _passwordInputController,
+          hintText: '* * * * * * * * * *',
           obscureText: true,
-          decoration: InputDecoration(
-            hintText: '* * * * * * * * * *',
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(30),
-            ),
-            prefixIcon: const Icon(Icons.key),
-          ),
+          prefixIcon: const Icon(Icons.key),
         ),
         const SizedBox(height: 10),
         Padding(

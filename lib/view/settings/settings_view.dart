@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gatemate_mobile/model/viewmodels/fields_view_model.dart';
+import 'package:gatemate_mobile/view/ui_primatives/custom_input_field.dart';
 import 'package:provider/provider.dart';
 
 // TODO: Consider replacing with an Enum
@@ -10,23 +11,34 @@ class SettingsRoute extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: Change this to use GetIt instead of creating a new viewmodel
     return ChangeNotifierProvider(
       create: (context) => FieldsViewModel(),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Settings'),
         ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            FieldSelectionRow(),
-            SizedBox(height: 20),
-            // TODO: The way this row is structured could be improved
-            WaterLevelRow(),
-            SizedBox(height: 20),
-            NotificationSettingsRow(),
-            // TODO: User login options (sign out, etc.)
-          ],
+        body: Padding(
+          padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: const [
+              FieldSelectionRow(),
+              Divider(
+                height: 40,
+                thickness: 2,
+                color: Colors.black,
+              ),
+              WaterLevelRow(),
+              Divider(
+                height: 40,
+                thickness: 2,
+                color: Colors.black,
+              ),
+              NotificationSettingsRow(),
+              // TODO: User login options (sign out, etc.)
+            ],
+          ),
         ),
       ),
     );
@@ -43,19 +55,27 @@ class FieldSelectionRow extends StatelessWidget {
     // TODO: Pass this to widget builders instead of doing this each time
     var theme = Theme.of(context);
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const FieldSelectionDropdown(),
-        IconButton(
-          icon: Icon(
-            Icons.add_circle,
-            color: theme.colorScheme.primary,
-          ),
-          onPressed: () {
-            // TODO
-            print('DEBUG: Add field button pressed!');
-          },
+        const Text(
+          'Field selection:',
+          style: TextStyle(fontSize: 18),
+        ),
+        Row(
+          children: [
+            const FieldSelectionDropdown(),
+            IconButton(
+              icon: Icon(
+                Icons.add_circle,
+                color: theme.colorScheme.primary,
+              ),
+              onPressed: () {
+                // TODO
+                print('DEBUG: Add field button pressed!');
+              },
+            ),
+          ],
         ),
       ],
     );
@@ -69,28 +89,50 @@ class WaterLevelRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Column(
       children: [
-        const Text('4.2 in'), // TODO: Populate with remote data
-        const SizedBox(width: 20),
-        const SizedBox(
-          width: 200,
-          child: TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: 'Desired water level...',
-            ),
-            keyboardType: TextInputType.number,
+        Align(
+          alignment: Alignment.centerLeft,
+          // TODO: Populate with remote data
+          child: Row(
+            children: const [
+              Text(
+                'Current Target Water Level: ',
+                style: TextStyle(fontSize: 18),
+              ),
+              Text(
+                '4.2 in',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              )
+            ],
           ),
         ),
-        const SizedBox(width: 20),
-        ElevatedButton(
-          child: const Text('Save'),
-          onPressed: () {
-            // TODO: Update remote data
-            print('DEBUG: Crop height update button pressed!');
-          },
+        const SizedBox(height: 15),
+        Row(
+          children: [
+            Expanded(
+              flex: 7,
+              child: CustomInputField(
+                inputController: TextEditingController(),
+                hintText: 'Target water level (in)',
+                keyboardType: TextInputType.number,
+              ),
+            ),
+            const Spacer(),
+            Expanded(
+              flex: 2,
+              child: ElevatedButton(
+                child: const Text('Save'),
+                onPressed: () {
+                  // TODO: Update remote data
+                  print('DEBUG: Crop height update button pressed!');
+                },
+              ),
+            ),
+          ],
         ),
       ],
     );
@@ -104,12 +146,12 @@ class NotificationSettingsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: const [
-        Padding(
-          padding: EdgeInsets.only(right: 12.0),
-          child: Text('Notification Settings:'), // TODO: Beautify text
+        Text(
+          'Notification Settings:',
+          style: TextStyle(fontSize: 18),
         ),
         NotificationSettingDropdown(),
       ],
