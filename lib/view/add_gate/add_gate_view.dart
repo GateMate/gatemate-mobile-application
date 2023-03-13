@@ -15,14 +15,14 @@ import '../ui_primatives/confirmation_button.dart';
 List<Marker> markers = [];
 int markerId = 0;
 
-class AddGateRoute extends StatefulWidget {
-  const AddGateRoute({super.key});
+class AddGateView extends StatefulWidget {
+  const AddGateView({super.key});
 
   @override
   _AddGateState createState() => _AddGateState();
 }
 
-class _AddGateState extends State<AddGateRoute> {
+class _AddGateState extends State<AddGateView> {
   AddGateModel addGateModel = AddGateModel();
   final LatLng _center = LatLng(36.06889761358809, -94.17477200170791);
   final PopupController _popupController = PopupController();

@@ -10,8 +10,8 @@ import 'package:http/http.dart' as http;
 
 import '../../model/firebase/gatemate_auth.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+class LoginView extends StatelessWidget {
+  const LoginView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -214,7 +214,7 @@ class _LoginMenuState extends State<_LoginMenu> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => const HomePage(),
+          builder: (context) => const HomeView(),
         ),
       );
     } else {

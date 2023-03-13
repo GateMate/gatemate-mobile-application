@@ -11,14 +11,14 @@ import '../ui_primatives/confirmation_popup.dart';
 late int _markerIdValue;
 // Set<Marker> _markers = HashSet<Marker>();
 
-class GateManagementRoute extends StatefulWidget {
-  const GateManagementRoute({super.key});
+class GateManagementView extends StatefulWidget {
+  const GateManagementView({super.key});
 
   @override
   _GateManagementState createState() => _GateManagementState();
 }
 
-class _GateManagementState extends State<GateManagementRoute> {
+class _GateManagementState extends State<GateManagementView> {
   // TODO: Use GetIt
   GateManagementViewModel _gateManagementViewModel = GateManagementViewModel();
   // final Set<Marker> markers = Set();

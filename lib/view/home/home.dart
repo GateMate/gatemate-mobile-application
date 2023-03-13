@@ -10,14 +10,14 @@ import 'package:provider/provider.dart';
 
 import '../../model/firebase/gatemate_auth.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class HomeView extends StatefulWidget {
+  const HomeView({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomeView> createState() => _HomeViewState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomeViewState extends State<HomeView> {
   final _authProvider = GetIt.I<GateMateAuth>();
 
   @override
@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => const LoginPage(),
+            builder: (context) => const LoginView(),
           ),
         );
       });
@@ -124,7 +124,7 @@ class NavigationDrawer extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const ActionCenterRoute(),
+                  builder: (context) => const ActionCenterView(),
                 ),
               );
             },
@@ -137,7 +137,7 @@ class NavigationDrawer extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const AddGateRoute(),
+                  builder: (context) => const AddGateView(),
                 ),
               );
               // Then close the drawer
@@ -152,7 +152,7 @@ class NavigationDrawer extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const GateManagementRoute(),
+                  builder: (context) => const GateManagementView(),
                 ),
               );
               // Then close the drawer
@@ -167,7 +167,7 @@ class NavigationDrawer extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const SettingsRoute(),
+                  builder: (context) => const SettingsView(),
                 ),
               );
               // Then close the drawer

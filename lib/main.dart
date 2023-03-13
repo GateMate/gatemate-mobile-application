@@ -36,7 +36,7 @@ class GateMateApp extends StatelessWidget {
 
     return MaterialApp(
       title: 'GateMate App',
-      home: const HomePage(),
+      home: const HomeView(),
       theme: ThemeData(
         colorScheme: colorScheme,
         cardTheme: CardTheme(

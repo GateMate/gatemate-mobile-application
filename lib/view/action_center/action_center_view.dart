@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:gatemate_mobile/model/viewmodels/action_center_view_model.dart';
 import 'package:get_it/get_it.dart';
 
-class ActionCenterRoute extends StatelessWidget {
-  const ActionCenterRoute({super.key});
+class ActionCenterView extends StatelessWidget {
+  const ActionCenterView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -172,10 +172,13 @@ class _NotificationsListState extends State<NotificationsList> {
           return ListView.builder(
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
-              return Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(snapshot.data![index].title, style: widget.style),
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(snapshot.data![index].title, style: widget.style),
+                  ),
                 ),
               );
             },

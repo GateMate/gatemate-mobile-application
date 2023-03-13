@@ -6,8 +6,8 @@ import 'package:provider/provider.dart';
 // TODO: Consider replacing with an Enum
 List<String> _notificationOptionsPlaceholder = ['Low', 'Med', 'High'];
 
-class SettingsRoute extends StatelessWidget {
-  const SettingsRoute({super.key});
+class SettingsView extends StatelessWidget {
+  const SettingsView({super.key});
 
   @override
   Widget build(BuildContext context) {
