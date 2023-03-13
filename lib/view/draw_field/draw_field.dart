@@ -439,8 +439,12 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                           ),
                         ),
                         PolygonLayerWidget(
-                            options: PolygonLayerOptions(
-                                polygons: [Polygon(points: polygonList)])),
+                            options: PolygonLayerOptions(polygons: [
+                          Polygon(
+                              points: polygonList,
+                              color: Colors.green,
+                              borderStrokeWidth: 5.0)
+                        ])),
                         MarkerLayerWidget(
                             options: MarkerLayerOptions(markers: markers)),
                         Container(
