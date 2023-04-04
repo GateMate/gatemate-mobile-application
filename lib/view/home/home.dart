@@ -52,6 +52,15 @@ class _HomeViewState extends State<HomeView> {
               child: const Text('Sign Out'),
             ),
           ),
+          const SizedBox(width: 10),
+          Center(
+            child: ElevatedButton(
+              onPressed: () {
+
+              },
+              child: const Text('Notification Text'),
+            )
+          ),
         ],
       ),
       drawer: const Drawer(
