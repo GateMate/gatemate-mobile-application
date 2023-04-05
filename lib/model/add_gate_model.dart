@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:http/http.dart' as http;
 
 int markerId = 0;
 
@@ -28,6 +31,18 @@ class AddGateModel extends ChangeNotifier {
     print('markers: ${this.markers}');
     return this.markers;
   }
+
+  // void addGate() async {
+  //   var field = await http.get(
+  //     Uri.parse('https://todo-proukhgi3a-uc.a.run.app/getField'),
+  //   );
+
+  //   var body = jsonDecode(field.body);
+
+  //   var fieldID = body['success'];
+
+  //   // print(fieldID);
+  // }
 
   // Marker(
   //   markerId: MarkerId('$markerId'),

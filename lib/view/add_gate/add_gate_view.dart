@@ -284,9 +284,9 @@ class _AddGateState extends State<AddGateRoute> {
     );
   }
 
-  Future<http.Response> fetchElevation(LatLng latLng) {
-    return http.get(Uri.parse(
-      'https://api.open-elevation.com/api/v1/lookup?locations=$latLng',
-    ));
-  }
+  // Future<http.Response> fetchElevation(LatLng latLng) {
+  //   return http.get(Uri.parse(
+  //     'https://api.open-elevation.com/api/v1/lookup?locations=$latLng',
+  //   ));
+  // }
 }

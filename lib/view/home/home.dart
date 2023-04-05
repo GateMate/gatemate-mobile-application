@@ -4,6 +4,7 @@ import 'package:gatemate_mobile/view/add_gate/add_gate_view.dart';
 import 'package:gatemate_mobile/view/draw_field/draw_field.dart';
 import 'package:gatemate_mobile/view/gate_management/gate_management_view.dart';
 import 'package:gatemate_mobile/model/fields_view_model.dart';
+import 'package:gatemate_mobile/view/manage_multiple_gates/manage_multiple_gates.dart';
 import 'package:gatemate_mobile/view/settings/settings_view.dart';
 import 'package:provider/provider.dart';
 
@@ -109,6 +110,20 @@ class NavigationDrawer extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const SettingsRoute()),
+              );
+              // Then close the drawer
+              // Navigator.pop(context);
+            },
+            trailing: const Icon(Icons.arrow_forward_ios),
+          ),
+          ListTile(
+            title: const Text('Manage Multiple Gates'),
+            onTap: () {
+              // Update the state of the app
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MultipleGateManagementRoute()),
               );
               // Then close the drawer
               // Navigator.pop(context);

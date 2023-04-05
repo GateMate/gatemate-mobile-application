@@ -13,6 +13,7 @@ import '../../model/add_gate_model.dart';
 
 import '../ui_primatives/my_button.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'dart:convert';
 
 List<Marker> markers = [];
 int markerId = 0;
@@ -78,7 +79,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
     super.dispose();
   }
 
-  void createPolygon() {
+  void createPolygon() async {
     setState(() {
       polygonList.clear();
       markers.clear();
@@ -124,6 +125,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
 
     polygonList.add(LatLng(double.parse(polyLat4Controller.text),
         double.parse(polyLong4Controller.text)));
+
     poly4LatLng = (Marker(
       builder: (_) => const Icon(
         Icons.circle,
@@ -134,6 +136,37 @@ class _AddFieldRoute extends State<AddFieldRoute> {
     ));
 
     markers.add(poly4LatLng);
+
+    var response = await http.post(
+        Uri.parse('https://todo-proukhgi3a-uc.a.run.app/addField'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'nw': markers.elementAt(0).point.latitude.toString() +
+              "|" +
+              markers.elementAt(0).point.longitude.toString(),
+          'ne': markers.elementAt(1).point.latitude.toString() +
+              "|" +
+              markers.elementAt(1).point.longitude.toString(),
+          'sw': markers.elementAt(2).point.latitude.toString() +
+              "|" +
+              markers.elementAt(2).point.longitude.toString(),
+          'se': markers.elementAt(3).point.latitude.toString() +
+              "|" +
+              markers.elementAt(3).point.longitude.toString(),
+        }));
+
+    var body = jsonDecode(response.body);
+
+    var thingToSendIvris = body['success'];
+
+    // var tiles = await http
+    //     .get(Uri.parse('https://todo-proukhgi3a-uc.a.run.app/tile-field?fieldID='));
+
+    // var tileMarkers = jsonDecode(tiles.body);
+
+    // print(thingToSendIvris);
   }
 
   void saveFieldDialog() {
@@ -275,7 +308,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                               EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                           subtitle: MyTextField(
                             controller: polyLat1Controller,
-                            hintText: "Lat 1",
+                            hintText: "NW Lat 1",
                             obscureText: false,
                             prefixIcon: Icon(Icons.my_location),
                             onChanged: () {
@@ -290,7 +323,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                             EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                         subtitle: MyTextField(
                           controller: polyLong1Controller,
-                          hintText: "Long 1",
+                          hintText: "NW Long 1",
                           obscureText: false,
                           prefixIcon: Icon(Icons.my_location),
                         ),
@@ -305,7 +338,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                               EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                           subtitle: MyTextField(
                               controller: polyLat2Controller,
-                              hintText: "Lat 2",
+                              hintText: "NE Lat 2",
                               obscureText: false,
                               prefixIcon: Icon(Icons.my_location)),
                         ),
@@ -316,7 +349,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                             EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                         subtitle: MyTextField(
                           controller: polyLong2Controller,
-                          hintText: "Long 2",
+                          hintText: "NE Long 2",
                           obscureText: false,
                           prefixIcon: Icon(Icons.my_location),
                         ),
@@ -331,7 +364,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                               EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                           subtitle: MyTextField(
                             controller: polyLat3Controller,
-                            hintText: "Lat 3",
+                            hintText: "SW Lat 3",
                             obscureText: false,
                             prefixIcon: Icon(Icons.my_location),
                           ),
@@ -343,7 +376,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                             EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                         subtitle: MyTextField(
                           controller: polyLong3Controller,
-                          hintText: "Long 3",
+                          hintText: "SW Long 3",
                           obscureText: false,
                           prefixIcon: Icon(Icons.my_location),
                         ),
@@ -358,7 +391,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                               EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                           subtitle: MyTextField(
                             controller: polyLat4Controller,
-                            hintText: "Lat 4",
+                            hintText: "SE Lat 4",
                             obscureText: false,
                             prefixIcon: Icon(Icons.my_location),
                           ),
@@ -370,7 +403,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                             EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                         subtitle: MyTextField(
                           controller: polyLong4Controller,
-                          hintText: "Long 4",
+                          hintText: "SE Long 4",
                           obscureText: false,
                           prefixIcon: Icon(Icons.my_location),
                         ),

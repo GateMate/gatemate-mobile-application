@@ -41,43 +41,23 @@ class GateManagementViewModel extends ChangeNotifier {
     });
 
     createAlbum(gateHeight);
-
-    // DocumentSnapshot snapshot = (await _db
-    //     .collection("gates_test")
-    //     .where('lat', isEqualTo: latitude)
-    //     .where('long', isEqualTo: longitude)
-    //     .get()) as DocumentSnapshot<Object?>;
-
-    // print(snapshot.reference.id);
-
-    // DocumentReference doc_ref = FirebaseFirestore.instance
-    //     .collection("board")
-    //     .document(doc_id)
-    //     .collection("Dates")
-    //     .document();
-
-    // DocumentSnapshot ds =
-    //     await FirebaseFirestore.instance.collection('users').doc('30').get();
-    // getname = ds.data['name'];
-    // snapshot.docs.first
-    //     .data()
-    //     .update({gateHeight: gateHeight}).then((value) => print("updated"));
   }
+
   Future<http.Response> createAlbum(String height) async {
-  if (kDebugMode) {
-    // ignore: prefer_interpolation_to_compose_strings
-    print("HEIGHT" + height);
+    if (kDebugMode) {
+      // ignore: prefer_interpolation_to_compose_strings
+      print("HEIGHT" + height);
+    }
+    return await http.post(
+      Uri.parse('http://10.0.2.2:5000/setGateHeight'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'height': height,
+      }),
+    );
   }
-   return await http.post(
-    Uri.parse('http://10.0.2.2:5000/setGateHeight'),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: jsonEncode(<String, String>{
-      'height': height,
-    }),
-  );
-}
 
   Future<List<Marker>> getGates() async {
     final snapshot = await _db.collection("gates_test").get();
