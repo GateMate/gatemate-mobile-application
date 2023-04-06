@@ -5,7 +5,9 @@ import 'package:gatemate_mobile/model/firebase/gatemate_auth.dart';
 import 'package:gatemate_mobile/model/viewmodels/action_center_view_model.dart';
 import 'package:gatemate_mobile/view/home/home.dart';
 import 'package:get_it/get_it.dart';
+import 'package:workmanager/workmanager.dart';
 
+import 'model/alerts_fetcher.dart';
 import 'model/firebase/firebase_options.dart';
 
 void main() async {
@@ -50,6 +52,21 @@ void main() async {
   );
 
   // TODO: Request notification permissions (iOS)
+
+  // TODO: Setup for iOS use of Workmanager has not been accomplished
+  Workmanager().initialize(
+    callbackDispatcher,
+    isInDebugMode: true,
+  );
+  // TODO: Move task registration to FieldViewModel initialization;
+  //       register a task for EACH field.
+  // TODO: Cancel tasks upon signout (or check for credentials?)
+  // Workmanager().registerOneOffTask('task-test', 'testing-tasks');
+  Workmanager().registerPeriodicTask(
+    'field-1',
+    'weather-fetcher',
+    frequency: const Duration(minutes: 15),
+  );
 
   // Start app
   runApp(const GateMateApp());

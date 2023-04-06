@@ -8,4 +8,9 @@ class AppConstants {
   static const String mapBoxStyleId = 'cldievrq0000301o10nbx1zvu';
 
   static final myLocation = LatLng(36.0831986, -94.2166087);
+
+  // URL of web server
+  static const serverUrl = 'https://todo-proukhgi3a-uc.a.run.app';
+  // TODO: Remove this (for debugging only)
+  // static const serverUrl = 'http://127.0.0.1:8080';
 }

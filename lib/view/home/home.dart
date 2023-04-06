@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:gatemate_mobile/model/viewmodels/fields_view_model.dart';
 import 'package:gatemate_mobile/view/action_center/action_center_view.dart';
 import 'package:gatemate_mobile/view/add_gate/add_gate_view.dart';
@@ -7,6 +8,7 @@ import 'package:gatemate_mobile/view/login/login.dart';
 import 'package:gatemate_mobile/view/settings/settings_view.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
+import 'package:workmanager/workmanager.dart';
 
 import '../../model/firebase/gatemate_auth.dart';
 
@@ -55,11 +57,28 @@ class _HomeViewState extends State<HomeView> {
           const SizedBox(width: 10),
           Center(
             child: ElevatedButton(
-              onPressed: () {
-
+              onPressed: () async {
+                Workmanager().registerOneOffTask(
+                    'field-2', 'weather-fetching-they/them');
+                // const notificationDetails = AndroidNotificationDetails(
+                //   'edu.uark.team15.gatemate',
+                //   'gatemate',
+                //   channelDescription: 'WEATHER BE HAPPENIN',
+                //   importance: Importance.high,
+                //   priority: Priority.high,
+                //   ticker: 'ACCESSIBLE WEATHER?',
+                // );
+                // const notification =
+                //     NotificationDetails(android: notificationDetails);
+                // await FlutterLocalNotificationsPlugin().show(
+                //   0,
+                //   'Weather alert....',
+                //   'Well I thought weather be happenin should go here...',
+                //   notification,
+                // );
               },
-              child: const Text('Notification Text'),
-            )
+              child: const Text('Notification Test'),
+            ),
           ),
         ],
       ),
