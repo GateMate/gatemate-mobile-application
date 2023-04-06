@@ -410,68 +410,67 @@ class _AddFieldRoute extends State<AddFieldRoute> {
           title: const Text('Add Field'),
           backgroundColor: Colors.green[700],
         ),
-        body: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Flexible(
-                    child: FlutterMap(
-                      options: MapOptions(
-                        center: LatLng(36.133512, -94.121556),
-                        allowPanningOnScrollingParent: false,
-                        // center: LatLng(47.925812, 106.919831),
-                        maxZoom: 18,
-                        zoom: 9.0,
-                        plugins: [EsriPlugin()],
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Flexible(
+                child: FlutterMap(
+                  options: MapOptions(
+                    center: LatLng(36.133512, -94.121556),
+                    // center: LatLng(47.925812, 106.919831),
+                    allowPanningOnScrollingParent: false,
+                    maxZoom: 18,
+                    zoom: 9.0,
+                    plugins: [EsriPlugin()],
+                  ),
+                  children: [
+                    TileLayerWidget(
+                      options: TileLayerOptions(
+                        urlTemplate:
+                            'https://services.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}?apiKey=AAPK9832e94d28094f39a7c33300e31ddd28P3dyFrvyoHAnYo3etV-ZrnsdZdCGXg2nG7HmfduCx6PE8v2IAVVOnSbtncioU578',
+                        subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+                        tileProvider: NonCachingNetworkTileProvider(),
+                        backgroundColor: Colors.transparent,
                       ),
-                      //   )
-                      // ],
-                      children: [
-                        TileLayerWidget(
-                          options: TileLayerOptions(
-                            urlTemplate:
-                                'https://services.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}?apiKey=AAPK9832e94d28094f39a7c33300e31ddd28P3dyFrvyoHAnYo3etV-ZrnsdZdCGXg2nG7HmfduCx6PE8v2IAVVOnSbtncioU578',
-                            subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
-                            tileProvider: NonCachingNetworkTileProvider(),
-                            backgroundColor: Colors.transparent,
-                          ),
-                        ),
-                        PolygonLayerWidget(
-                            options: PolygonLayerOptions(polygons: [
-                          Polygon(
-                              points: polygonList,
-                              color: Colors.green,
-                              borderStrokeWidth: 5.0)
-                        ])),
-                        MarkerLayerWidget(
-                            options: MarkerLayerOptions(markers: markers)),
-                        Container(
-                          alignment: Alignment.bottomRight,
-                          padding: const EdgeInsets.all(10.0),
-                          child: _getFab(),
-                        ),
-                        PopupMarkerLayerWidget(
-                          options: PopupMarkerLayerOptions(
-                            popupController: _popupController,
-                            markers: markers,
-                            popupBuilder:
-                                (BuildContext context, Marker marker) =>
-                                    viewPopup(marker),
-                          ),
-                        ),
-                      ],
                     ),
-                  ),
-                  Container(
-                    alignment: Alignment.bottomCenter,
-                    child: getText(),
-                  ),
-                ],
+                    PolygonLayerWidget(
+                      options: PolygonLayerOptions(
+                        polygons: [
+                          Polygon(
+                            points: polygonList,
+                            color: Colors.green,
+                            borderStrokeWidth: 5.0,
+                          ),
+                        ],
+                      ),
+                    ),
+                    MarkerLayerWidget(
+                      options: MarkerLayerOptions(markers: markers),
+                    ),
+                    Container(
+                      alignment: Alignment.bottomRight,
+                      padding: const EdgeInsets.all(10.0),
+                      child: _getFab(),
+                    ),
+                    PopupMarkerLayerWidget(
+                      options: PopupMarkerLayerOptions(
+                        popupController: _popupController,
+                        markers: markers,
+                        popupBuilder:
+                            (BuildContext context, Marker marker) =>
+                                viewPopup(marker),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+              Container(
+                alignment: Alignment.bottomCenter,
+                child: getText(),
+              ),
+            ],
+          ),
         ),
       ),
     );
