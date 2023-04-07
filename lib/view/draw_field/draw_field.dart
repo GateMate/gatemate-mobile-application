@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_arcgis/flutter_map_arcgis.dart';
@@ -5,6 +7,7 @@ import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
 import 'package:gatemate_mobile/model/add_field.dart';
 import 'package:gatemate_mobile/view/ui_primatives/my_textfield.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:gatemate_mobile/view/ui_primatives/marker_popup_view.dart';
@@ -26,10 +29,20 @@ class AddFieldRoute extends StatefulWidget {
 }
 
 class _AddFieldRoute extends State<AddFieldRoute> {
+  late List<LatLng> _poly0List;
   AddFieldModel addFieldModel = AddFieldModel();
   final LatLng _center = LatLng(36.06889761358809, -94.17477200170791);
   final PopupController _popupController = PopupController();
   late List<LatLng> polygonList = <LatLng>[];
+  late List<LatLng> polygon0List = <LatLng>[];
+  late List<LatLng> polygon1List = <LatLng>[];
+  late List<LatLng> polygon2List = <LatLng>[];
+  late List<LatLng> polygon3List = <LatLng>[];
+  List<LatLng> poly0List = <LatLng>[LatLng(0, 0)];
+  late List<LatLng> poly1List = <LatLng>[];
+  late List<LatLng> poly2List = <LatLng>[];
+  late List<LatLng> poly3List = <LatLng>[];
+
   final polyLat1Controller = TextEditingController();
   final polyLong1Controller = TextEditingController();
   final polyLat2Controller = TextEditingController();
@@ -82,6 +95,10 @@ class _AddFieldRoute extends State<AddFieldRoute> {
   void createPolygon() async {
     setState(() {
       polygonList.clear();
+      polygon0List.clear();
+      polygon1List.clear();
+      polygon2List.clear();
+      polygon3List.clear();
       markers.clear();
     });
     polygonList.add(LatLng(double.parse(polyLat1Controller.text),
@@ -126,6 +143,8 @@ class _AddFieldRoute extends State<AddFieldRoute> {
     polygonList.add(LatLng(double.parse(polyLat4Controller.text),
         double.parse(polyLong4Controller.text)));
 
+    print(polygonList);
+
     poly4LatLng = (Marker(
       builder: (_) => const Icon(
         Icons.circle,
@@ -143,10 +162,10 @@ class _AddFieldRoute extends State<AddFieldRoute> {
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(<String, String>{
-          'nw': markers.elementAt(0).point.latitude.toString() +
+          'ne': markers.elementAt(0).point.latitude.toString() +
               "|" +
               markers.elementAt(0).point.longitude.toString(),
-          'ne': markers.elementAt(1).point.latitude.toString() +
+          'nw': markers.elementAt(1).point.latitude.toString() +
               "|" +
               markers.elementAt(1).point.longitude.toString(),
           'sw': markers.elementAt(2).point.latitude.toString() +
@@ -157,16 +176,185 @@ class _AddFieldRoute extends State<AddFieldRoute> {
               markers.elementAt(3).point.longitude.toString(),
         }));
 
-    var body = jsonDecode(response.body);
+    var responseBody = jsonDecode(response.body);
 
-    var thingToSendIvris = body['success'];
+    var thingToSendIvris = responseBody['success'].toString();
 
-    // var tiles = await http
-    //     .get(Uri.parse('https://todo-proukhgi3a-uc.a.run.app/tile-field?fieldID='));
+    print("GIMME FIELD ID" + thingToSendIvris.toString());
 
-    // var tileMarkers = jsonDecode(tiles.body);
+    var tiles = await http.post(
+        Uri.parse('https://todo-proukhgi3a-uc.a.run.app/tile-field'),
+        headers: <String, String>{
+          'content-type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(
+            <String, String>{'fieldID': '${responseBody['success']}'}));
 
-    // print(thingToSendIvris);
+    // print(tiles.body);
+
+    var jsonDecodeGatePlacement = (jsonDecode(tiles.body) as Map).map(
+        (key, value) => MapEntry(key as String, value as Map<String, dynamic>));
+
+    // print(jsonDecodeGatePlacement);
+
+    for (var i = 0; i < jsonDecodeGatePlacement.length; i++) {
+      print(jsonDecodeGatePlacement[i.toString()]!['height_val'].runtimeType);
+      // setState(() {
+      if (jsonDecodeGatePlacement[i.toString()]!['height_val'] == 0) {
+        // print("HOWDYYYYY 0");
+        setState(() {
+          polygon0List.clear();
+          polygon0List.add(LatLng(
+              double.parse(jsonDecodeGatePlacement[i.toString()]!['nw_point']
+                  .toString()
+                  .split('|')[0]),
+              double.parse(jsonDecodeGatePlacement[i.toString()]!['nw_point']
+                  .toString()
+                  .split('|')[1])));
+          polygon0List.add(LatLng(
+              double.parse(jsonDecodeGatePlacement[i.toString()]!['ne_point']
+                  .toString()
+                  .split('|')[0]),
+              double.parse(jsonDecodeGatePlacement[i.toString()]!['ne_point']
+                  .toString()
+                  .split('|')[1])));
+          polygon0List.add(LatLng(
+              double.parse(jsonDecodeGatePlacement[i.toString()]!['se_point']
+                  .toString()
+                  .split('|')[0]),
+              double.parse(jsonDecodeGatePlacement[i.toString()]!['se_point']
+                  .toString()
+                  .split('|')[1])));
+          polygon0List.add(LatLng(
+              double.parse(jsonDecodeGatePlacement[i.toString()]!['sw_point']
+                  .toString()
+                  .split('|')[0]),
+              double.parse(jsonDecodeGatePlacement[i.toString()]!['sw_point']
+                  .toString()
+                  .split('|')[1])));
+          // if (polygon0List.length == 4) {
+          print("POLYGON" + polygon0List.toString());
+          // poly0List.clear();
+          // WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
+          // poly0List.clear();
+          // for (int p = 0; p < polygon0List.length; p++) {
+          // WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
+          //       poly0List = polygon0List;
+          //     }));
+          // print(poly0List);
+          // }
+          // ;
+          // }));
+          // polygon0List.clear();
+        });
+        // }
+      } else if (jsonDecodeGatePlacement[i.toString()]!['height_val'] == 1) {
+        polygon1List.add(LatLng(
+            double.parse(jsonDecodeGatePlacement[i.toString()]!['nw_point']
+                .toString()
+                .split('|')[0]),
+            double.parse(jsonDecodeGatePlacement[i.toString()]!['nw_point']
+                .toString()
+                .split('|')[1])));
+        polygon1List.add(LatLng(
+            double.parse(jsonDecodeGatePlacement[i.toString()]!['ne_point']
+                .toString()
+                .split('|')[0]),
+            double.parse(jsonDecodeGatePlacement[i.toString()]!['ne_point']
+                .toString()
+                .split('|')[1])));
+        polygon1List.add(LatLng(
+            double.parse(jsonDecodeGatePlacement[i.toString()]!['se_point']
+                .toString()
+                .split('|')[0]),
+            double.parse(jsonDecodeGatePlacement[i.toString()]!['se_point']
+                .toString()
+                .split('|')[1])));
+        polygon1List.add(LatLng(
+            double.parse(jsonDecodeGatePlacement[i.toString()]!['sw_point']
+                .toString()
+                .split('|')[0]),
+            double.parse(jsonDecodeGatePlacement[i.toString()]!['sw_point']
+                .toString()
+                .split('|')[1])));
+
+        if (polygon1List.length == 4) {
+          setState(() => {
+                poly1List.clear(),
+                for (int p = 0; p < polygon1List.length; p++)
+                  {poly1List.add(polygon1List[p])},
+                polygon1List.clear()
+              });
+        }
+      } else if (jsonDecodeGatePlacement[i.toString()]!['height_val'] == 2) {
+        polygon2List.add(LatLng(
+            double.parse(jsonDecodeGatePlacement[i.toString()]!['nw_point']
+                .toString()
+                .split('|')[0]),
+            double.parse(jsonDecodeGatePlacement[i.toString()]!['nw_point']
+                .toString()
+                .split('|')[1])));
+        polygon2List.add(LatLng(
+            double.parse(jsonDecodeGatePlacement[i.toString()]!['ne_point']
+                .toString()
+                .split('|')[0]),
+            double.parse(jsonDecodeGatePlacement[i.toString()]!['ne_point']
+                .toString()
+                .split('|')[1])));
+        polygon2List.add(LatLng(
+            double.parse(jsonDecodeGatePlacement[i.toString()]!['se_point']
+                .toString()
+                .split('|')[0]),
+            double.parse(jsonDecodeGatePlacement[i.toString()]!['se_point']
+                .toString()
+                .split('|')[1])));
+        polygon2List.add(LatLng(
+            double.parse(jsonDecodeGatePlacement[i.toString()]!['sw_point']
+                .toString()
+                .split('|')[0]),
+            double.parse(jsonDecodeGatePlacement[i.toString()]!['sw_point']
+                .toString()
+                .split('|')[1])));
+        if (polygon2List.length == 4) {
+          setState(() => {
+                poly2List.clear(),
+                for (int p = 0; p < polygon2List.length; p++)
+                  {poly2List.add(polygon2List[p])},
+                polygon2List.clear()
+              });
+        }
+      } else if (jsonDecodeGatePlacement[i.toString()]!['height_val'] == 3) {
+        polygon3List.add(LatLng(
+            double.parse(jsonDecodeGatePlacement[i.toString()]!['nw_point']
+                .toString()
+                .split('|')[0]),
+            double.parse(jsonDecodeGatePlacement[i.toString()]!['nw_point']
+                .toString()
+                .split('|')[1])));
+        polygon3List.add(LatLng(
+            double.parse(jsonDecodeGatePlacement[i.toString()]!['ne_point']
+                .toString()
+                .split('|')[0]),
+            double.parse(jsonDecodeGatePlacement[i.toString()]!['ne_point']
+                .toString()
+                .split('|')[1])));
+        polygon3List.add(LatLng(
+            double.parse(jsonDecodeGatePlacement[i.toString()]!['se_point']
+                .toString()
+                .split('|')[0]),
+            double.parse(jsonDecodeGatePlacement[i.toString()]!['se_point']
+                .toString()
+                .split('|')[1])));
+        polygon3List.add(LatLng(
+            double.parse(jsonDecodeGatePlacement[i.toString()]!['sw_point']
+                .toString()
+                .split('|')[0]),
+            double.parse(jsonDecodeGatePlacement[i.toString()]!['sw_point']
+                .toString()
+                .split('|')[1])));
+      }
+      // });
+    }
   }
 
   void saveFieldDialog() {
@@ -195,6 +383,10 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                         () {
                           setState(() {
                             polygonList.clear();
+                            polygon0List.clear();
+                            polygon1List.clear();
+                            polygon2List.clear();
+                            polygon3List.clear();
                             markers.clear();
                             polyLat1Controller.clear();
                             polyLat2Controller.clear();
@@ -226,7 +418,15 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                         onPressed: () => {
                               setState(() {
                                 polygonList.clear();
+                                polygon0List.clear();
+                                polygon1List.clear();
+                                polygon2List.clear();
+                                polygon3List.clear();
                                 markers.clear();
+                                poly0List.clear();
+                                poly1List.clear();
+                                poly2List.clear();
+                                poly3List.clear();
                                 polyLat1Controller.clear();
                                 polyLat2Controller.clear();
                                 polyLat3Controller.clear();
@@ -364,7 +564,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                               EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                           subtitle: MyTextField(
                             controller: polyLat3Controller,
-                            hintText: "SW Lat 3",
+                            hintText: "SE Lat 3",
                             obscureText: false,
                             prefixIcon: Icon(Icons.my_location),
                           ),
@@ -376,7 +576,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                             EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                         subtitle: MyTextField(
                           controller: polyLong3Controller,
-                          hintText: "SW Long 3",
+                          hintText: "SE Long 3",
                           obscureText: false,
                           prefixIcon: Icon(Icons.my_location),
                         ),
@@ -391,7 +591,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                               EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                           subtitle: MyTextField(
                             controller: polyLat4Controller,
-                            hintText: "SE Lat 4",
+                            hintText: "SW Lat 4",
                             obscureText: false,
                             prefixIcon: Icon(Icons.my_location),
                           ),
@@ -403,7 +603,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                             EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                         subtitle: MyTextField(
                           controller: polyLong4Controller,
-                          hintText: "SE Long 4",
+                          hintText: "SW Long 4",
                           obscureText: false,
                           prefixIcon: Icon(Icons.my_location),
                         ),
@@ -468,15 +668,31 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                                 'https://services.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}?apiKey=AAPK9832e94d28094f39a7c33300e31ddd28P3dyFrvyoHAnYo3etV-ZrnsdZdCGXg2nG7HmfduCx6PE8v2IAVVOnSbtncioU578',
                             subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
                             tileProvider: NonCachingNetworkTileProvider(),
-                            backgroundColor: Colors.transparent,
+                            // backgroundColor: Colors.transparent,
                           ),
                         ),
                         PolygonLayerWidget(
                             options: PolygonLayerOptions(polygons: [
                           Polygon(
                               points: polygonList,
-                              color: Colors.green,
-                              borderStrokeWidth: 5.0)
+                              borderStrokeWidth: 5.0,
+                              borderColor: Colors.pink),
+                          Polygon(
+                              points: _poly0List,
+                              borderStrokeWidth: 5.0,
+                              borderColor: Colors.green),
+                          Polygon(
+                              points: poly1List,
+                              borderStrokeWidth: 5.0,
+                              borderColor: Colors.blue),
+                          Polygon(
+                              points: poly2List,
+                              borderStrokeWidth: 5.0,
+                              borderColor: Colors.purple),
+                          Polygon(
+                              points: polygon3List,
+                              borderStrokeWidth: 5.0,
+                              borderColor: Colors.brown),
                         ])),
                         MarkerLayerWidget(
                             options: MarkerLayerOptions(markers: markers)),
@@ -510,9 +726,20 @@ class _AddFieldRoute extends State<AddFieldRoute> {
     );
   }
 
-  Future<http.Response> fetchElevation(LatLng latLng) {
-    return http.get(Uri.parse(
-      'https://api.open-elevation.com/api/v1/lookup?locations=$latLng',
-    ));
-  }
+  // List<LatLng> getPoints() {
+  //   if (polyList.isNotEmpty) {
+  //     for (var i = 0; i < polyList.length; i++) {
+  //       return polyList[i];
+  //     }
+  //   }
+  //   return <LatLng>[];
+  // }
+
+  var listyBoy = (List<List<LatLng>>? list) => list?.removeLast();
+
+  // Future<http.Response> fetchElevation(LatLng latLng) {
+  //   return http.get(Uri.parse(
+  //     'https://api.open-elevation.com/api/v1/lookup?locations=$latLng',
+  //   ));
+  // }
 }

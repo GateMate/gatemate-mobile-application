@@ -89,19 +89,25 @@ class _MultipleGateManagementState extends State<MultipleGateManagementRoute> {
                             _manageMultipleGatesViewModel.markers[i]
                         ],
                       )),
-                      // PopupMarkerLayerWidget(
-                      //   options: PopupMarkerLayerOptions(
-                      //     popupController: _popupController,
-                      //     markers: [
-                      //       for (int i = 0; i < markers.length; i++) markers[i]
-                      //     ],
-                      //     // markerRotateAlignment:
-                      //     //     PopupMarkerLayerOptions.rotationAlignmentFor(
-                      //     //         AnchorAlign.top),
-                      //     popupBuilder: (BuildContext context, Marker marker) =>
-                      //         ExamplePopup(marker),
-                      //   ),
-                      // ),
+                      PopupMarkerLayerWidget(
+                        options: PopupMarkerLayerOptions(
+                          popupController: _popupController,
+                          markers: [
+                            for (int i = 0; i < markers.length; i++) markers[i]
+                          ],
+                          // markerRotateAlignment:
+                          //     PopupMarkerLayerOptions.rotationAlignmentFor(
+                          //         AnchorAlign.top),
+                          popupBuilder: (BuildContext context, Marker marker) =>
+                              ExamplePopup(marker),
+                          selectedMarkerBuilder: (context, marker) {
+                            print("TAP");
+                            var selectedMarkers = <Marker>[];
+                            selectedMarkers.add(marker);
+                            return Text("");
+                          },
+                        ),
+                      ),
                     ],
                   ),
                 ),
