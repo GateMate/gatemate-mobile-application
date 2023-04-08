@@ -27,6 +27,20 @@ class AddGateModel extends ChangeNotifier {
     print('markers: ${this.markers}');
   }
 
+  //not yet accounting fields
+  addToFB(Marker m) async {
+    var response = await http.post(
+        Uri.parse('https://todo-proukhgi3a-uc.a.run.app/addGate'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          "gateLocation": "${m.point.latitude}" + "|" + "${m.point.longitude}"
+        }));
+
+    print(response.body);
+  }
+
   getMarkers() {
     print('markers: ${this.markers}');
     return this.markers;

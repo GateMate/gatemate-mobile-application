@@ -60,6 +60,7 @@ class _AddGateState extends State<AddGateRoute> {
       },
     );
     addGateModel.setMarkers(m);
+    addGateModel.addToFB(m);
 
     Fluttertoast.showToast(
         msg: "Gate Marker Added Successfully!",

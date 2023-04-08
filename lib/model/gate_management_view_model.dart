@@ -59,28 +59,47 @@ class GateManagementViewModel extends ChangeNotifier {
     );
   }
 
-  Future<List<Marker>> getGates() async {
-    final snapshot = await _db.collection("gates_test").get();
+  // Future<List<Marker>> getGates() async {
+  //   final snapshot = await _db.collection("gates_test").get();
 
-    final gateData =
-        snapshot.docs.map((e) => GateModel.fromSnapshot(e)).toList();
+  //   final gateData =
+  //       snapshot.docs.map((e) => GateModel.fromSnapshot(e)).toList();
 
-    for (var g in gateData) {
+  //   for (var g in gateData) {
+  //     markers.add(Marker(
+  //         point: LatLng(double.parse(g.lat), double.parse(g.long)),
+  //         builder: (_) => const Icon(Icons.roller_shades_outlined, size: 25)));
+  //   }
+
+  //   return markers;
+  // }
+
+  getGates() async {
+    var gateData = await http
+        .get(Uri.parse('https://todo-proukhgi3a-uc.a.run.app/getGates'));
+
+    // var gates = (jsonDecode(gateData.body) as Map).map(
+    // (key, value) => MapEntry(key as String, value as Map<String, String>));
+
+    Map<String, dynamic> data = jsonDecode(gateData.body);
+    print(data);
+
+    // print(gateData.body);
+
+    // var gates = jsonDecode(gateData.body).cast<Map<String, dynamic>>();
+    // var decodeGates = gates['success'].toString();
+
+    // print(gates);
+    // print(gates.entries.length);
+
+    for (var g in data.entries) {
+      // print(g.value['lat']);
       markers.add(Marker(
-          point: LatLng(double.parse(g.lat), double.parse(g.long)),
+          point: LatLng(
+              double.parse(g.value['lat']!), double.parse(g.value['long']!)),
           builder: (_) => const Icon(Icons.roller_shades_outlined, size: 25)));
     }
-
+    print(markers.length);
     return markers;
   }
-
-  // String snippetMessage(LatLng latLng) {
-  //   var elevation = fetchElevation(latLng);
-  //   return 'Location: {$latLng}, Elevation: ${elevation}';
-  // }
-
-  // Future<http.Response> fetchElevation(LatLng latLng) {
-  //   return http.get(Uri.parse(
-  //       'https://api.open-elevation.com/api/v1/lookup?locations=$latLng'));
-  // }
 }

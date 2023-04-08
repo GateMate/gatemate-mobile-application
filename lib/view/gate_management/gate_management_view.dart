@@ -37,7 +37,7 @@ class _GateManagementState extends State<GateManagementRoute> {
         markers = value;
       });
     });
-
+    // _gateManagementViewModel.getGates();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Gate Management'),

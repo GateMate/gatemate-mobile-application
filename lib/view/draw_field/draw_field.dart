@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_arcgis/flutter_map_arcgis.dart';
+import 'package:flutter_map_line_editor/polyeditor.dart';
 import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
 import 'package:gatemate_mobile/model/add_field.dart';
 import 'package:gatemate_mobile/view/ui_primatives/my_textfield.dart';
@@ -29,7 +30,6 @@ class AddFieldRoute extends StatefulWidget {
 }
 
 class _AddFieldRoute extends State<AddFieldRoute> {
-  late List<LatLng> _poly0List;
   AddFieldModel addFieldModel = AddFieldModel();
   final LatLng _center = LatLng(36.06889761358809, -94.17477200170791);
   final PopupController _popupController = PopupController();
@@ -42,7 +42,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
   late List<LatLng> poly1List = <LatLng>[];
   late List<LatLng> poly2List = <LatLng>[];
   late List<LatLng> poly3List = <LatLng>[];
-
+  late List<Polygon> polygons = <Polygon>[];
   final polyLat1Controller = TextEditingController();
   final polyLong1Controller = TextEditingController();
   final polyLat2Controller = TextEditingController();
@@ -190,7 +190,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
         body: jsonEncode(
             <String, String>{'fieldID': '${responseBody['success']}'}));
 
-    // print(tiles.body);
+    print(tiles.body);
 
     var jsonDecodeGatePlacement = (jsonDecode(tiles.body) as Map).map(
         (key, value) => MapEntry(key as String, value as Map<String, dynamic>));
@@ -639,12 +639,11 @@ class _AddFieldRoute extends State<AddFieldRoute> {
     return ChangeNotifierProvider(
       create: (context) => AddGateModel(),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Add Field'),
-          backgroundColor: Colors.green[700],
-        ),
-        body: Stack(
-          children: [
+          appBar: AppBar(
+            title: const Text('Add Field'),
+            backgroundColor: Colors.green[700],
+          ),
+          body: Stack(children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
@@ -672,68 +671,81 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                           ),
                         ),
                         PolygonLayerWidget(
-                            options: PolygonLayerOptions(polygons: [
-                          Polygon(
-                              points: polygonList,
-                              borderStrokeWidth: 5.0,
-                              borderColor: Colors.pink),
-                          Polygon(
-                              points: _poly0List,
-                              borderStrokeWidth: 5.0,
-                              borderColor: Colors.green),
-                          Polygon(
-                              points: poly1List,
-                              borderStrokeWidth: 5.0,
-                              borderColor: Colors.blue),
-                          Polygon(
-                              points: poly2List,
-                              borderStrokeWidth: 5.0,
-                              borderColor: Colors.purple),
-                          Polygon(
-                              points: polygon3List,
-                              borderStrokeWidth: 5.0,
-                              borderColor: Colors.brown),
-                        ])),
-                        MarkerLayerWidget(
-                            options: MarkerLayerOptions(markers: markers)),
-                        Container(
-                          alignment: Alignment.bottomRight,
-                          padding: const EdgeInsets.all(10.0),
-                          child: _getFab(),
+                          options: PolygonLayerOptions(polygons: polygons
+
+                              //     Polygon(
+                              //         points: polygonList,
+                              //         borderStrokeWidth: 5.0,
+                              //         borderColor: Colors.pink),
+                              //     Polygon(
+                              //         points: poly0List,
+                              //         borderStrokeWidth: 5.0,
+                              //         borderColor: Colors.green),
+                              //     Polygon(
+                              //         points: poly1List,
+                              //         borderStrokeWidth: 5.0,
+                              //         borderColor: Colors.blue),
+                              //     Polygon(
+                              //         points: poly2List,
+                              //         borderStrokeWidth: 5.0,
+                              //         borderColor: Colors.purple),
+                              //     Polygon(
+                              //         points: polygon3List,
+                              //         borderStrokeWidth: 5.0,
+                              //         borderColor: Colors.brown),
+                              //   ])),
+                              //   MarkerLayerWidget(
+                              //       options: MarkerLayerOptions(markers: markers)),
+                              //   Container(
+                              //     alignment: Alignment.bottomRight,
+                              //     padding: const EdgeInsets.all(10.0),
+                              //     child: _getFab(),
+                              //   ),
+                              //   PopupMarkerLayerWidget(
+                              //     options: PopupMarkerLayerOptions(
+                              //       popupController: _popupController,
+                              //       markers: markers,
+                              //       popupBuilder:
+                              //           (BuildContext context, Marker marker) =>
+                              //               viewPopup(marker),
+                              //     ),
+                              //   ),
+                              // ],
+                              ),
                         ),
-                        PopupMarkerLayerWidget(
-                          options: PopupMarkerLayerOptions(
-                            popupController: _popupController,
-                            markers: markers,
-                            popupBuilder:
-                                (BuildContext context, Marker marker) =>
-                                    viewPopup(marker),
-                          ),
+                        Container(
+                          alignment: Alignment.bottomCenter,
+                          child: getText(),
                         ),
                       ],
                     ),
                   ),
-                  Container(
-                    alignment: Alignment.bottomCenter,
-                    child: getText(),
-                  ),
                 ],
               ),
             ),
-          ],
-        ),
-      ),
+          ])),
     );
   }
 
-  // List<LatLng> getPoints() {
-  //   if (polyList.isNotEmpty) {
-  //     for (var i = 0; i < polyList.length; i++) {
-  //       return polyList[i];
-  //     }
-  //   }
-  //   return <LatLng>[];
-  // }
+  void getPoints() {
+    var polyEditor = PolyEditor(
+        pointIcon: const Icon(
+          Icons.lens,
+          size: 15,
+          color: Colors.orange,
+        ),
+        points: [
+          for (int p = 0; p < polygon0List.length; p = p + 3)
+            {
+              polygons.add(Polygon(points: <LatLng>[
+                polygon0List[p],
+                polygon0List[p + 1],
+                polygon0List[p + 2],
+                polygon0List[p + 3]
+              ], borderColor: Colors.purple)),
+            },
+        ]);
+  }
 
   var listyBoy = (List<List<LatLng>>? list) => list?.removeLast();
 
