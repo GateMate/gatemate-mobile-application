@@ -9,6 +9,7 @@ import 'package:gatemate_mobile/view/settings/settings_view.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:workmanager/workmanager.dart';
+import 'package:logger/logger.dart';
 
 import '../../model/firebase/gatemate_auth.dart';
 
@@ -59,7 +60,9 @@ class _HomeViewState extends State<HomeView> {
             child: ElevatedButton(
               onPressed: () async {
                 Workmanager().registerOneOffTask(
-                    'field-2', 'weather-fetching-they/them');
+                  'field-2',
+                  'weather-fetching-test-task',
+                );
                 // const notificationDetails = AndroidNotificationDetails(
                 //   'edu.uark.team15.gatemate',
                 //   'gatemate',

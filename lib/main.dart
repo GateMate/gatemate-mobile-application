@@ -58,15 +58,10 @@ void main() async {
     callbackDispatcher,
     isInDebugMode: true,
   );
+  
   // TODO: Move task registration to FieldViewModel initialization;
   //       register a task for EACH field.
   // TODO: Cancel tasks upon signout (or check for credentials?)
-  // Workmanager().registerOneOffTask('task-test', 'testing-tasks');
-  Workmanager().registerPeriodicTask(
-    'field-1',
-    'weather-fetcher',
-    frequency: const Duration(minutes: 15),
-  );
 
   // Start app
   runApp(const GateMateApp());
