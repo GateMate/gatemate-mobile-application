@@ -6,6 +6,7 @@ import 'package:flutter_map_arcgis/flutter_map_arcgis.dart';
 import 'package:flutter_map_line_editor/polyeditor.dart';
 import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
 import 'package:gatemate_mobile/model/add_field.dart';
+import 'package:gatemate_mobile/settings/settings_view.dart';
 import 'package:gatemate_mobile/view/ui_primatives/my_textfield.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -193,7 +194,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
         body: jsonEncode(
             <String, String>{'fieldID': '${responseBody['success']}'}));
 
-    print(tiles.body);
+    // print(tiles.body);
 
     var jsonDecodeGatePlacement = (jsonDecode(tiles.body) as Map).map(
         (key, value) => MapEntry(key as String, value as Map<String, dynamic>));
@@ -201,7 +202,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
     // print(jsonDecodeGatePlacement);
 
     for (var i = 0; i < jsonDecodeGatePlacement.length; i++) {
-      print(jsonDecodeGatePlacement[i.toString()]!['height_val'].runtimeType);
+      // print(jsonDecodeGatePlacement[i.toString()]!['height_val'].runtimeType);
       // setState(() {
       if (jsonDecodeGatePlacement[i.toString()]!['height_val'] == 0) {
         // print("HOWDYYYYY 0");
@@ -236,7 +237,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                   .toString()
                   .split('|')[1])));
           // if (polygon0List.length == 4) {
-          print("POLYGON" + polygon0List.toString());
+          // print("POLYGON" + polygon0List.toString());
           getPoints(polygon0List, Colors.purple);
         });
         // }
@@ -366,6 +367,8 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                             polygon2List.clear();
                             polygon3List.clear();
                             markers.clear();
+                            gates.clear();
+                            polygons.clear();
                             polyLat1Controller.clear();
                             polyLat2Controller.clear();
                             polyLat3Controller.clear();
@@ -394,6 +397,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                     MyButton(
                         buttonText: 'No, Don\'t Create Field',
                         onPressed: () => {
+                              addFieldModel.deleteField(fieldID),
                               setState(() {
                                 polygonList.clear();
                                 polygon0List.clear();
@@ -401,6 +405,8 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                                 polygon2List.clear();
                                 polygon3List.clear();
                                 markers.clear();
+                                gates.clear();
+                                polygons.clear();
                                 poly0List.clear();
                                 poly1List.clear();
                                 poly2List.clear();

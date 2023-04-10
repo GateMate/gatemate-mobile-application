@@ -14,6 +14,16 @@ class AddFieldModel extends ChangeNotifier {
     print('markers: ${this.markers}');
   }
 
+  deleteField(String fieldID) async {
+    var response = await http.post(
+        Uri.parse('https://todo-proukhgi3a-uc.a.run.app/deleteField'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{"fieldID": "${fieldID}"}));
+    print(response.body);
+  }
+
   addToFB(Marker m, String fieldID) async {
     var response = await http.post(
         Uri.parse('https://todo-proukhgi3a-uc.a.run.app/addGate'),

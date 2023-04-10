@@ -27,7 +27,9 @@ class _ExamplePopupState extends State<ExamplePopup> {
   final latController = TextEditingController();
   final longController = TextEditingController();
   GateManagementViewModel _gateManagementViewModel = GateManagementViewModel();
-  late var gateHeight;
+  String gateHeight = "";
+  late var lat;
+  late var long;
 
   @override
   void initState() {
@@ -35,6 +37,16 @@ class _ExamplePopupState extends State<ExamplePopup> {
     gateHeightController.addListener(
       () {},
     );
+    getHeight();
+  }
+
+  getHeight() async {
+    print(await _gateManagementViewModel.getGateHeight(
+        widget.marker.point.latitude.toString(),
+        widget.marker.point.longitude.toString()));
+    gateHeight = await _gateManagementViewModel.getGateHeight(
+        widget.marker.point.latitude.toString(),
+        widget.marker.point.longitude.toString());
   }
 
   void setHeight(String latitude, String longitude) {
@@ -46,6 +58,10 @@ class _ExamplePopupState extends State<ExamplePopup> {
 
     _gateManagementViewModel.setGateHeight(
         latitude, longitude, gateHeightController.text);
+  }
+
+  void setPosition(String latitude, String longitude) {
+    // setState() {}
   }
 
   @override
@@ -106,26 +122,46 @@ class _ExamplePopupState extends State<ExamplePopup> {
             //   ],
             // ),
 
-            Text(
-              'Position: ${widget.marker.point.latitude}, ${widget.marker.point.longitude}',
-              style: const TextStyle(fontSize: 12.0),
+            // Text(
+            //   'Position: ${widget.marker.point.latitude}, ${widget.marker.point.longitude}',
+            //   style: const TextStyle(fontSize: 12.0),
+            // ),
+            SizedBox(
+              height: 35,
+              child: MyTextField(
+                  controller: latController,
+                  hintText:
+                      "Lat: ${widget.marker.point.latitude.toString().substring(0, 6)}",
+                  obscureText: false,
+                  prefixIcon: const Icon(Icons.location_on_outlined, size: 20)),
+            ),
+            SizedBox(
+              height: 35,
+              child: MyTextField(
+                  controller: longController,
+                  hintText:
+                      "Long: ${widget.marker.point.longitude.toString().substring(0, 6)}",
+                  obscureText: false,
+                  prefixIcon: const Icon(Icons.location_on_outlined, size: 20)),
             ),
 
             SizedBox(
               height: 35,
               child: MyTextField(
                   controller: gateHeightController,
-                  hintText: "GateHeight",
+                  hintText: "GateHeight: $gateHeight",
                   obscureText: false,
                   prefixIcon:
                       const Icon(Icons.roller_shades_outlined, size: 20)),
             ),
             MyButton(
                 onPressed: () {
+                  setPosition(widget.marker.point.latitude.toString(),
+                      widget.marker.point.longitude.toString());
                   setHeight(widget.marker.point.latitude.toString(),
                       widget.marker.point.longitude.toString());
                 },
-                buttonText: "Update Gate")
+                buttonText: "Update")
           ],
         ),
       ),

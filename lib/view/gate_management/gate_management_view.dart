@@ -88,18 +88,14 @@ class _GateManagementState extends State<GateManagementRoute> {
                       //   ],
                       // )),
                       PopupMarkerLayerWidget(
-                        options: PopupMarkerLayerOptions(
-                          popupController: _popupController,
-                          markers: [
-                            for (int i = 0; i < markers.length; i++) markers[i]
-                          ],
-                          // markerRotateAlignment:
-                          //     PopupMarkerLayerOptions.rotationAlignmentFor(
-                          //         AnchorAlign.top),
-                          popupBuilder: (BuildContext context, Marker marker) =>
-                              ExamplePopup(marker),
-                        ),
-                      ),
+                          options: PopupMarkerLayerOptions(
+                        popupController: _popupController,
+                        markers: [
+                          for (int i = 0; i < markers.length; i++) markers[i]
+                        ],
+                        popupBuilder: (BuildContext context, Marker marker) =>
+                            ExamplePopup(marker),
+                      )),
                     ],
                   ),
                 ),
