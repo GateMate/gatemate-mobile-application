@@ -7,67 +7,51 @@ import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workmanager/workmanager.dart';
 
-// TODO: There is currently an open issue with the http package that is
-//  causing issues in the below (commented out) WeatherNotifier class.
-//  Reverting to a much less clean implementation as a work around.
-
 /// Background process that monitors forecasted rainfall amounts by
 /// querying the application server.
-/*
 class WeatherNotifier {
   final double fieldLatitude;
   final double fieldLongitude;
   static const urlPrefix = '${AppConstants.serverUrl}/weather_forecast';
 
-  const WeatherNotifier({
-    required this.fieldLatitude,
-    required this.fieldLongitude,
-  });
+  const WeatherNotifier(
+    this.fieldLatitude,
+    this.fieldLongitude,
+  );
 
-  void execute() async {
+  Future<bool> execute() async {
+    // TODO: Just throw the exception in the method
     final fieldParamsException = _validateFieldParams();
     if (fieldParamsException != null) {
       throw fieldParamsException;
     }
 
-    final notificationId = await _getNotificationId();
-    Logger().d('Notification ID is $notificationId.');
-
     final response = await _fetchWeatherData();
-    Logger().d('Response code: ${response.statusCode}');
-
     if (response.statusCode == 200) {
-      Map<String, dynamic> jsonBody = jsonDecode(response.body);
-
-      // Parse the list of precipitation amounts
-      List rawPrecipitation = jsonBody['precipitation_hourly'];
-      var hourlyPrecipitation = rawPrecipitation.cast<double>();
-
-      // Parse the list of instances in time for which there's a forecast
-      List rawTimes = jsonBody['timedate_hourly'];
-      var forecastTimes = rawTimes.cast<String>();
-
-      Logger().i('Checking data returned from server...');
-
-      // Check data returned from server
-      if (hourlyPrecipitation.length != forecastTimes.length) {
-        throw Exception(
-          'Invalid response from server! Returned ${forecastTimes.length} '
-          'forecast times, but ${hourlyPrecipitation.length} rain amounts.',
-        );
+      // Deserialize server response
+      final WeatherData weatherData;
+      try {
+        weatherData = WeatherData.fromJson(jsonDecode(response.body));
+      } catch (error) {
+        throw Exception('Invalid response from server (weather API)!\n$error');
       }
-
-      Logger().i('Checking for rain over threshold...');
+      final forecastTimes = weatherData.forecastTimes;
+      final hourlyRainfall = weatherData.hourlyRainfall;
 
       // Check for rain over threshold
       for (var i = 0; i < forecastTimes.length; i++) {
-        // TODO Potential preference change: rain threshold amount
-        if (hourlyPrecipitation[i] >= AppConstants.rainAlertThreshold) {
-          Logger().i(
-            'Severe weather! Rain: ${hourlyPrecipitation[i]}',
+        // TODO Potential preference change: rain threshold amount.
+        //  Also, what about weak but sustained rain?
+        if (hourlyRainfall[i] >= AppConstants.rainAlertThreshold) {
+          _displayNotification(
+            await _getNotificationId(),
+            hourlyRainfall[i],
+            forecastTimes[i],
           );
+          break;
         } else {
-          Logger().d('It's ok: ${hourlyPrecipitation[i]}');
+          // TODO: REMOVE
+          Logger().d('It\'s ok: ${hourlyRainfall[i]}');
         }
       }
     } else {
@@ -76,11 +60,12 @@ class WeatherNotifier {
         'Response status code: ${response.statusCode}',
       );
     }
+
+    return Future.value(true);
   }
 
-  /// Checks field location validity.
+  /// Checks field location validity. Returns an exception
   Exception? _validateFieldParams() {
-    Logger().i('Validating params...');
     if (fieldLatitude < -90.0 || fieldLatitude > 90) {
       return Exception('Invalid field latitude! Value: $fieldLatitude');
     }
@@ -88,42 +73,89 @@ class WeatherNotifier {
       return Exception('Invalid field longitude! Value: $fieldLongitude');
     }
 
-    Logger().i('Params validated!');
-
     return null;
   }
 
   /// Gets unique notification id
   Future<int> _getNotificationId() async {
+    const preferencesKey = 'lastNotificationId';
     final sharedPreferences = await SharedPreferences.getInstance();
-    final lastNotificationId = sharedPreferences.getInt('lastNotificationId');
-    // TODO: Update shared preferences instance
-    return lastNotificationId == null ? 0 : lastNotificationId + 1;
+    final lastNotificationId = sharedPreferences.getInt(preferencesKey);
+
+    final notificationId =
+        lastNotificationId == null ? 0 : lastNotificationId + 1;
+    sharedPreferences.setInt(preferencesKey, notificationId);
+
+    return notificationId;
   }
 
   /// Fetch weather data from application server
   Future<http.Response> _fetchWeatherData() async {
-    var uri = '${WeatherNotifier.urlPrefix}/$fieldLatitude/$fieldLongitude';
-    Logger().i('URL: $uri');
+    return http.get(Uri.parse(
+      '${WeatherNotifier.urlPrefix}/$fieldLatitude/$fieldLongitude',
+    ));
+  }
 
-    try {
-      var response = http.get(Uri.parse(
-        uri,
-      ));
+  /// Display notification to user regarding significant forecasted rainfall
+  void _displayNotification(int notificationId, double rainfall, String time) {
+    const androidNotificationDetails = AndroidNotificationDetails(
+      AppConstants.domain,
+      'GateMate Weather Alert',
+      importance: Importance.high,
+      priority: Priority.high,
+      ticker: 'GateMate Weather Alert',
+    );
 
-      // Logger().d('Response code: ${response.statusCode}');
-      // Logger().d('Response body: ${response.body}');
-      Logger().i('http.get has supposedly happened...');
+    // TODO: iOS support
+    const notificationDetails = NotificationDetails(
+      android: androidNotificationDetails,
+    );
 
-      return response;
-    } catch (error) {
-      Logger().e(error.toString());
-      throw Exception(error);
-    }
+    FlutterLocalNotificationsPlugin().show(
+      notificationId,
+      'GateMate Weather Alert',
+      // TODO: Include time of rain
+      'Significant rainfall in forecast: $rainfall',
+      notificationDetails,
+    );
   }
 }
-*/
 
+/// Stores two lists:
+///  - Hourly forecast times
+///  - Hourly rainfall amaounts
+/// Throws exception if the number of elements in each list are not equal
+class WeatherData {
+  // TODO: Change forecastTimes from a list of strings to a list of times
+  final List<double> hourlyRainfall;
+  List<String> forecastTimes;
+
+  WeatherData(this.hourlyRainfall, this.forecastTimes) {
+    if (hourlyRainfall.length != forecastTimes.length) {
+      throw Exception(
+        'Invalid weather data! Member list lengths must be equivalent. '
+        'Given ${forecastTimes.length} forecast timestamps but '
+        '${hourlyRainfall.length} rainfall values.'
+      );
+    }
+  }
+
+  /// Deserializes Map from decoded JSON and returns WeatherData instance
+  factory WeatherData.fromJson(Map<String, dynamic> json) {
+    final List rawRainfall = json['precipitation_hourly'];
+    final hourlyRainfall = rawRainfall.cast<double>();
+
+    final List rawTimes = json['timedate_hourly'];
+    final forecastTimes = rawTimes.cast<String>();
+
+    return WeatherData(hourlyRainfall, forecastTimes);
+  }
+}
+
+/// Entry point for scheduled background tasks
+/// Currently only used to check for weather updates
+/// TODO: Potentially put this in main?
+/// TODO: Check for gate malfunction updates
 @pragma('vm:entry-point')
 void callbackDispatcher() {
   Workmanager().executeTask((taskName, inputData) async {
@@ -132,98 +164,17 @@ void callbackDispatcher() {
     // TODO: Configure BackoffPolicy for Android
     // https://pub.dev/packages/workmanager#work-result
 
+    // TODO: Will likely have to pass lat/long in task parameters.
+    //  Is this a privacy issue? Could alternatively provide field
+    //  identifier and fetch coords remotely.
+    const notifier = WeatherNotifier(8.0, 170.1);
+
     try {
-      // Used to keep notification ID's unique
-      // TODO: Update value in shared preferences
-      final sharedPreferences = await SharedPreferences.getInstance();
-      final lastNotificationId = sharedPreferences.getInt('lastNotificationId');
-      final notificationId =
-          lastNotificationId == null ? 0 : lastNotificationId + 1;
-
-      // Request weather info from server
-      // TODO: Will likely have to pass lat/long in task parameters.
-      //  Is this a privacy issue? Could alternatively provide field
-      //  identifier and fetch coords remotely.
-      const url = '${AppConstants.serverUrl}/weather_forecast/8.0/170.1';
-      final response = await http.get(Uri.parse(url));
-
-      if (response.statusCode == 200) {
-        Map<String, dynamic> jsonBody = jsonDecode(response.body);
-
-        // Parse the list of precipitation amounts
-        List rawPrecipitation = jsonBody['precipitation_hourly'];
-        var hourlyPrecipitation = rawPrecipitation.cast<double>();
-
-        // Parse the list of instances in time for which there's a forecast
-        List rawTimes = jsonBody['timedate_hourly'];
-        var forecastTimes = rawTimes.cast<String>();
-
-        // Check data returned from server
-        if (hourlyPrecipitation.length != forecastTimes.length) {
-          throw Exception(
-            'Invalid response from server! Returned ${forecastTimes.length} '
-            'forecast times, but ${hourlyPrecipitation.length} rain amounts.',
-          );
-        }
-
-        // Check for rain over threshold
-        for (var i = 0; i < forecastTimes.length; i++) {
-          Logger().d('Rainfall: ${hourlyPrecipitation[i]}');
-          // TODO Potential preference change: rain threshold amount
-          if (hourlyPrecipitation[i] >= AppConstants.rainAlertThreshold) {
-            Logger().i('Threshold met!');
-
-            const androidNotificationDetails = AndroidNotificationDetails(
-              AppConstants.domain,
-              'GateMate Weather Alert',
-              importance: Importance.high,
-              priority: Priority.high,
-              ticker: 'GateMate Weather Alert',
-            );
-
-            // TODO: iOS support
-            const notificationDetails = NotificationDetails(
-              android: androidNotificationDetails,
-            );
-
-            FlutterLocalNotificationsPlugin().show(
-              notificationId,
-              'GateMate Weather Alert',
-              // TODO: Include time of rain
-              'Significant rainfall in forecast: ${hourlyPrecipitation[i]}',
-              notificationDetails,
-            );
-
-            break;
-          }
-        }
-      } else {
-        throw Exception('Failed to fetch weather data!'
-            'Response status code: ${response.statusCode}');
-      }
+      await notifier.execute();
     } catch (error) {
       Logger().e(error.toString());
       throw Exception(error);
     }
-
-    // TODO: Will likely have to pass lat/long in task parameters.
-    //  Is this a privacy issue? Could alternatively provide field
-    //  identifier and fetch coords remotely.
-    // TODO: This is the driver portion of the code that is affected
-    //  by the http package issue.
-    // const notifier = WeatherNotifier(
-    //   fieldLatitude: 84.1,
-    //   fieldLongitude: 172.45,
-    // );
-
-    // try {
-    //   Logger().i('Executing notifier...');
-    //   notifier.execute();
-    //   Logger().i('Notifier executed!');
-    // } catch (error) {
-    //   Logger().e(error.toString());
-    //   throw Exception(error);
-    // }
 
     return Future.value(true);
   });
