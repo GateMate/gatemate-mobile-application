@@ -38,6 +38,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
   late List<LatLng> polygon1List = <LatLng>[];
   late List<LatLng> polygon2List = <LatLng>[];
   late List<LatLng> polygon3List = <LatLng>[];
+  late PolyEditor polyEditor;
   List<LatLng> poly0List = <LatLng>[LatLng(0, 0)];
   late List<LatLng> poly1List = <LatLng>[];
   late List<LatLng> poly2List = <LatLng>[];
@@ -180,7 +181,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
 
     var thingToSendIvris = responseBody['success'].toString();
 
-    print("GIMME FIELD ID" + thingToSendIvris.toString());
+    // print("GIMME FIELD ID" + thingToSendIvris.toString());
 
     var tiles = await http.post(
         Uri.parse('https://todo-proukhgi3a-uc.a.run.app/tile-field'),
@@ -190,7 +191,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
         body: jsonEncode(
             <String, String>{'fieldID': '${responseBody['success']}'}));
 
-    print(tiles.body);
+    // print(tiles.body);
 
     var jsonDecodeGatePlacement = (jsonDecode(tiles.body) as Map).map(
         (key, value) => MapEntry(key as String, value as Map<String, dynamic>));
@@ -234,18 +235,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                   .split('|')[1])));
           // if (polygon0List.length == 4) {
           print("POLYGON" + polygon0List.toString());
-          // poly0List.clear();
-          // WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
-          // poly0List.clear();
-          // for (int p = 0; p < polygon0List.length; p++) {
-          // WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
-          //       poly0List = polygon0List;
-          //     }));
-          // print(poly0List);
-          // }
-          // ;
-          // }));
-          // polygon0List.clear();
+          getPoints(polygon0List, Colors.purple);
         });
         // }
       } else if (jsonDecodeGatePlacement[i.toString()]!['height_val'] == 1) {
@@ -277,15 +267,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
             double.parse(jsonDecodeGatePlacement[i.toString()]!['sw_point']
                 .toString()
                 .split('|')[1])));
-
-        if (polygon1List.length == 4) {
-          setState(() => {
-                poly1List.clear(),
-                for (int p = 0; p < polygon1List.length; p++)
-                  {poly1List.add(polygon1List[p])},
-                polygon1List.clear()
-              });
-        }
+        getPoints(polygon1List, Colors.pink);
       } else if (jsonDecodeGatePlacement[i.toString()]!['height_val'] == 2) {
         polygon2List.add(LatLng(
             double.parse(jsonDecodeGatePlacement[i.toString()]!['nw_point']
@@ -315,14 +297,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
             double.parse(jsonDecodeGatePlacement[i.toString()]!['sw_point']
                 .toString()
                 .split('|')[1])));
-        if (polygon2List.length == 4) {
-          setState(() => {
-                poly2List.clear(),
-                for (int p = 0; p < polygon2List.length; p++)
-                  {poly2List.add(polygon2List[p])},
-                polygon2List.clear()
-              });
-        }
+        getPoints(polygon2List, Colors.red);
       } else if (jsonDecodeGatePlacement[i.toString()]!['height_val'] == 3) {
         polygon3List.add(LatLng(
             double.parse(jsonDecodeGatePlacement[i.toString()]!['nw_point']
@@ -352,6 +327,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
             double.parse(jsonDecodeGatePlacement[i.toString()]!['sw_point']
                 .toString()
                 .split('|')[1])));
+        getPoints(polygon3List, Colors.orange);
       }
       // });
     }
@@ -671,47 +647,49 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                           ),
                         ),
                         PolygonLayerWidget(
-                          options: PolygonLayerOptions(polygons: polygons
-
-                              //     Polygon(
-                              //         points: polygonList,
-                              //         borderStrokeWidth: 5.0,
-                              //         borderColor: Colors.pink),
-                              //     Polygon(
-                              //         points: poly0List,
-                              //         borderStrokeWidth: 5.0,
-                              //         borderColor: Colors.green),
-                              //     Polygon(
-                              //         points: poly1List,
-                              //         borderStrokeWidth: 5.0,
-                              //         borderColor: Colors.blue),
-                              //     Polygon(
-                              //         points: poly2List,
-                              //         borderStrokeWidth: 5.0,
-                              //         borderColor: Colors.purple),
-                              //     Polygon(
-                              //         points: polygon3List,
-                              //         borderStrokeWidth: 5.0,
-                              //         borderColor: Colors.brown),
-                              //   ])),
-                              //   MarkerLayerWidget(
-                              //       options: MarkerLayerOptions(markers: markers)),
-                              //   Container(
-                              //     alignment: Alignment.bottomRight,
-                              //     padding: const EdgeInsets.all(10.0),
-                              //     child: _getFab(),
-                              //   ),
-                              //   PopupMarkerLayerWidget(
-                              //     options: PopupMarkerLayerOptions(
-                              //       popupController: _popupController,
-                              //       markers: markers,
-                              //       popupBuilder:
-                              //           (BuildContext context, Marker marker) =>
-                              //               viewPopup(marker),
-                              //     ),
-                              //   ),
-                              // ],
-                              ),
+                          options: PolygonLayerOptions(
+                            polygons: polygons +
+                                [
+                                  Polygon(
+                                      points: polygonList,
+                                      borderStrokeWidth: 5.0,
+                                      borderColor: Colors.black),
+                                ],
+                            //     Polygon(
+                            //         points: poly0List,
+                            //         borderStrokeWidth: 5.0,
+                            //         borderColor: Colors.green),
+                            //     Polygon(
+                            //         points: poly1List,
+                            //         borderStrokeWidth: 5.0,
+                            //         borderColor: Colors.blue),
+                            //     Polygon(
+                            //         points: poly2List,
+                            //         borderStrokeWidth: 5.0,
+                            //         borderColor: Colors.purple),
+                            //     Polygon(
+                            //         points: polygon3List,
+                            //         borderStrokeWidth: 5.0,
+                            //         borderColor: Colors.brown),
+                            //   ])),
+                            //   MarkerLayerWidget(
+                            //       options: MarkerLayerOptions(markers: markers)),
+                            //   Container(
+                            //     alignment: Alignment.bottomRight,
+                            //     padding: const EdgeInsets.all(10.0),
+                            //     child: _getFab(),
+                            //   ),
+                            //   PopupMarkerLayerWidget(
+                            //     options: PopupMarkerLayerOptions(
+                            //       popupController: _popupController,
+                            //       markers: markers,
+                            //       popupBuilder:
+                            //           (BuildContext context, Marker marker) =>
+                            //               viewPopup(marker),
+                            //     ),
+                            //   ),
+                            // ],
+                          ),
                         ),
                         Container(
                           alignment: Alignment.bottomCenter,
@@ -727,27 +705,39 @@ class _AddFieldRoute extends State<AddFieldRoute> {
     );
   }
 
-  void getPoints() {
-    var polyEditor = PolyEditor(
+  List<Polygon> getPoints(List<LatLng> list, Color color) {
+    polyEditor = PolyEditor(
         pointIcon: const Icon(
           Icons.lens,
           size: 15,
           color: Colors.orange,
         ),
         points: [
-          for (int p = 0; p < polygon0List.length; p = p + 3)
+          for (int p = 0; p < list.length; p = p + 4)
             {
-              polygons.add(Polygon(points: <LatLng>[
-                polygon0List[p],
-                polygon0List[p + 1],
-                polygon0List[p + 2],
-                polygon0List[p + 3]
-              ], borderColor: Colors.purple)),
+              print(list[p]),
+              print(list[p + 1]),
+              print(list[p + 2]),
+              print(list[p + 3]),
+              setState(() {
+                polygons.add(Polygon(points: <LatLng>[
+                  list[p],
+                  list[p + 1],
+                  list[p + 2],
+                  list[p + 3]
+                ], color: color));
+              }),
             },
         ]);
+
+    for (var p in polygons) {
+      print(p);
+    }
+
+    return polygons;
   }
 
-  var listyBoy = (List<List<LatLng>>? list) => list?.removeLast();
+  // var listyBoy = (List<List<LatLng>>? list) => list?.removeLast();
 
   // Future<http.Response> fetchElevation(LatLng latLng) {
   //   return http.get(Uri.parse(
