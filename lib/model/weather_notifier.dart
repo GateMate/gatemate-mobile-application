@@ -48,10 +48,8 @@ class WeatherNotifier {
             hourlyRainfall[i],
             forecastTimes[i],
           );
+          Logger().v('WeatherNotifer triggering amount: ${hourlyRainfall[i]}');
           break;
-        } else {
-          // TODO: REMOVE
-          Logger().d('It\'s ok: ${hourlyRainfall[i]}');
         }
       }
     } else {
