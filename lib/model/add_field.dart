@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:http/http.dart' as http;
 
 class AddFieldModel extends ChangeNotifier {
   List<Marker> markers = [];
@@ -9,5 +12,19 @@ class AddFieldModel extends ChangeNotifier {
     this.markers.add(m);
     notifyListeners();
     print('markers: ${this.markers}');
+  }
+
+  addToFB(Marker m, String fieldID) async {
+    var response = await http.post(
+        Uri.parse('https://todo-proukhgi3a-uc.a.run.app/addGate'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          "gateLocation": "${m.point.latitude}" + "|" + "${m.point.longitude}",
+          "fieldID": "${fieldID}"
+        }));
+
+    print(response.body);
   }
 }

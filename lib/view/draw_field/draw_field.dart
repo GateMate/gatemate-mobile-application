@@ -20,7 +20,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:convert';
 
 List<Marker> markers = [];
+List<Marker> gates = [];
 int markerId = 0;
+String fieldID = "";
 
 class AddFieldRoute extends StatefulWidget {
   const AddFieldRoute({super.key});
@@ -179,9 +181,9 @@ class _AddFieldRoute extends State<AddFieldRoute> {
 
     var responseBody = jsonDecode(response.body);
 
-    var thingToSendIvris = responseBody['success'].toString();
+    fieldID = responseBody['success'].toString();
 
-    // print("GIMME FIELD ID" + thingToSendIvris.toString());
+    print("GIMME FIELD ID" + fieldID.toString());
 
     var tiles = await http.post(
         Uri.parse('https://todo-proukhgi3a-uc.a.run.app/tile-field'),
@@ -191,7 +193,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
         body: jsonEncode(
             <String, String>{'fieldID': '${responseBody['success']}'}));
 
-    // print(tiles.body);
+    print(tiles.body);
 
     var jsonDecodeGatePlacement = (jsonDecode(tiles.body) as Map).map(
         (key, value) => MapEntry(key as String, value as Map<String, dynamic>));
@@ -267,7 +269,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
             double.parse(jsonDecodeGatePlacement[i.toString()]!['sw_point']
                 .toString()
                 .split('|')[1])));
-        getPoints(polygon1List, Colors.pink);
+        getPoints(polygon1List, Colors.blue);
       } else if (jsonDecodeGatePlacement[i.toString()]!['height_val'] == 2) {
         polygon2List.add(LatLng(
             double.parse(jsonDecodeGatePlacement[i.toString()]!['nw_point']
@@ -423,7 +425,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
   Widget getText() {
     if (polygonList.length == 4) {
       return const Text(
-        'Tap the "+" to Add the Field',
+        'Tap to place a gate in each square,\nTap the "+" to Add the Field',
         style: TextStyle(fontSize: 20),
         textAlign: TextAlign.center,
       );
@@ -632,6 +634,17 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                         // center: LatLng(47.925812, 106.919831),
                         maxZoom: 18,
                         zoom: 9.0,
+                        onTap: (tapPosition, point) {
+                          setState(() {
+                            var gate = Marker(
+                                point: point,
+                                builder: (_) => const Icon(
+                                    Icons.roller_shades_outlined,
+                                    size: 25));
+                            gates.add(gate);
+                            addFieldModel.addToFB(gate, fieldID);
+                          });
+                        },
                         plugins: [EsriPlugin()],
                       ),
                       //   )
@@ -655,41 +668,15 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                                       borderStrokeWidth: 5.0,
                                       borderColor: Colors.black),
                                 ],
-                            //     Polygon(
-                            //         points: poly0List,
-                            //         borderStrokeWidth: 5.0,
-                            //         borderColor: Colors.green),
-                            //     Polygon(
-                            //         points: poly1List,
-                            //         borderStrokeWidth: 5.0,
-                            //         borderColor: Colors.blue),
-                            //     Polygon(
-                            //         points: poly2List,
-                            //         borderStrokeWidth: 5.0,
-                            //         borderColor: Colors.purple),
-                            //     Polygon(
-                            //         points: polygon3List,
-                            //         borderStrokeWidth: 5.0,
-                            //         borderColor: Colors.brown),
-                            //   ])),
-                            //   MarkerLayerWidget(
-                            //       options: MarkerLayerOptions(markers: markers)),
-                            //   Container(
-                            //     alignment: Alignment.bottomRight,
-                            //     padding: const EdgeInsets.all(10.0),
-                            //     child: _getFab(),
-                            //   ),
-                            //   PopupMarkerLayerWidget(
-                            //     options: PopupMarkerLayerOptions(
-                            //       popupController: _popupController,
-                            //       markers: markers,
-                            //       popupBuilder:
-                            //           (BuildContext context, Marker marker) =>
-                            //               viewPopup(marker),
-                            //     ),
-                            //   ),
-                            // ],
                           ),
+                        ),
+                        MarkerLayerWidget(
+                            options:
+                                MarkerLayerOptions(markers: markers + gates)),
+                        Container(
+                          alignment: Alignment.bottomRight,
+                          padding: const EdgeInsets.all(10.0),
+                          child: _getFab(),
                         ),
                         Container(
                           alignment: Alignment.bottomCenter,
@@ -715,10 +702,6 @@ class _AddFieldRoute extends State<AddFieldRoute> {
         points: [
           for (int p = 0; p < list.length; p = p + 4)
             {
-              print(list[p]),
-              print(list[p + 1]),
-              print(list[p + 2]),
-              print(list[p + 3]),
               setState(() {
                 polygons.add(Polygon(points: <LatLng>[
                   list[p],
@@ -730,18 +713,6 @@ class _AddFieldRoute extends State<AddFieldRoute> {
             },
         ]);
 
-    for (var p in polygons) {
-      print(p);
-    }
-
     return polygons;
   }
-
-  // var listyBoy = (List<List<LatLng>>? list) => list?.removeLast();
-
-  // Future<http.Response> fetchElevation(LatLng latLng) {
-  //   return http.get(Uri.parse(
-  //     'https://api.open-elevation.com/api/v1/lookup?locations=$latLng',
-  //   ));
-  // }
 }
