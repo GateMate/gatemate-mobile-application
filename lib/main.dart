@@ -7,7 +7,7 @@ import 'package:gatemate_mobile/view/home/home.dart';
 import 'package:get_it/get_it.dart';
 import 'package:workmanager/workmanager.dart';
 
-import 'model/alerts_fetcher.dart';
+import 'model/weather_notifier.dart';
 import 'model/firebase/firebase_options.dart';
 
 void main() async {
