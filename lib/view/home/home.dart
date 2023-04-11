@@ -62,23 +62,11 @@ class _HomeViewState extends State<HomeView> {
                 Workmanager().registerOneOffTask(
                   'field-2',
                   'weather-fetching-test-task',
+                  inputData: {
+                    'latitude': 8.0,
+                    'longitude': 170.1,
+                  },
                 );
-                // const notificationDetails = AndroidNotificationDetails(
-                //   'edu.uark.team15.gatemate',
-                //   'gatemate',
-                //   channelDescription: 'WEATHER BE HAPPENIN',
-                //   importance: Importance.high,
-                //   priority: Priority.high,
-                //   ticker: 'ACCESSIBLE WEATHER?',
-                // );
-                // const notification =
-                //     NotificationDetails(android: notificationDetails);
-                // await FlutterLocalNotificationsPlugin().show(
-                //   0,
-                //   'Weather alert....',
-                //   'Well I thought weather be happenin should go here...',
-                //   notification,
-                // );
               },
               child: const Text('Notification Test'),
             ),

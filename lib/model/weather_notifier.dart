@@ -48,7 +48,9 @@ class WeatherNotifier {
             hourlyRainfall[i],
             _formatTime(forecastTimes[i]),
           );
-          Logger().v('WeatherNotifer triggering amount: ${hourlyRainfall[i]}');
+          Logger().v(
+            'WeatherNotifer triggering index: $i/${hourlyRainfall.length}',
+          );
           break;
         }
       }
@@ -189,9 +191,11 @@ void callbackDispatcher() {
     // TODO: Will likely have to pass lat/long in task parameters.
     //  Is this a privacy issue? Could alternatively provide field
     //  identifier and fetch coords remotely.
-    const notifier = WeatherNotifier(8.0, 170.1);
 
     try {
+      final inputLatitude = inputData!['latitude'];
+      final inputLongitude = inputData['longitude'];
+      final notifier = WeatherNotifier(inputLatitude, inputLongitude);
       await notifier.execute();
     } catch (error) {
       Logger().e(error.toString());
