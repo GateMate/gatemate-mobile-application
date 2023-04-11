@@ -46,7 +46,7 @@ class WeatherNotifier {
           _displayNotification(
             await _getNotificationId(),
             hourlyRainfall[i],
-            forecastTimes[i],
+            _formatTime(forecastTimes[i]),
           );
           Logger().v('WeatherNotifer triggering amount: ${hourlyRainfall[i]}');
           break;
@@ -94,18 +94,44 @@ class WeatherNotifier {
     ));
   }
 
+  /// Format datetime from server response for notification
+  String _formatTime(String forecastTime) {
+    final dateTime = DateTime.parse(forecastTime).toLocal();
+
+    int hour;
+    String modifier;
+    if (dateTime.hour < 12) {
+      modifier = 'AM';
+      hour = (dateTime.hour == 0) ? 12 : dateTime.hour;
+    } else {
+      modifier = 'PM';
+      hour = (dateTime.hour == 12) ? 12 : dateTime.hour % 12;
+    }
+
+    return '$hour $modifier, ${dateTime.month}/${dateTime.day}';
+  }
+
   /// Display notification to user regarding significant forecasted rainfall
-  void _displayNotification(int notificationId, double rainfall, String time) {
-    const androidNotificationDetails = AndroidNotificationDetails(
+  void _displayNotification(
+    int notificationId,
+    double rainfall,
+    String forecastTime,
+  ) {
+    // TODO: Include the relevant field's name
+    final notificationMessage =
+        'Significant rainfall in forecast! $rainfall inches at $forecastTime.';
+
+    final androidNotificationDetails = AndroidNotificationDetails(
       AppConstants.domain,
       'GateMate Weather Alert',
       importance: Importance.high,
       priority: Priority.high,
       ticker: 'GateMate Weather Alert',
+      styleInformation: BigTextStyleInformation(notificationMessage),
     );
 
     // TODO: iOS support
-    const notificationDetails = NotificationDetails(
+    final notificationDetails = NotificationDetails(
       android: androidNotificationDetails,
     );
 
@@ -113,7 +139,7 @@ class WeatherNotifier {
       notificationId,
       'GateMate Weather Alert',
       // TODO: Include time of rain
-      'Significant rainfall in forecast: $rainfall',
+      notificationMessage,
       notificationDetails,
     );
   }
@@ -124,7 +150,6 @@ class WeatherNotifier {
 ///  - Hourly rainfall amaounts
 /// Throws exception if the number of elements in each list are not equal
 class WeatherData {
-  // TODO: Change forecastTimes from a list of strings to a list of times
   final List<double> hourlyRainfall;
   List<String> forecastTimes;
 
@@ -133,7 +158,7 @@ class WeatherData {
       throw Exception(
         'Invalid weather data! Member list lengths must be equivalent. '
         'Given ${forecastTimes.length} forecast timestamps but '
-        '${hourlyRainfall.length} rainfall values.'
+        '${hourlyRainfall.length} rainfall values.',
       );
     }
   }
@@ -152,7 +177,6 @@ class WeatherData {
 
 /// Entry point for scheduled background tasks
 /// Currently only used to check for weather updates
-/// TODO: Potentially put this in main?
 /// TODO: Check for gate malfunction updates
 @pragma('vm:entry-point')
 void callbackDispatcher() {
