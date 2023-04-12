@@ -28,8 +28,8 @@ class _ExamplePopupState extends State<ExamplePopup> {
   final longController = TextEditingController();
   GateManagementViewModel _gateManagementViewModel = GateManagementViewModel();
   String gateHeight = "";
-  late var lat;
-  late var long;
+  String lat = "";
+  String long = "";
 
   @override
   void initState() {
@@ -61,7 +61,15 @@ class _ExamplePopupState extends State<ExamplePopup> {
   }
 
   void setPosition(String latitude, String longitude) {
-    // setState() {}
+    print(latController.text);
+    print(longController.text);
+
+    setState() {
+      lat = latController.text;
+      long = longController.text;
+    }
+
+    _gateManagementViewModel.updatePosition(lat, long);
   }
 
   @override
@@ -99,33 +107,6 @@ class _ExamplePopupState extends State<ExamplePopup> {
               ),
             ),
             const Padding(padding: EdgeInsets.symmetric(vertical: 4.0)),
-            // Row(
-            //   children: <Widget>[
-            //     SizedBox(
-            //       height: 35,
-            //       child: MyTextField(
-            //           controller: latController,
-            //           hintText: widget.marker.point.latitude.toString(),
-            //           obscureText: false,
-            //           prefixIcon:
-            //               const Icon(Icons.roller_shades_outlined, size: 20)),
-            //     ),
-            //     SizedBox(
-            //       height: 35,
-            //       child: MyTextField(
-            //           controller: longController,
-            //           hintText: widget.marker.point.longitude.toString(),
-            //           obscureText: false,
-            //           prefixIcon:
-            //               const Icon(Icons.roller_shades_outlined, size: 20)),
-            //     ),
-            //   ],
-            // ),
-
-            // Text(
-            //   'Position: ${widget.marker.point.latitude}, ${widget.marker.point.longitude}',
-            //   style: const TextStyle(fontSize: 12.0),
-            // ),
             SizedBox(
               height: 35,
               child: MyTextField(
@@ -144,7 +125,6 @@ class _ExamplePopupState extends State<ExamplePopup> {
                   obscureText: false,
                   prefixIcon: const Icon(Icons.location_on_outlined, size: 20)),
             ),
-
             SizedBox(
               height: 35,
               child: MyTextField(

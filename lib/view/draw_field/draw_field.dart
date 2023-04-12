@@ -191,8 +191,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
         headers: <String, String>{
           'content-type': 'application/json; charset=UTF-8',
         },
-        body: jsonEncode(
-            <String, String>{'fieldID': '${responseBody['success']}'}));
+        body: jsonEncode(<String, String>{'fieldID': '${fieldID}'}));
 
     // print(tiles.body);
 
@@ -431,7 +430,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
   Widget getText() {
     if (polygonList.length == 4) {
       return const Text(
-        'Tap to place a gate in each square,\nTap the "+" to Add the Field',
+        'Tap to place a gate on the borders between colors,\nTap the "+" to Add or Delete the Field',
         style: TextStyle(fontSize: 20),
         textAlign: TextAlign.center,
       );
@@ -714,7 +713,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                   list[p + 1],
                   list[p + 2],
                   list[p + 3]
-                ], color: color));
+                ], color: color, isFilled: true));
               }),
             },
         ]);
