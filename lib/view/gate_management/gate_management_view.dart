@@ -4,27 +4,24 @@ import 'package:flutter_map_arcgis/flutter_map_arcgis.dart';
 import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
 import 'package:latlong2/latlong.dart';
 
-import '../../model/gate_management_view_model.dart';
-import '../ui_primatives/marker_popup.dart';
+import '../../model/viewmodels/gate_management_view_model.dart';
+import '../ui_primatives/confirmation_popup.dart';
 
 late int _markerIdValue;
 // Set<Marker> _markers = HashSet<Marker>();
 late List<Marker> markers = [];
 
-class GateManagementRoute extends StatefulWidget {
-  GateManagementRoute({super.key});
+class GateManagementView extends StatefulWidget {
+  const GateManagementView({super.key});
 
   @override
   _GateManagementState createState() => _GateManagementState();
 }
 
-class _GateManagementState extends State<GateManagementRoute> {
+class _GateManagementState extends State<GateManagementView> {
+  // TODO: Use GetIt
   GateManagementViewModel _gateManagementViewModel = GateManagementViewModel();
-  @override
-  void InitState() {
-    super.initState();
-  }
-
+  // final Set<Marker> markers = Set();
   int polyId = 0;
 
   final LatLng _center = LatLng(36.06889761358809, -94.17477200170791);
@@ -88,14 +85,21 @@ class _GateManagementState extends State<GateManagementRoute> {
                       //   ],
                       // )),
                       PopupMarkerLayerWidget(
-                          options: PopupMarkerLayerOptions(
-                        popupController: _popupController,
-                        markers: [
-                          for (int i = 0; i < markers.length; i++) markers[i]
-                        ],
-                        popupBuilder: (BuildContext context, Marker marker) =>
-                            ExamplePopup(marker),
-                      )),
+                        options: PopupMarkerLayerOptions(
+                          popupController: _popupController,
+                          markers: [
+                            for (int i = 0;
+                                i < _gateManagementViewModel.markers.length;
+                                i++)
+                              _gateManagementViewModel.markers[i]
+                          ],
+                          // markerRotateAlignment:
+                          //     PopupMarkerLayerOptions.rotationAlignmentFor(
+                          //         AnchorAlign.top),
+                          popupBuilder: (BuildContext context, Marker marker) =>
+                              ExamplePopup(marker),
+                        ),
+                      ),
                     ],
                   ),
                 ),

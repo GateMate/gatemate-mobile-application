@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_arcgis/flutter_map_arcgis.dart';
 import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
+import 'package:gatemate_mobile/model/viewmodels/add_gate_model.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gatemate_mobile/view/ui_primatives/marker_popup_view.dart';
 import 'package:gatemate_mobile/view/ui_primatives/my_textfield.dart';
@@ -10,20 +11,21 @@ import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 
 import '../../model/add_gate_model.dart';
+import '../ui_primatives/marker_popup.dart';
 import '../ui_primatives/my_button.dart';
 
 // Set<Marker> markers = <Marker>{};
 List<Marker> markers = [];
 int markerId = 0;
 
-class AddGateRoute extends StatefulWidget {
-  const AddGateRoute({super.key});
+class AddGateView extends StatefulWidget {
+  const AddGateView({super.key});
 
   @override
   _AddGateState createState() => _AddGateState();
 }
 
-class _AddGateState extends State<AddGateRoute> {
+class _AddGateState extends State<AddGateView> {
   AddGateModel addGateModel = AddGateModel();
   final LatLng _center = LatLng(36.06889761358809, -94.17477200170791);
   final PopupController _popupController = PopupController();
@@ -219,7 +221,60 @@ class _AddGateState extends State<AddGateRoute> {
                         maxZoom: 18,
                         zoom: 9.0,
                         plugins: [EsriPlugin()],
-                        onTap: (tapPos, latlng) {},
+                        onTap: (tapPos, latlng) {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return Dialog(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(40),
+                                ),
+                                elevation: 16,
+                                child: ListView(
+                                  shrinkWrap: true,
+                                  children: <Widget>[
+                                    const SizedBox(height: 20),
+                                    Center(
+                                      child: Text(
+                                        'Are you sure you want to add a marker at ${latlng.latitude.toStringAsFixed(3)}, ${latlng.longitude.toStringAsFixed(3)}?',
+                                        style: const TextStyle(fontSize: 20),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                    Column(
+                                      children: [
+                                        MyButton(
+                                          buttonText: 'Yes, Add Marker',
+                                          onPressed: () => setState(
+                                            () {
+                                              var newMarker = Marker(
+                                                builder: (_) => const Icon(
+                                                  Icons.roller_shades_outlined,
+                                                  size: 25,
+                                                ),
+                                                point: latlng,
+                                              );
+                                              markers.add(newMarker);
+                                              addGateModel
+                                                  .setMarkers(newMarker);
+                                              Navigator.pop(context);
+                                            },
+                                          ),
+                                        ),
+                                        MyButton(
+                                          buttonText: 'No, Don\'t Add Marker',
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 20),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                        },
                       ),
                       children: [
                         TileLayerWidget(
@@ -242,7 +297,7 @@ class _AddGateState extends State<AddGateRoute> {
                             ],
                             popupBuilder:
                                 (BuildContext context, Marker marker) =>
-                                    viewPopup(marker),
+                                    ExamplePopup(marker),
                           ),
                         ),
                         Container(

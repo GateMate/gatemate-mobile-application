@@ -1,35 +1,82 @@
 import 'package:flutter/material.dart';
+import 'package:gatemate_mobile/model/viewmodels/fields_view_model.dart';
 import 'package:gatemate_mobile/view/action_center/action_center_view.dart';
 import 'package:gatemate_mobile/view/add_gate/add_gate_view.dart';
 import 'package:gatemate_mobile/view/draw_field/draw_field.dart';
 import 'package:gatemate_mobile/view/gate_management/gate_management_view.dart';
+import 'package:gatemate_mobile/view/login/login.dart';
 import 'package:gatemate_mobile/model/fields_view_model.dart';
 import 'package:gatemate_mobile/view/manage_multiple_gates/manage_multiple_gates.dart';
 import 'package:gatemate_mobile/view/settings/settings_view.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key, required this.title});
+import '../../model/firebase/gatemate_auth.dart';
 
-  // Title of the page (displayed in the appbar)
-  final String title;
+class HomeView extends StatefulWidget {
+  const HomeView({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomeView> createState() => _HomeViewState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomeViewState extends State<HomeView> {
+  final _authProvider = GetIt.I<GateMateAuth>();
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Manually check login status because the below listener will only trigger
+    // upon a change in status, which may not occur when this widget is
+    // initialized.
+    _checkLoginStatus();
+    _authProvider.addListener(_checkLoginStatus);
+  }
+
+  @override
+  void dispose() {
+    _authProvider.removeListener(_checkLoginStatus);
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: const Text('GateMate Home'),
       ),
-      body: const Placeholder(), // TODO
+      body: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Center(
+            child: ElevatedButton(
+              onPressed: _authProvider.signOut,
+              child: const Text('Sign Out'),
+            ),
+          ),
+        ],
+      ),
       drawer: const Drawer(
         child: NavigationDrawer(),
       ),
     );
+  }
+
+  void _checkLoginStatus() {
+    // TODO: Ensure 'null' is the correct thing to check for
+    if (_authProvider.currentUser == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const LoginView(),
+          ),
+        );
+      });
+    } else {
+      // TODO: Either do something here or remove "else"
+    }
   }
 }
 
@@ -39,7 +86,11 @@ class NavigationDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (context) => FieldsViewModel(), child: _drawer(context));
+      // TODO: Should not be creating a new instance of viewmodel here
+      // TODO: Use GetIt
+      create: (context) => FieldsViewModel(),
+      child: _drawer(context),
+    );
   }
 
   Widget _drawer(BuildContext context) {
@@ -48,17 +99,21 @@ class NavigationDrawer extends StatelessWidget {
       child: Column(
         children: <Widget>[
           UserAccountsDrawerHeader(
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary,
-              ),
-              accountName: const Text("xyz"),
-              accountEmail: const Text("xyz@gmail.com"),
-              currentAccountPicture: const CircleAvatar(
-                backgroundColor: Colors.white,
-                child: Text("xyz"),
-              )),
-          const Text('Current Field Selection: ',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            // TODO: Populate with data from Firebase authentication
+            accountName: const Text("xyz"),
+            accountEmail: const Text("xyz@gmail.com"),
+            currentAccountPicture: const CircleAvatar(
+              backgroundColor: Colors.white,
+              child: Text("xyz"),
+            ),
+          ),
+          const Text(
+            'Current Field Selection: ',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
           const FieldSelectionDropdown(),
           Divider(
             color: Colors.green[700],
@@ -72,7 +127,8 @@ class NavigationDrawer extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => const ActionCenterRoute()),
+                  builder: (context) => const ActionCenterView(),
+                ),
               );
             },
             trailing: const Icon(Icons.arrow_forward_ios),
@@ -83,7 +139,9 @@ class NavigationDrawer extends StatelessWidget {
               // Update the state of the app
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const AddGateRoute()),
+                MaterialPageRoute(
+                  builder: (context) => const AddGateView(),
+                ),
               );
               // Then close the drawer
               // Navigator.pop(context);
@@ -96,7 +154,9 @@ class NavigationDrawer extends StatelessWidget {
               // Update the state of the app
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => GateManagementRoute()),
+                MaterialPageRoute(
+                  builder: (context) => const GateManagementView(),
+                ),
               );
               // Then close the drawer
               // Navigator.pop(context);
@@ -109,7 +169,9 @@ class NavigationDrawer extends StatelessWidget {
               // Update the state of the app
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const SettingsRoute()),
+                MaterialPageRoute(
+                  builder: (context) => const SettingsView(),
+                ),
               );
               // Then close the drawer
               // Navigator.pop(context);
