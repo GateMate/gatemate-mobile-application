@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gatemate_mobile/model/viewmodels/fields_view_model.dart';
 import 'package:gatemate_mobile/view/ui_primatives/custom_input_field.dart';
-import 'package:gatemate_mobile/model/fields_view_model.dart';
+// import 'package:gatemate_mobile/model/fields_view_model.dart';
 import 'package:gatemate_mobile/view/draw_field/draw_field.dart';
 import 'package:provider/provider.dart';
 

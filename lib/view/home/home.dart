@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:gatemate_mobile/model/viewmodels/fields_view_model.dart';
 import 'package:gatemate_mobile/view/action_center/action_center_view.dart';
 import 'package:gatemate_mobile/view/add_gate/add_gate_view.dart';
-import 'package:gatemate_mobile/view/draw_field/draw_field.dart';
 import 'package:gatemate_mobile/view/gate_management/gate_management_view.dart';
 import 'package:gatemate_mobile/view/login/login.dart';
-import 'package:gatemate_mobile/model/fields_view_model.dart';
 import 'package:gatemate_mobile/view/manage_multiple_gates/manage_multiple_gates.dart';
 import 'package:gatemate_mobile/view/settings/settings_view.dart';
 import 'package:get_it/get_it.dart';
@@ -155,7 +153,7 @@ class NavigationDrawer extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const GateManagementView(),
+                  builder: (context) => GateManagementRoute(),
                 ),
               );
               // Then close the drawer

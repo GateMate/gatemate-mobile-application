@@ -5,7 +5,7 @@ import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
 import 'package:gatemate_mobile/model/multiple_gates_view_model.dart';
 import 'package:latlong2/latlong.dart';
 
-import '../../model/gate_management_view_model.dart';
+// import '../../model/gate_management_view_model.dart';
 import '../ui_primatives/marker_popup.dart';
 
 late int _markerIdValue;

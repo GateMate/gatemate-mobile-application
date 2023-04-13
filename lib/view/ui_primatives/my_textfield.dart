@@ -9,14 +9,13 @@ class MyTextField extends StatelessWidget {
   final Icon prefixIcon;
   final Function()? onChanged;
 
-  const MyTextField({
-    super.key,
-    required this.controller,
-    required this.hintText,
-    required this.obscureText,
-    required this.prefixIcon,
-    this.onChanged,
-  });
+  const MyTextField(
+      {super.key,
+      required this.controller,
+      required this.hintText,
+      required this.obscureText,
+      required this.prefixIcon,
+      this.onChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +26,7 @@ class MyTextField extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hintText,
         fillColor: HexColor("#f0f3f1"),
-        // contentPadding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
-        contentPadding: const EdgeInsets.all(0),
+        contentPadding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
         hintStyle: GoogleFonts.poppins(
           fontSize: 15,
           color: HexColor("#8d8d8d"),

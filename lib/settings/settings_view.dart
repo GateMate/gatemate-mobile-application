@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gatemate_mobile/model/fields_view_model.dart';
+// import 'package:gatemate_mobile/model/fields_view_model.dart';
+import 'package:gatemate_mobile/model/viewmodels/fields_view_model.dart';
 import 'package:provider/provider.dart';
 
 // TODO: Consider replacing with an Enum
