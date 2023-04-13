@@ -23,7 +23,6 @@ class GateMateAuth extends ChangeNotifier {
         email: email,
         password: password,
       );
-      // TODO: Implement service call to signin route with the currentUser -JM
 
       return AuthResponse(true, '');
     } on FirebaseAuthException catch (e) {
@@ -42,11 +41,6 @@ class GateMateAuth extends ChangeNotifier {
         password: password,
       );
 
-      /* TODO
-       * Id will be passed into a service call to the server api and
-       * stored as a collection. -JM
-      */
-
       return AuthResponse(true, '');
     } on FirebaseAuthException catch (e) {
       return AuthResponse(false, e.code);
@@ -57,7 +51,15 @@ class GateMateAuth extends ChangeNotifier {
     await _firebaseAuth.signOut();
   }
 
-  // TODO: createUser (?)
+  /// Returns Firebase authorization token. App server can identify a user with this.
+  /// Throws a `GateMateAuthException` if no user is signed in.
+  /// Can technically return null, but that seems unlikely.
+  Future<String?> getAuthToken() async {
+    if (currentUser == null) {
+      throw const GateMateAuthException('No user signed in! \'currentUser\' is null!');
+    }
+    return currentUser?.getIdToken();
+  }
 }
 
 /// Contains information on the status of a completed Firestore authentication
@@ -69,4 +71,10 @@ class AuthResponse {
   final String message;
 
   AuthResponse(this.successful, this.message);
+}
+
+class GateMateAuthException implements Exception {
+  final String message;
+
+  const GateMateAuthException(this.message);
 }
