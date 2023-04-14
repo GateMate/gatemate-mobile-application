@@ -1,21 +1,20 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:gatemate_mobile/app_constants.dart';
 import 'package:http/http.dart' as http;
 
 import '../data/action_item.dart';
 
 class ActionCenterViewModel extends ChangeNotifier {
-  // TODO: Read up on StreamBuilder for this!
   var actionItems = fetchToDoItems();
 }
 
 Future<ActionItem> createToDoItem(String title) async {
-  // TODO: Generating id? Should the server handle that?
+  // TODO: The server should generate the item ID
   const id = 67;
   final response = await http.post(
-    // TODO: Use an app constant to store the root path
-    Uri.parse('https://todo-proukhgi3a-uc.a.run.app/add?id=$id'),
+    Uri.parse('${AppConstants.serverUrl}/add?id=$id'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -39,7 +38,7 @@ Future<ActionItem> createToDoItem(String title) async {
 
 Future<List<ActionItem>> fetchToDoItems() async {
   final response = await http.get(
-    Uri.parse('https://todo-proukhgi3a-uc.a.run.app/list'),
+    Uri.parse('${AppConstants.serverUrl}/list'),
   );
 
   if (response.statusCode == 200) {
@@ -62,7 +61,7 @@ Future<List<ActionItem>> fetchToDoItems() async {
 
 Future<ActionItem> fetchToDoItemById(int id) async {
   final response = await http.get(
-    Uri.parse('https://todo-proukhgi3a-uc.a.run.app/list?id=$id'),
+    Uri.parse('${AppConstants.serverUrl}/list?id=$id'),
   );
 
   if (response.statusCode == 200) {

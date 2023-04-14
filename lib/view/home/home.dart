@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:gatemate_mobile/model/viewmodels/fields_view_model.dart';
 import 'package:gatemate_mobile/view/action_center/action_center_view.dart';
 import 'package:gatemate_mobile/view/add_gate/add_gate_view.dart';
@@ -8,6 +9,8 @@ import 'package:gatemate_mobile/view/manage_multiple_gates/manage_multiple_gates
 import 'package:gatemate_mobile/view/settings/settings_view.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
+import 'package:workmanager/workmanager.dart';
+import 'package:logger/logger.dart';
 
 import '../../model/firebase/gatemate_auth.dart';
 
@@ -51,6 +54,22 @@ class _HomeViewState extends State<HomeView> {
             child: ElevatedButton(
               onPressed: _authProvider.signOut,
               child: const Text('Sign Out'),
+            ),
+          ),
+          const SizedBox(width: 10),
+          Center(
+            child: ElevatedButton(
+              onPressed: () async {
+                Workmanager().registerOneOffTask(
+                  'field-2',
+                  'weather-fetching-test-task',
+                  inputData: {
+                    'latitude': 8.0,
+                    'longitude': 170.1,
+                  },
+                );
+              },
+              child: const Text('Notification Test'),
             ),
           ),
         ],
