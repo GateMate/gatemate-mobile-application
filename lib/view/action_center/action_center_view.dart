@@ -108,8 +108,11 @@ class _NewActionDialogState extends State<NewActionDialog> {
     void Function()? onSubmit;
     if (!_submitting) {
       onSubmit = () {
+        // TODO: This is broken. Probably just remove this, it's useless
         if (_inputTextController.text.trim().isNotEmpty) {
-          createToDoItem(_inputTextController.text);
+          GetIt.I<ActionCenterViewModel>().createToDoItem(
+            _inputTextController.text,
+          );
           setState(() {
             _submitting = true;
           });
@@ -177,7 +180,8 @@ class _NotificationsListState extends State<NotificationsList> {
                 child: Card(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text(snapshot.data![index].title, style: widget.style),
+                    child:
+                        Text(snapshot.data![index].title, style: widget.style),
                   ),
                 ),
               );
