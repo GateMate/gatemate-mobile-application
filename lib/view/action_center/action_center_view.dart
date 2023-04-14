@@ -177,7 +177,10 @@ class _NotificationsListState extends State<NotificationsList> {
                 child: Card(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text(snapshot.data![index].title, style: widget.style),
+                    child: Text(
+                      snapshot.data![index].title,
+                      style: widget.style,
+                    ),
                   ),
                 ),
               );

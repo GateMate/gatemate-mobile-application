@@ -5,11 +5,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:gatemate_mobile/view/home/home.dart';
 import 'package:gatemate_mobile/view/ui_primatives/custom_input_field.dart';
-import 'package:gatemate_mobile/view/ui_primatives/my_button.dart';
-import 'package:gatemate_mobile/view/ui_primatives/my_textfield.dart';
 import 'package:get_it/get_it.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:http/http.dart' as http;
 
 import '../../model/firebase/gatemate_auth.dart';

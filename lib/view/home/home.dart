@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:gatemate_mobile/model/viewmodels/fields_view_model.dart';
 import 'package:gatemate_mobile/view/action_center/action_center_view.dart';
 import 'package:gatemate_mobile/view/add_gate/add_gate_view.dart';
@@ -10,7 +9,6 @@ import 'package:gatemate_mobile/view/settings/settings_view.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:workmanager/workmanager.dart';
-import 'package:logger/logger.dart';
 
 import '../../model/firebase/gatemate_auth.dart';
 

@@ -1,26 +1,22 @@
-import 'dart:collection';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_arcgis/flutter_map_arcgis.dart';
 import 'package:flutter_map_line_editor/polyeditor.dart';
 import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gatemate_mobile/model/add_field.dart';
 import 'package:gatemate_mobile/model/firebase/gatemate_auth.dart';
 import 'package:gatemate_mobile/model/viewmodels/add_gate_model.dart';
-import 'package:gatemate_mobile/settings/settings_view.dart';
 import 'package:gatemate_mobile/view/login/login.dart';
-import 'package:gatemate_mobile/view/ui_primatives/my_textfield.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
-import 'package:http/http.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
-import 'package:gatemate_mobile/view/ui_primatives/marker_popup_view.dart';
 
-import '../ui_primatives/my_button.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'dart:convert';
+import '../ui_primatives/confirmation_button.dart';
+import '../ui_primatives/custom_input_field.dart';
 
 List<Marker> markers = [];
 List<Marker> gates = [];
@@ -414,7 +410,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                 ),
                 Column(
                   children: [
-                    MyButton(
+                    ConfirmationButton(
                       buttonText: 'Yes, Create Field',
                       onPressed: () => setState(
                         () {
@@ -452,7 +448,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                         },
                       ),
                     ),
-                    MyButton(
+                    ConfirmationButton(
                         buttonText: 'No, Don\'t Create Field',
                         onPressed: () => {
                               addFieldModel.deleteField(fieldID),
@@ -548,14 +544,11 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                         child: ListTile(
                           contentPadding:
                               EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                          subtitle: MyTextField(
-                            controller: polyLat1Controller,
+                          subtitle: CustomInputField(
+                            inputController: polyLat1Controller,
                             hintText: "NW Lat 1",
                             obscureText: false,
                             prefixIcon: Icon(Icons.my_location),
-                            onChanged: () {
-                              print(polyLat1Controller.text);
-                            },
                           ),
                         ),
                       ),
@@ -563,8 +556,8 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                           child: ListTile(
                         contentPadding:
                             EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                        subtitle: MyTextField(
-                          controller: polyLong1Controller,
+                        subtitle: CustomInputField(
+                          inputController: polyLong1Controller,
                           hintText: "NW Long 1",
                           obscureText: false,
                           prefixIcon: Icon(Icons.my_location),
@@ -578,8 +571,8 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                         child: ListTile(
                           contentPadding:
                               EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                          subtitle: MyTextField(
-                              controller: polyLat2Controller,
+                          subtitle: CustomInputField(
+                              inputController: polyLat2Controller,
                               hintText: "NE Lat 2",
                               obscureText: false,
                               prefixIcon: Icon(Icons.my_location)),
@@ -589,8 +582,8 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                           child: ListTile(
                         contentPadding:
                             EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                        subtitle: MyTextField(
-                          controller: polyLong2Controller,
+                        subtitle: CustomInputField(
+                          inputController: polyLong2Controller,
                           hintText: "NE Long 2",
                           obscureText: false,
                           prefixIcon: Icon(Icons.my_location),
@@ -604,8 +597,8 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                         child: ListTile(
                           contentPadding:
                               EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                          subtitle: MyTextField(
-                            controller: polyLat3Controller,
+                          subtitle: CustomInputField(
+                            inputController: polyLat3Controller,
                             hintText: "SE Lat 3",
                             obscureText: false,
                             prefixIcon: Icon(Icons.my_location),
@@ -616,8 +609,8 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                           child: ListTile(
                         contentPadding:
                             EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                        subtitle: MyTextField(
-                          controller: polyLong3Controller,
+                        subtitle: CustomInputField(
+                          inputController: polyLong3Controller,
                           hintText: "SE Long 3",
                           obscureText: false,
                           prefixIcon: Icon(Icons.my_location),
@@ -631,8 +624,8 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                         child: ListTile(
                           contentPadding:
                               EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                          subtitle: MyTextField(
-                            controller: polyLat4Controller,
+                          subtitle: CustomInputField(
+                            inputController: polyLat4Controller,
                             hintText: "SW Lat 4",
                             obscureText: false,
                             prefixIcon: Icon(Icons.my_location),
@@ -643,8 +636,8 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                           child: ListTile(
                         contentPadding:
                             EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                        subtitle: MyTextField(
-                          controller: polyLong4Controller,
+                        subtitle: CustomInputField(
+                          inputController: polyLong4Controller,
                           hintText: "SW Long 4",
                           obscureText: false,
                           prefixIcon: Icon(Icons.my_location),
@@ -656,7 +649,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
               ),
               Column(
                 children: [
-                  MyButton(
+                  ConfirmationButton(
                     buttonText: 'Add Field',
                     onPressed: () => setState(
                       () {
