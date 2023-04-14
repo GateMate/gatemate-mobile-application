@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 
 class GateMateAuth extends ChangeNotifier {
   final _firebaseAuth = FirebaseAuth.instance;
@@ -53,12 +54,15 @@ class GateMateAuth extends ChangeNotifier {
 
   /// Returns Firebase authorization token. App server can identify a user with this.
   /// Throws a `GateMateAuthException` if no user is signed in.
-  /// Can technically return null, but that seems unlikely.
-  Future<String?> getAuthToken() async {
-    if (currentUser == null) {
-      throw const GateMateAuthException('No user signed in! \'currentUser\' is null!');
+  Future<String> getAuthToken() async {
+    final userSnapshot = currentUser;
+    if (userSnapshot == null) {
+      const errorMessage = 'No user signed in! \'currentUser\' is null!';
+      Logger().e(errorMessage);
+      throw const GateMateAuthException(errorMessage);
     }
-    return currentUser?.getIdToken();
+
+    return userSnapshot.getIdToken();
   }
 }
 
