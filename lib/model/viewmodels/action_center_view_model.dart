@@ -53,7 +53,7 @@ Future<List<ActionItem>> fetchToDoItems() async {
   } else {
     // TODO: Handle this
     throw Exception(
-      'Failed to fetch to do items!'
+      'Failed to fetch to do items! '
       'Response status code: ${response.statusCode}',
     );
   }
@@ -69,7 +69,7 @@ Future<ActionItem> fetchToDoItemById(int id) async {
   } else {
     // TODO: Handle this?
     throw Exception(
-      'Failed to load user data!'
+      'Failed to load user data! '
       'Response status code: ${response.statusCode}',
     );
   }
