@@ -1,15 +1,11 @@
 //used https://github.com/rorystephenson/flutter_map_marker_popup/blob/master/example/lib/example_popup.dart
 
-// import 'dart:convert';
-// import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:gatemate_mobile/model/viewmodels/gate_management_view_model.dart';
-import 'package:gatemate_mobile/view/ui_primatives/my_textfield.dart';
+import 'package:gatemate_mobile/view/ui_primatives/confirmation_button.dart';
+import 'package:gatemate_mobile/view/ui_primatives/custom_input_field.dart';
 import 'package:http/http.dart' as http;
-
-import 'my_button.dart';
 
 class ExamplePopup extends StatefulWidget {
   final Marker marker;
@@ -109,39 +105,46 @@ class _ExamplePopupState extends State<ExamplePopup> {
             const Padding(padding: EdgeInsets.symmetric(vertical: 4.0)),
             SizedBox(
               height: 35,
-              child: MyTextField(
-                  controller: latController,
-                  hintText:
-                      "Lat: ${widget.marker.point.latitude.toString().substring(0, 6)}",
-                  obscureText: false,
-                  prefixIcon: const Icon(Icons.location_on_outlined, size: 20)),
+              child: CustomInputField(
+                inputController: latController,
+                hintText:
+                    "Lat: ${widget.marker.point.latitude.toString().substring(0, 6)}",
+                obscureText: false,
+                prefixIcon: const Icon(Icons.location_on_outlined, size: 20),
+              ),
             ),
             SizedBox(
               height: 35,
-              child: MyTextField(
-                  controller: longController,
-                  hintText:
-                      "Long: ${widget.marker.point.longitude.toString().substring(0, 6)}",
-                  obscureText: false,
-                  prefixIcon: const Icon(Icons.location_on_outlined, size: 20)),
+              child: CustomInputField(
+                inputController: longController,
+                hintText:
+                    "Long: ${widget.marker.point.longitude.toString().substring(0, 6)}",
+                obscureText: false,
+                prefixIcon: const Icon(Icons.location_on_outlined, size: 20),
+              ),
             ),
             SizedBox(
               height: 35,
-              child: MyTextField(
-                  controller: gateHeightController,
-                  hintText: "GateHeight: $gateHeight",
-                  obscureText: false,
-                  prefixIcon:
-                      const Icon(Icons.roller_shades_outlined, size: 20)),
+              child: CustomInputField(
+                inputController: gateHeightController,
+                hintText: "GateHeight: $gateHeight",
+                obscureText: false,
+                prefixIcon: const Icon(Icons.roller_shades_outlined, size: 20),
+              ),
             ),
-            MyButton(
-                onPressed: () {
-                  setPosition(widget.marker.point.latitude.toString(),
-                      widget.marker.point.longitude.toString());
-                  setHeight(widget.marker.point.latitude.toString(),
-                      widget.marker.point.longitude.toString());
-                },
-                buttonText: "Update")
+            ConfirmationButton(
+              onPressed: () {
+                setPosition(
+                  widget.marker.point.latitude.toString(),
+                  widget.marker.point.longitude.toString(),
+                );
+                setHeight(
+                  widget.marker.point.latitude.toString(),
+                  widget.marker.point.longitude.toString(),
+                );
+              },
+              buttonText: "Update",
+            ),
           ],
         ),
       ),

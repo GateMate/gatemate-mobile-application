@@ -2,15 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_arcgis/flutter_map_arcgis.dart';
 import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
-import 'package:gatemate_mobile/model/viewmodels/add_gate_model.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:gatemate_mobile/view/ui_primatives/marker_popup_view.dart';
-import 'package:gatemate_mobile/view/ui_primatives/my_button.dart';
-import 'package:gatemate_mobile/view/ui_primatives/my_textfield.dart';
-import 'package:http/http.dart' as http;
+import 'package:gatemate_mobile/model/viewmodels/add_gate_model.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 
+import '../ui_primatives/confirmation_button.dart';
+import '../ui_primatives/custom_input_field.dart';
 import '../ui_primatives/marker_popup.dart';
 
 // Set<Marker> markers = <Marker>{};
@@ -75,70 +73,69 @@ class _AddGateState extends State<AddGateView> {
 
   void markerToAddDialog() {
     showDialog(
-        context: context,
-        builder: (context) {
-          return Dialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(40),
-              ),
-              elevation: 16,
-              child: ListView(shrinkWrap: true, children: <Widget>[
-                const SizedBox(height: 20),
-                Column(children: [
-                  const Text(
-                    'Enter the Latitude and Longitude To Add a Gate Marker at that Location:',
-                    style: TextStyle(fontSize: 20),
-                    textAlign: TextAlign.center,
-                  ),
-                  Row(children: [
-                    Expanded(
-                      child: ListTile(
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                        subtitle: MyTextField(
-                          controller: addMarkerLatController,
-                          hintText: "Lat",
-                          obscureText: false,
-                          prefixIcon: Icon(Icons.my_location),
-                          onChanged: () {
-                            print(addMarkerLatController.text);
-                          },
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: ListTile(
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                        subtitle: MyTextField(
-                          controller: addMarkerLongController,
-                          hintText: "Long",
-                          obscureText: false,
-                          prefixIcon: Icon(Icons.my_location),
-                          onChanged: () {
-                            print(addMarkerLongController.text);
-                          },
-                        ),
-                      ),
-                    ),
-                  ]),
-                ]),
-                Column(
-                  children: [
-                    MyButton(
-                      buttonText: 'Add Gate',
-                      onPressed: () => setState(
-                        () {
-                          addMarker();
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ),
-                  ],
+      context: context,
+      builder: (context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(40),
+          ),
+          elevation: 16,
+          child: ListView(
+            shrinkWrap: true,
+            children: <Widget>[
+              const SizedBox(height: 20),
+              Column(children: [
+                const Text(
+                  'Enter the Latitude and Longitude To Add a Gate Marker at that Location:',
+                  style: TextStyle(fontSize: 20),
+                  textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 20),
-              ]));
-        });
+                Row(children: [
+                  Expanded(
+                    child: ListTile(
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                      subtitle: CustomInputField(
+                        inputController: addMarkerLatController,
+                        hintText: "Lat",
+                        obscureText: false,
+                        prefixIcon: Icon(Icons.my_location),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: ListTile(
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                      subtitle: CustomInputField(
+                        inputController: addMarkerLongController,
+                        hintText: "Long",
+                        obscureText: false,
+                        prefixIcon: Icon(Icons.my_location),
+                      ),
+                    ),
+                  ),
+                ]),
+              ]),
+              Column(
+                children: [
+                  ConfirmationButton(
+                    buttonText: 'Add Gate',
+                    onPressed: () => setState(
+                      () {
+                        addMarker();
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   // void confirmationDialog(LatLng latlng) {
@@ -242,7 +239,7 @@ class _AddGateState extends State<AddGateView> {
                                     ),
                                     Column(
                                       children: [
-                                        MyButton(
+                                        ConfirmationButton(
                                           buttonText: 'Yes, Add Marker',
                                           onPressed: () => setState(
                                             () {
@@ -260,7 +257,7 @@ class _AddGateState extends State<AddGateView> {
                                             },
                                           ),
                                         ),
-                                        MyButton(
+                                        ConfirmationButton(
                                           buttonText: 'No, Don\'t Add Marker',
                                           onPressed: () =>
                                               Navigator.pop(context),
@@ -300,17 +297,18 @@ class _AddGateState extends State<AddGateView> {
                           ),
                         ),
                         Container(
-                            alignment: Alignment.bottomRight,
-                            padding: const EdgeInsets.all(10.0),
-                            child: FloatingActionButton(
-                              onPressed: () {
-                                addMarkerLatController.clear();
-                                addMarkerLongController.clear();
-                                markerToAddDialog();
-                              },
-                              backgroundColor: Colors.green[400],
-                              child: const Icon(Icons.add),
-                            )),
+                          alignment: Alignment.bottomRight,
+                          padding: const EdgeInsets.all(10.0),
+                          child: FloatingActionButton(
+                            onPressed: () {
+                              addMarkerLatController.clear();
+                              addMarkerLongController.clear();
+                              markerToAddDialog();
+                            },
+                            backgroundColor: Colors.green[400],
+                            child: const Icon(Icons.add),
+                          ),
+                        ),
                         // MarkerLayerOptions(
                         //   markers: [
                         //     for (int i = 0;
