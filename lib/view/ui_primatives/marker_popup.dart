@@ -11,22 +11,22 @@ import 'package:http/http.dart' as http;
 
 import '../login/login.dart';
 
-class ExamplePopup extends StatefulWidget {
+class MarkerPopup extends StatefulWidget {
   final Marker marker;
   // final LatLng latLng;
 
-  const ExamplePopup(this.marker, {Key? key}) : super(key: key);
+  const MarkerPopup(this.marker, {Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _ExamplePopupState();
+  State<StatefulWidget> createState() => _MarkerPopupState();
 }
 
-class _ExamplePopupState extends State<ExamplePopup> {
+class _MarkerPopupState extends State<MarkerPopup> {
   late Future<http.Response> httpStuff;
   final gateHeightController = TextEditingController();
   final latController = TextEditingController();
   final longController = TextEditingController();
-  GateManagementViewModel _gateManagementViewModel = GateManagementViewModel();
+  final _gateManagementViewModel = GateManagementViewModel();
   String gateHeight = "";
   String lat = "";
   String long = "";

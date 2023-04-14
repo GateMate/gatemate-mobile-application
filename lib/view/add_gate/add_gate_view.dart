@@ -317,7 +317,7 @@ class _AddGateState extends State<AddGateView> {
                             ],
                             popupBuilder:
                                 (BuildContext context, Marker marker) =>
-                                    ExamplePopup(marker),
+                                    MarkerPopup(marker),
                           ),
                         ),
                         Container(

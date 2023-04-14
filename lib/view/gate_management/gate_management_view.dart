@@ -130,7 +130,7 @@ class _GateManagementState extends State<GateManagementRoute> {
                           for (int i = 0; i < markers.length; i++) markers[i]
                         ],
                         popupBuilder: (BuildContext context, Marker marker) =>
-                            ExamplePopup(marker),
+                            MarkerPopup(marker),
                       )),
                     ],
                   ),

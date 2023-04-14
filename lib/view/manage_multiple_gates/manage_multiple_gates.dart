@@ -99,7 +99,7 @@ class _MultipleGateManagementState extends State<MultipleGateManagementRoute> {
                           //     PopupMarkerLayerOptions.rotationAlignmentFor(
                           //         AnchorAlign.top),
                           popupBuilder: (BuildContext context, Marker marker) =>
-                              ExamplePopup(marker),
+                              MarkerPopup(marker),
                           selectedMarkerBuilder: (context, marker) {
                             print("TAP");
                             var selectedMarkers = <Marker>[];
