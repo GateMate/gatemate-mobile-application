@@ -6,9 +6,12 @@ import 'package:flutter_map_arcgis/flutter_map_arcgis.dart';
 import 'package:flutter_map_line_editor/polyeditor.dart';
 import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
 import 'package:gatemate_mobile/model/add_field.dart';
+import 'package:gatemate_mobile/model/firebase/gatemate_auth.dart';
 import 'package:gatemate_mobile/model/viewmodels/add_gate_model.dart';
 import 'package:gatemate_mobile/settings/settings_view.dart';
+import 'package:gatemate_mobile/view/login/login.dart';
 import 'package:gatemate_mobile/view/ui_primatives/my_textfield.dart';
+import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:latlong2/latlong.dart';
@@ -33,6 +36,7 @@ class AddFieldRoute extends StatefulWidget {
 
 class _AddFieldRoute extends State<AddFieldRoute> {
   AddFieldModel addFieldModel = AddFieldModel();
+  final _authProvider = GetIt.I<GateMateAuth>();
   final LatLng _center = LatLng(36.06889761358809, -94.17477200170791);
   final PopupController _popupController = PopupController();
   late List<LatLng> polygonList = <LatLng>[];
@@ -87,12 +91,31 @@ class _AddFieldRoute extends State<AddFieldRoute> {
     polyLong4Controller.addListener(
       () {},
     );
+    _checkLoginStatus();
+    _authProvider.addListener(_checkLoginStatus);
   }
 
   @override
   void dispose() {
     // teardown goes here
+    _authProvider.removeListener(_checkLoginStatus);
     super.dispose();
+  }
+
+  void _checkLoginStatus() {
+    // TODO: Ensure 'null' is the correct thing to check for
+    if (_authProvider.currentUser == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const LoginView(),
+          ),
+        );
+      });
+    } else {
+      // TODO: Either do something here or remove "else"
+    }
   }
 
   void createPolygon() async {
@@ -158,37 +181,74 @@ class _AddFieldRoute extends State<AddFieldRoute> {
     ));
 
     markers.add(poly4LatLng);
+    // var response;
 
-    var response = await http.post(
-        Uri.parse('https://todo-proukhgi3a-uc.a.run.app/addField'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(<String, String>{
-          'ne': markers.elementAt(0).point.latitude.toString() +
-              "|" +
-              markers.elementAt(0).point.longitude.toString(),
-          'nw': markers.elementAt(1).point.latitude.toString() +
-              "|" +
-              markers.elementAt(1).point.longitude.toString(),
-          'sw': markers.elementAt(2).point.latitude.toString() +
-              "|" +
-              markers.elementAt(2).point.longitude.toString(),
-          'se': markers.elementAt(3).point.latitude.toString() +
-              "|" +
-              markers.elementAt(3).point.longitude.toString(),
-        }));
+    await _authProvider
+        .getAuthToken()
+        .then((value) => createField(value.toString()));
+  }
 
-    var responseBody = jsonDecode(response.body);
+  void createField(String token) async {
+    var responseBody;
+    var response = await http
+        .post(Uri.parse('https://todo-proukhgi3a-uc.a.run.app/addField'),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+              'Authorization': token,
+            },
+            body: jsonEncode(<String, String>{
+              'ne': markers.elementAt(0).point.latitude.toString() +
+                  "|" +
+                  markers.elementAt(0).point.longitude.toString(),
+              'nw': markers.elementAt(1).point.latitude.toString() +
+                  "|" +
+                  markers.elementAt(1).point.longitude.toString(),
+              'sw': markers.elementAt(2).point.latitude.toString() +
+                  "|" +
+                  markers.elementAt(2).point.longitude.toString(),
+              'se': markers.elementAt(3).point.latitude.toString() +
+                  "|" +
+                  markers.elementAt(3).point.longitude.toString()
+            }))
+        .then((value) {
+      // getField(token);
+      responseBody = jsonDecode(value.body);
+      print(responseBody);
+      fieldID = responseBody['success'].toString();
 
-    fieldID = responseBody['success'].toString();
+      print("GIMME FIELD ID" + fieldID.toString());
 
-    print("GIMME FIELD ID" + fieldID.toString());
+      drawSquares(token);
+    });
 
+    // var responseBody = jsonDecode(response.body);
+    // print(responseBody);
+
+    // fieldID = responseBody['success'].toString();
+
+    // print("GIMME FIELD ID" + fieldID.toString());
+
+    // drawSquares(token);
+  }
+
+  // getField(String token) async {
+  //   var response = await http
+  //       .post(Uri.parse('https://todo-proukhgi3a-uc.a.run.app/getField'),
+  //           headers: <String, String>{
+  //             'Content-Type': 'application/json; charset=UTF-8',
+  //           },
+  //           body: jsonEncode(<String, String>{'auth_token': token}))
+  //       .then((value) {
+  //     print(value.body);
+  //   });
+  // }
+
+  drawSquares(String token) async {
     var tiles = await http.post(
         Uri.parse('https://todo-proukhgi3a-uc.a.run.app/tile-field'),
         headers: <String, String>{
           'content-type': 'application/json; charset=UTF-8',
+          'Authorization': token,
         },
         body: jsonEncode(<String, String>{'fieldID': '${fieldID}'}));
 
@@ -646,7 +706,9 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                                     Icons.roller_shades_outlined,
                                     size: 25));
                             gates.add(gate);
-                            addFieldModel.addToFB(gate, fieldID);
+                            _authProvider.getAuthToken().then(((value) =>
+                                addFieldModel.addToFB(
+                                    gate, fieldID, value.toString())));
                           });
                         },
                         plugins: [EsriPlugin()],
@@ -683,7 +745,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                           child: _getFab(),
                         ),
                         Container(
-                          alignment: Alignment.bottomCenter,
+                          alignment: Alignment.topCenter,
                           child: getText(),
                         ),
                       ],

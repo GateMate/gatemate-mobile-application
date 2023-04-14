@@ -5,8 +5,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:gatemate_mobile/model/firebase/gatemate_auth.dart';
 import 'package:gatemate_mobile/model/viewmodels/gate_management_view_model.dart';
+import 'package:gatemate_mobile/view/login/login.dart';
 import 'package:gatemate_mobile/view/ui_primatives/my_textfield.dart';
+import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 
 import 'my_button.dart';
@@ -30,6 +33,7 @@ class _ExamplePopupState extends State<ExamplePopup> {
   String gateHeight = "";
   String lat = "";
   String long = "";
+  final _authProvider = GetIt.I<GateMateAuth>();
 
   @override
   void initState() {
@@ -37,16 +41,36 @@ class _ExamplePopupState extends State<ExamplePopup> {
     gateHeightController.addListener(
       () {},
     );
+    _authProvider.addListener(_checkLoginStatus);
     getHeight();
   }
 
+  void _checkLoginStatus() {
+    // TODO: Ensure 'null' is the correct thing to check for
+    if (_authProvider.currentUser == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const LoginView(),
+          ),
+        );
+      });
+    } else {
+      // TODO: Either do something here or remove "else"
+    }
+  }
+
   getHeight() async {
-    print(await _gateManagementViewModel.getGateHeight(
+    _authProvider.getAuthToken().then((value) => getHeightFromFB(
         widget.marker.point.latitude.toString(),
-        widget.marker.point.longitude.toString()));
+        widget.marker.point.longitude.toString(),
+        value.toString()));
+  }
+
+  getHeightFromFB(String latitude, String longitude, String token) async {
     gateHeight = await _gateManagementViewModel.getGateHeight(
-        widget.marker.point.latitude.toString(),
-        widget.marker.point.longitude.toString());
+        latitude, longitude, token);
   }
 
   void setHeight(String latitude, String longitude) {
@@ -56,8 +80,13 @@ class _ExamplePopupState extends State<ExamplePopup> {
       gateHeight = gateHeightController.text;
     }
 
-    // _gateManagementViewModel.setGateHeight(
-    //     latitude, longitude, gateHeightController.text);
+    _authProvider.getAuthToken().then((value) => setHeightInFB(
+        latitude, longitude, gateHeightController.text, value.toString()));
+  }
+
+  setHeightInFB(
+      String latitude, String longitude, String height, String token) async {
+    _gateManagementViewModel.setGateHeight(latitude, longitude, height, token);
   }
 
   void setPosition(String latitude, String longitude) {
@@ -69,7 +98,14 @@ class _ExamplePopupState extends State<ExamplePopup> {
       long = longController.text;
     }
 
-    // _gateManagementViewModel.updatePosition(lat, long);
+    _authProvider.getAuthToken().then((value) => setPositionInFB(latitude,
+        longitude, latController.text, longController.text, value.toString()));
+  }
+
+  setPositionInFB(String latitude, String longitude, String newLat,
+      String newLong, String token) async {
+    _gateManagementViewModel.setPosition(
+        latitude, longitude, newLat, newLong, token);
   }
 
   @override
@@ -138,8 +174,10 @@ class _ExamplePopupState extends State<ExamplePopup> {
                 onPressed: () {
                   setPosition(widget.marker.point.latitude.toString(),
                       widget.marker.point.longitude.toString());
-                  setHeight(widget.marker.point.latitude.toString(),
-                      widget.marker.point.longitude.toString());
+                  if (gateHeight != "") {
+                    setHeight(widget.marker.point.latitude.toString(),
+                        widget.marker.point.longitude.toString());
+                  }
                 },
                 buttonText: "Update")
           ],

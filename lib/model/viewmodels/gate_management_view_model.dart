@@ -21,87 +21,111 @@ class GateManagementViewModel extends ChangeNotifier {
 
   void setGateHeight(String latitude, String longitude, String gateHeight,
       String token) async {
-    getGateID(latitude, longitude);
+    getGateID(latitude, longitude, token)
+        .then((value) => updateHeight(latitude, longitude, gateHeight, token));
+  }
+
+  updateHeight(String latitude, String longitude, String gateHeight,
+      String token) async {
     await http.post(
         Uri.parse('https://todo-proukhgi3a-uc.a.run.app/setGateHeight'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': token,
         },
-        body: jsonEncode(<String, String>{
-          "height": gateHeight,
-          "gateID": gateDocId,
-          "auth_token": token
-        }));
+        body: jsonEncode(
+            <String, String>{"height": gateHeight, "gateID": gateDocId}));
+  }
+
+  void setPosition(String latitude, String longitude, String newLat,
+      String newLong, String token) async {
+    getGateID(latitude, longitude, token)
+        .then((value) => updatePosition(newLat, newLong, token));
   }
 
   updatePosition(String latitude, String longitude, String token) async {
-    getGateID(latitude, longitude);
     await http.post(
         Uri.parse('https://todo-proukhgi3a-uc.a.run.app/adjustGateLocation'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': token,
         },
         body: jsonEncode(<String, String>{
           "gateID": gateDocId,
           "location": "${latitude}|${longitude}",
-          "auth_token": token
         }));
   }
 
-  getGateID(String latitude, String longitude) async {
-    var gateData = await http
-        .get(Uri.parse('https://todo-proukhgi3a-uc.a.run.app/getGates'))
-        .then((value) => (jsonDecode(value.body) as Map).map((key, value) =>
-            MapEntry(key as String, value as Map<String, dynamic>)));
-    for (var gateID in gateData.entries) {
+  getGateID(String latitude, String longitude, String token) async {
+    var gateData = await http.post(
+        Uri.parse('https://todo-proukhgi3a-uc.a.run.app/getGates'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': token,
+        },
+        body: jsonEncode(<String, String>{"gateID": gateDocId}));
+    // var gateData = await http
+    //     .get(Uri.parse('https://todo-proukhgi3a-uc.a.run.app/getGates'))
+    //     .then((value) => (jsonDecode(value.body) as Map).map((key, value) =>
+    //         MapEntry(key as String, value as Map<String, dynamic>)));
+
+    var jsonDecodeGates = (jsonDecode(gateData.body) as Map).map(
+        (key, value) => MapEntry(key as String, value as Map<String, dynamic>));
+
+    for (var gateID in jsonDecodeGates.entries) {
       if (gateID.value['lat'].toString() == latitude &&
           gateID.value['long'].toString() == longitude) {
         gateDocId = gateID.key;
       }
     }
+    // for (var gateID in gateData.entries) {
+    //   if (gateID.value['lat'].toString() == latitude &&
+    //       gateID.value['long'].toString() == longitude) {
+    //     gateDocId = gateID.key;
+    //   }
+    // }
   }
 
-  getGateHeight(String latitude, String longitude) async {
+  getGateHeight(String latitude, String longitude, String token) async {
     var height = "";
-    var gateData = await http
-        .get(Uri.parse('https://todo-proukhgi3a-uc.a.run.app/getGates'))
-        .then((value) => (jsonDecode(value.body) as Map).map((key, value) =>
-            MapEntry(key as String, value as Map<String, dynamic>)));
 
-    for (var gateID in gateData.entries) {
+    var gateData = await http.post(
+        Uri.parse('https://todo-proukhgi3a-uc.a.run.app/getGates'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': token,
+        },
+        body: jsonEncode(<String, String>{"gateID": gateDocId}));
+    var jsonDecodeGates = (jsonDecode(gateData.body) as Map).map(
+        (key, value) => MapEntry(key as String, value as Map<String, dynamic>));
+
+    for (var gateID in jsonDecodeGates.entries) {
       if (gateID.value['lat'].toString() == latitude &&
           gateID.value['long'].toString() == longitude) {
         print((gateID.value['height']).toString());
-        return ((gateID.value['height']).toString());
+        height = (gateID.value['height']).toString();
+        return height;
       }
     }
-
-    return height;
-  }
-
-  updateHeight() async {
-    var gateData = await http
-        .get(Uri.parse('https://todo-proukhgi3a-uc.a.run.app/getGates'));
-
-    var jsonDecoder = (jsonDecode(gateData.body) as Map).map(
-        (key, value) => MapEntry(key as String, value as Map<String, dynamic>));
-    // print(jsonDecoder);
   }
 
   getGates(String token) async {
     // markers.clear();
     field = _fieldsViewModel.currentFieldSelection;
 
-    //need to get the field so we can get gates from the given field
+    // need to get the field so we can get gates from the given field
     // var fieldData = await http.post(
     //     Uri.parse('https://todo-proukhgi3a-uc.a.run.app/getField'),
     //     headers: <String, String>{
     //       'Content-Type': 'application/json; charset=UTF-8',
     //     },
-    //     body: jsonEncode(<String, String>{"fieldID": "NrxKA24m0xQ4w5GptET2"}));
+    //     body: jsonEncode(<String, String>{
+    //       "fieldID": "NrxKA24m0xQ4w5GptET2",
+    //       "auth_token": token
+    //     }));
 
     // var fields = (jsonDecode(fieldData.body) as Map)
-    //     .map((key, value) => MapEntry(key as String, value as List<dynamic>));
+    //     .map((key, value) => MapEntry(key as String, value as String));
 
     // print(fields);
 
@@ -112,9 +136,9 @@ class GateManagementViewModel extends ChangeNotifier {
         Uri.parse('https://todo-proukhgi3a-uc.a.run.app/getGates'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': token,
         },
-        body: jsonEncode(
-            <String, String>{"gateID": gateDocId, "auth_token": token}));
+        body: jsonEncode(<String, String>{"gateID": gateDocId}));
 
     Map<String, dynamic> data = jsonDecode(gateData.body);
 

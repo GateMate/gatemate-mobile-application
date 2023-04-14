@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class GateMateAuth extends ChangeNotifier {
   final _firebaseAuth = FirebaseAuth.instance;
@@ -56,10 +59,26 @@ class GateMateAuth extends ChangeNotifier {
   /// Can technically return null, but that seems unlikely.
   Future<String?> getAuthToken() async {
     if (currentUser == null) {
-      throw const GateMateAuthException('No user signed in! \'currentUser\' is null!');
+      throw const GateMateAuthException(
+          'No user signed in! \'currentUser\' is null!');
     }
+    var token = currentUser?.getIdToken().then((value) {
+      print(value);
+      // signUpUser(value.toString());
+    });
+
     return currentUser?.getIdToken();
   }
+}
+
+void signUpUser(String token) async {
+  var response = await http
+      .post(Uri.parse('https://todo-proukhgi3a-uc.a.run.app/signup'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, String>{"auth_token": token}))
+      .then((value) => print(value.body));
 }
 
 /// Contains information on the status of a completed Firestore authentication

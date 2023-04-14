@@ -56,10 +56,10 @@ class _viewPopupState extends State<viewPopup> {
               'Position: ${widget.marker.point.latitude}, ${widget.marker.point.longitude}',
               style: const TextStyle(fontSize: 12.0),
             ),
-            const Text(
-              'Current Water Levels:',
-              style: TextStyle(fontSize: 12.0),
-            ),
+            // const Text(
+            //   'Current Water Levels:',
+            //   style: TextStyle(fontSize: 12.0),
+            // ),
           ],
         ),
       ),

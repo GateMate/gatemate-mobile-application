@@ -27,15 +27,17 @@ class AddGateModel extends ChangeNotifier {
     print('markers: ${this.markers}');
   }
 
-  //not yet accounting fields
-  addToFB(Marker m) async {
+  //not yet accounting fields NEED TO UPDATE TO GET CORRECT FIELDID INSTEAD OF HARD CODE!!!!!!!
+  addToFB(Marker m, String token) async {
     var response = await http.post(
         Uri.parse('https://todo-proukhgi3a-uc.a.run.app/addGate'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(<String, String>{
-          "gateLocation": "${m.point.latitude}" + "|" + "${m.point.longitude}"
+          "fieldID": "1UXmjyGgW5Yup1vF8Uco",
+          "gateLocation": "${m.point.latitude}" + "|" + "${m.point.longitude}",
+          "auth_token": token
         }));
 
     print(response.body);

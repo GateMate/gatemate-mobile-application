@@ -74,6 +74,12 @@ class FieldSelectionRow extends StatelessWidget {
               ),
               onPressed: () {
                 // TODO
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AddFieldRoute(),
+                  ),
+                );
                 print('DEBUG: Add field button pressed!');
               },
             ),

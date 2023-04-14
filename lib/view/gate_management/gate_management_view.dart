@@ -24,6 +24,7 @@ class GateManagementRoute extends StatefulWidget {
 class _GateManagementState extends State<GateManagementRoute> {
   GateManagementViewModel _gateManagementViewModel = GateManagementViewModel();
   final _authProvider = GetIt.I<GateMateAuth>();
+  String user = "";
 
   @override
   void InitState() {
@@ -61,14 +62,17 @@ class _GateManagementState extends State<GateManagementRoute> {
 
   @override
   Widget build(BuildContext context) {
-    print(_authProvider.getAuthToken().toString());
-    _gateManagementViewModel
-        .getGates(_authProvider.getAuthToken().toString())
-        .then((value) {
-      setState(() {
-        markers = value;
-      });
-    });
+    _authProvider.getAuthToken().then(
+          (value) =>
+              _gateManagementViewModel.getGates(value.toString()).then((value) {
+            if (mounted) {
+              setState(() {
+                markers = value;
+              });
+            }
+          }),
+        );
+
     // _gateManagementViewModel.getGates();
     return Scaffold(
       appBar: AppBar(
