@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_arcgis/flutter_map_arcgis.dart';
 import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
+import 'package:gatemate_mobile/model/firebase/gatemate_auth.dart';
 import 'package:gatemate_mobile/model/viewmodels/gate_management_view_model.dart';
+import 'package:gatemate_mobile/view/login/login.dart';
+import 'package:get_it/get_it.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../ui_primatives/marker_popup.dart';
@@ -20,9 +23,19 @@ class GateManagementRoute extends StatefulWidget {
 
 class _GateManagementState extends State<GateManagementRoute> {
   GateManagementViewModel _gateManagementViewModel = GateManagementViewModel();
+  final _authProvider = GetIt.I<GateMateAuth>();
+
   @override
   void InitState() {
     super.initState();
+    _checkLoginStatus();
+    _authProvider.addListener(_checkLoginStatus);
+  }
+
+  @override
+  void dispose() {
+    _authProvider.removeListener(_checkLoginStatus);
+    super.dispose();
   }
 
   int polyId = 0;
@@ -30,9 +43,28 @@ class _GateManagementState extends State<GateManagementRoute> {
   final LatLng _center = LatLng(36.06889761358809, -94.17477200170791);
   final PopupController _popupController = PopupController();
 
+  void _checkLoginStatus() {
+    // TODO: Ensure 'null' is the correct thing to check for
+    if (_authProvider.currentUser == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const LoginView(),
+          ),
+        );
+      });
+    } else {
+      // TODO: Either do something here or remove "else"
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    _gateManagementViewModel.getGates().then((value) {
+    print(_authProvider.getAuthToken().toString());
+    _gateManagementViewModel
+        .getGates(_authProvider.getAuthToken().toString())
+        .then((value) {
       setState(() {
         markers = value;
       });

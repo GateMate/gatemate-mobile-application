@@ -56,8 +56,8 @@ class _ExamplePopupState extends State<ExamplePopup> {
       gateHeight = gateHeightController.text;
     }
 
-    _gateManagementViewModel.setGateHeight(
-        latitude, longitude, gateHeightController.text);
+    // _gateManagementViewModel.setGateHeight(
+    //     latitude, longitude, gateHeightController.text);
   }
 
   void setPosition(String latitude, String longitude) {
@@ -69,7 +69,7 @@ class _ExamplePopupState extends State<ExamplePopup> {
       long = longController.text;
     }
 
-    _gateManagementViewModel.updatePosition(lat, long);
+    // _gateManagementViewModel.updatePosition(lat, long);
   }
 
   @override

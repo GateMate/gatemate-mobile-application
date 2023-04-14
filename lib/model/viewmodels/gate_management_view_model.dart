@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:gatemate_mobile/model/firebase/gatemate_auth.dart';
 import 'package:gatemate_mobile/model/viewmodels/fields_view_model.dart';
+import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -17,19 +19,22 @@ class GateManagementViewModel extends ChangeNotifier {
   var field = "";
   var gateDocId = "";
 
-  void setGateHeight(
-      String latitude, String longitude, String gateHeight) async {
+  void setGateHeight(String latitude, String longitude, String gateHeight,
+      String token) async {
     getGateID(latitude, longitude);
     await http.post(
         Uri.parse('https://todo-proukhgi3a-uc.a.run.app/setGateHeight'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
-        body: jsonEncode(
-            <String, String>{"height": gateHeight, "gateID": gateDocId}));
+        body: jsonEncode(<String, String>{
+          "height": gateHeight,
+          "gateID": gateDocId,
+          "auth_token": token
+        }));
   }
 
-  updatePosition(String latitude, String longitude) async {
+  updatePosition(String latitude, String longitude, String token) async {
     getGateID(latitude, longitude);
     await http.post(
         Uri.parse('https://todo-proukhgi3a-uc.a.run.app/adjustGateLocation'),
@@ -38,7 +43,8 @@ class GateManagementViewModel extends ChangeNotifier {
         },
         body: jsonEncode(<String, String>{
           "gateID": gateDocId,
-          "location": "${latitude}|${longitude}"
+          "location": "${latitude}|${longitude}",
+          "auth_token": token
         }));
   }
 
@@ -82,7 +88,7 @@ class GateManagementViewModel extends ChangeNotifier {
     // print(jsonDecoder);
   }
 
-  getGates() async {
+  getGates(String token) async {
     // markers.clear();
     field = _fieldsViewModel.currentFieldSelection;
 
@@ -99,10 +105,19 @@ class GateManagementViewModel extends ChangeNotifier {
 
     // print(fields);
 
-    var gateData = await http
-        .get(Uri.parse('https://todo-proukhgi3a-uc.a.run.app/getGates'));
+    // var gateData = await http
+    // .get(Uri.parse('https://todo-proukhgi3a-uc.a.run.app/getGates'));
+
+    var gateData = await http.post(
+        Uri.parse('https://todo-proukhgi3a-uc.a.run.app/getGates'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(
+            <String, String>{"gateID": gateDocId, "auth_token": token}));
 
     Map<String, dynamic> data = jsonDecode(gateData.body);
+
     // print(data);
 
     for (var g in data.entries) {
