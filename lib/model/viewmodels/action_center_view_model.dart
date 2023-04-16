@@ -1,76 +1,87 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:gatemate_mobile/app_constants.dart';
+import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
+import 'package:logger/logger.dart';
 
 import '../data/action_item.dart';
+import '../firebase/gatemate_auth.dart';
 
 class ActionCenterViewModel extends ChangeNotifier {
-  var actionItems = fetchToDoItems();
-}
+  late var actionItems = fetchToDoItems();
+  final _authProvider = GetIt.I<GateMateAuth>();
 
-Future<ActionItem> createToDoItem(String title) async {
-  // TODO: The server should generate the item ID
-  const id = 67;
-  final response = await http.post(
-    Uri.parse('${AppConstants.serverUrl}/add?id=$id'),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: jsonEncode(<String, String>{
-      'id': id.toString(),
-      'title': title,
-    }),
-  );
-
-  if (response.statusCode == 201) {
-    // TODO: Return item using id generated from backend
-    return ActionItem(id: id.toString(), title: title);
-  } else {
-    // TODO: Handle this?
-    throw Exception(
-      'Failed to create to do item!'
-      'Response status code: ${response.statusCode}',
-    );
-  }
-}
-
-Future<List<ActionItem>> fetchToDoItems() async {
-  final response = await http.get(
-    Uri.parse('${AppConstants.serverUrl}/list'),
-  );
-
-  if (response.statusCode == 200) {
-    List<dynamic> rawDataList = jsonDecode(response.body);
-    List<ActionItem> toDoItemList = [];
-
-    for (var i = 0; i < rawDataList.length; i++) {
-      toDoItemList.add(ActionItem.fromJson(rawDataList[i]));
+  /// TODO: This currently doesn't work, but I think it has something to do
+  ///  with the server.
+  Future<ActionItem> createToDoItem(String title) async {
+    String authToken;
+    try {
+      authToken = await _authProvider.getAuthToken();
+    } on GateMateAuthException catch (e) {
+      Logger().e('Creating an action item failed:\n$e');
+      throw Exception('GateMate authentication error! Message:\n$e');
     }
 
-    return toDoItemList;
-  } else {
-    // TODO: Handle this
-    throw Exception(
-      'Failed to fetch to do items!'
-      'Response status code: ${response.statusCode}',
+    final response = await http.post(
+      Uri.parse('${AppConstants.serverUrl}/add'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: authToken,
+      },
+      body: jsonEncode(<String, String>{
+        'title': title,
+      }),
     );
+
+    if (response.statusCode == 201) {
+      // TODO: Return item using id generated from backend
+      return ActionItem(title: title);
+      // return ActionItem(id: id.toString(), title: title);
+    } else {
+      // TODO: Handle this?
+      throw Exception(
+        'Failed to create to do item!'
+        'Response status code: ${response.statusCode}',
+      );
+    }
   }
-}
 
-Future<ActionItem> fetchToDoItemById(int id) async {
-  final response = await http.get(
-    Uri.parse('${AppConstants.serverUrl}/list?id=$id'),
-  );
+  Future<List<ActionItem>> fetchToDoItems() async {
+    String authToken;
+    try {
+      authToken = await _authProvider.getAuthToken();
+    } on GateMateAuthException catch (e) {
+      Logger().e('Fetching action items failed:\n$e');
+      throw Exception('GateMate authentication error! Message:\n$e');
+    }
 
-  if (response.statusCode == 200) {
-    return ActionItem.fromJson(jsonDecode(response.body));
-  } else {
-    // TODO: Handle this?
-    throw Exception(
-      'Failed to load user data!'
-      'Response status code: ${response.statusCode}',
+    final response = await http.get(
+      Uri.parse('${AppConstants.serverUrl}/list'),
+      headers: {
+        HttpHeaders.authorizationHeader: authToken,
+      },
     );
+
+    if (response.statusCode == 200) {
+      List<dynamic> rawDataList = jsonDecode(response.body);
+      List<ActionItem> toDoItemList = [];
+
+      for (var i = 0; i < rawDataList.length; i++) {
+        toDoItemList.add(ActionItem.fromJson(rawDataList[i]));
+      }
+
+      return toDoItemList;
+    } else {
+      // TODO: Handle this!
+      //  It's difficult to do anything when the codes coming from the server
+      //  are largely unrelated to anything that is happening.
+      throw Exception(
+        'Failed to fetch to do items!'
+        'Response status code: ${response.statusCode}',
+      );
+    }
   }
 }
