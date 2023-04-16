@@ -33,11 +33,11 @@ class AddGateModel extends ChangeNotifier {
         Uri.parse('https://todo-proukhgi3a-uc.a.run.app/addGate'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': token,
         },
         body: jsonEncode(<String, String>{
           "fieldID": "1UXmjyGgW5Yup1vF8Uco",
-          "gateLocation": "${m.point.latitude}" + "|" + "${m.point.longitude}",
-          "auth_token": token
+          "gateLocation": "${m.point.latitude}" + "|" + "${m.point.longitude}"
         }));
 
     print(response.body);

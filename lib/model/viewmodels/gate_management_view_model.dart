@@ -148,9 +148,10 @@ class GateManagementViewModel extends ChangeNotifier {
       // print(g.value['lat']);
       //put max so that it'd stop going to oblivion
       if (markers.length < 10) {
+        print(g.value['lat']!);
         markers.add(Marker(
-            point: LatLng(
-                double.parse(g.value['lat']!), double.parse(g.value['long']!)),
+            point: LatLng(double.parse('${g.value['lat']!}'),
+                double.parse('${g.value['long']!}')),
             builder: (_) =>
                 const Icon(Icons.roller_shades_outlined, size: 25)));
       }

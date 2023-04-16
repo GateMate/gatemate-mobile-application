@@ -209,12 +209,12 @@ class _AddFieldRoute extends State<AddFieldRoute> {
         .then((value) {
       // getField(token);
       responseBody = jsonDecode(value.body);
-      print(responseBody);
-      fieldID = responseBody['success'].toString();
+      // print(responseBody);
+      fieldID = responseBody['fieldID'].toString();
 
-      print("GIMME FIELD ID" + fieldID.toString());
+      print("GIMME FIELD ID" + fieldID);
 
-      drawSquares(token);
+      drawSquares(token, fieldID);
     });
 
     // var responseBody = jsonDecode(response.body);
@@ -239,16 +239,18 @@ class _AddFieldRoute extends State<AddFieldRoute> {
   //   });
   // }
 
-  drawSquares(String token) async {
+  drawSquares(String token, String field) async {
     var tiles = await http.post(
         Uri.parse('https://todo-proukhgi3a-uc.a.run.app/tile-field'),
         headers: <String, String>{
           'content-type': 'application/json; charset=UTF-8',
           'Authorization': token,
         },
-        body: jsonEncode(<String, String>{'fieldID': '${fieldID}'}));
+        body: jsonEncode(<String, String>{'fieldID': '${field}'}));
 
     // print(tiles.body);
+
+    print(tiles.body);
 
     var jsonDecodeGatePlacement = (jsonDecode(tiles.body) as Map).map(
         (key, value) => MapEntry(key as String, value as Map<String, dynamic>));

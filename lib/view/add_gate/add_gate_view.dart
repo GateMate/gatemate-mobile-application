@@ -4,6 +4,7 @@ import 'package:flutter_map_arcgis/flutter_map_arcgis.dart';
 import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gatemate_mobile/model/viewmodels/add_gate_model.dart';
+import 'package:gatemate_mobile/view/ui_primatives/marker_popup_view.dart';
 import 'package:get_it/get_it.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
@@ -162,59 +163,6 @@ class _AddGateState extends State<AddGateView> {
     );
   }
 
-  // void confirmationDialog(LatLng latlng) {
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) {
-  //       return Dialog(
-  //         shape: RoundedRectangleBorder(
-  //           borderRadius: BorderRadius.circular(40),
-  //         ),
-  //         elevation: 16,
-  //         child: ListView(
-  //           shrinkWrap: true,
-  //           children: <Widget>[
-  //             const SizedBox(height: 20),
-  //             Center(
-  //               child: Text(
-  //                 'Are you sure you want to add a marker at ${latlng.latitude.toStringAsFixed(3)}, ${latlng.longitude.toStringAsFixed(3)}?',
-  //                 style: const TextStyle(fontSize: 20),
-  //                 textAlign: TextAlign.center,
-  //               ),
-  //             ),
-  //             Column(
-  //               children: [
-  //                 MyButton(
-  //                   buttonText: 'Yes, Add Marker',
-  //                   onPressed: () => setState(
-  //                     () {
-  //                       var newMarker = Marker(
-  //                         builder: (_) => const Icon(
-  //                           Icons.roller_shades_outlined,
-  //                           size: 25,
-  //                         ),
-  //                         point: latlng,
-  //                       );
-  //                       markers.add(newMarker);
-  //                       addGateModel.setMarkers(newMarker);
-  //                       Navigator.pop(context);
-  //                     },
-  //                   ),
-  //                 ),
-  //                 MyButton(
-  //                   buttonText: 'No, Don\'t Add Marker',
-  //                   onPressed: () => Navigator.pop(context),
-  //                 ),
-  //               ],
-  //             ),
-  //             const SizedBox(height: 20),
-  //           ],
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     // var addGateModelMarkers = context.watch<AddGateModel>().markers;
@@ -241,60 +189,6 @@ class _AddGateState extends State<AddGateView> {
                         maxZoom: 18,
                         zoom: 9.0,
                         plugins: [EsriPlugin()],
-                        onTap: (tapPos, latlng) {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return Dialog(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(40),
-                                ),
-                                elevation: 16,
-                                child: ListView(
-                                  shrinkWrap: true,
-                                  children: <Widget>[
-                                    const SizedBox(height: 20),
-                                    Center(
-                                      child: Text(
-                                        'Are you sure you want to add a marker at ${latlng.latitude.toStringAsFixed(3)}, ${latlng.longitude.toStringAsFixed(3)}?',
-                                        style: const TextStyle(fontSize: 20),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ),
-                                    Column(
-                                      children: [
-                                        ConfirmationButton(
-                                          buttonText: 'Yes, Add Marker',
-                                          onPressed: () => setState(
-                                            () {
-                                              var newMarker = Marker(
-                                                builder: (_) => const Icon(
-                                                  Icons.roller_shades_outlined,
-                                                  size: 25,
-                                                ),
-                                                point: latlng,
-                                              );
-                                              markers.add(newMarker);
-                                              addGateModel
-                                                  .setMarkers(newMarker);
-                                              Navigator.pop(context);
-                                            },
-                                          ),
-                                        ),
-                                        ConfirmationButton(
-                                          buttonText: 'No, Don\'t Add Marker',
-                                          onPressed: () =>
-                                              Navigator.pop(context),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 20),
-                                  ],
-                                ),
-                              );
-                            },
-                          );
-                        },
                       ),
                       children: [
                         TileLayerWidget(
@@ -317,7 +211,7 @@ class _AddGateState extends State<AddGateView> {
                             ],
                             popupBuilder:
                                 (BuildContext context, Marker marker) =>
-                                    MarkerPopup(marker),
+                                    viewPopup(marker),
                           ),
                         ),
                         Container(

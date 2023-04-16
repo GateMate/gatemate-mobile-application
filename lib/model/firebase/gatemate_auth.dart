@@ -62,10 +62,10 @@ class GateMateAuth extends ChangeNotifier {
       throw const GateMateAuthException(
           'No user signed in! \'currentUser\' is null!');
     }
-    var token = currentUser?.getIdToken().then((value) {
-      print(value);
-      // signUpUser(value.toString());
-    });
+    // var token = currentUser?.getIdToken().then((value) {
+    //   print(value);
+    //   // signUpUser(value.toString());
+    // });
 
     return currentUser?.getIdToken();
   }

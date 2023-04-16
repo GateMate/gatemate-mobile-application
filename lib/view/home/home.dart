@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:gatemate_mobile/model/viewmodels/fields_view_model.dart';
 import 'package:gatemate_mobile/view/action_center/action_center_view.dart';
@@ -109,6 +111,7 @@ class NavigationDrawer extends StatelessWidget {
   }
 
   Widget _drawer(BuildContext context) {
+    final _authProvider = GetIt.I<GateMateAuth>();
     return Drawer(
       elevation: 16.0,
       child: Column(
@@ -118,11 +121,12 @@ class NavigationDrawer extends StatelessWidget {
               color: Theme.of(context).colorScheme.primary,
             ),
             // TODO: Populate with data from Firebase authentication
-            accountName: const Text("xyz"),
-            accountEmail: const Text("xyz@gmail.com"),
+            accountName: Text("Jia Di"),
+            // Text(_authProvider.currentUser!.displayName.toString()),
+            accountEmail: Text(_authProvider.currentUser!.email.toString()),
             currentAccountPicture: const CircleAvatar(
               backgroundColor: Colors.white,
-              child: Text("xyz"),
+              child: Text("jdi"),
             ),
           ),
           const Text(
@@ -193,20 +197,20 @@ class NavigationDrawer extends StatelessWidget {
             },
             trailing: const Icon(Icons.arrow_forward_ios),
           ),
-          ListTile(
-            title: const Text('Manage Multiple Gates'),
-            onTap: () {
-              // Update the state of the app
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => MultipleGateManagementRoute()),
-              );
-              // Then close the drawer
-              // Navigator.pop(context);
-            },
-            trailing: const Icon(Icons.arrow_forward_ios),
-          ),
+          // ListTile(
+          //   title: const Text('Manage Multiple Gates'),
+          //   onTap: () {
+          //     // Update the state of the app
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(
+          //           builder: (context) => MultipleGateManagementRoute()),
+          //     );
+          //     // Then close the drawer
+          //     // Navigator.pop(context);
+          //   },
+          //   trailing: const Icon(Icons.arrow_forward_ios),
+          // ),
           // ListTile(
           //   title: const Text('Add Field'),
           //   onTap: () {

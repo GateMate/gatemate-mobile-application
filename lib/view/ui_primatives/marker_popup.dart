@@ -73,12 +73,14 @@ class _MarkerPopupState extends State<MarkerPopup> {
   void setHeight(String latitude, String longitude) {
     print(gateHeightController.text);
 
-    setState() {
-      gateHeight = gateHeightController.text;
-    }
+    if (gateHeightController.text.isNotEmpty) {
+      setState() {
+        gateHeight = gateHeightController.text;
+      }
 
-    _authProvider.getAuthToken().then((value) => setHeightInFB(
-        latitude, longitude, gateHeightController.text, value.toString()));
+      _authProvider.getAuthToken().then((value) => setHeightInFB(
+          latitude, longitude, gateHeightController.text, value.toString()));
+    }
   }
 
   setHeightInFB(
@@ -86,17 +88,24 @@ class _MarkerPopupState extends State<MarkerPopup> {
     _gateManagementViewModel.setGateHeight(latitude, longitude, height, token);
   }
 
-  void setPosition(String latitude, String longitude) {
+  setPosition(String latitude, String longitude) {
     print(latController.text);
     print(longController.text);
 
-    setState() {
-      lat = latController.text;
-      long = longController.text;
-    }
+    if (latController.text.isNotEmpty && longController.text.isNotEmpty) {
+      setState() {
+        lat = latController.text;
+        long = longController.text;
+      }
 
-    _authProvider.getAuthToken().then((value) => setPositionInFB(latitude,
-        longitude, latController.text, longController.text, value.toString()));
+      _authProvider.getAuthToken().then((value) => setPositionInFB(
+          latitude,
+          longitude,
+          latController.text,
+          longController.text,
+          value.toString()));
+    }
+    ;
   }
 
   setPositionInFB(String latitude, String longitude, String newLat,
@@ -169,24 +178,26 @@ class _MarkerPopupState extends State<MarkerPopup> {
                 prefixIcon: const Icon(Icons.roller_shades_outlined, size: 20),
               ),
             ),
-            ConfirmationButton(
-              onPressed: () {
-                setPosition(
-                  widget.marker.point.latitude.toString(),
-                  widget.marker.point.longitude.toString(),
-                );
-                setHeight(
-                  widget.marker.point.latitude.toString(),
-                  widget.marker.point.longitude.toString(),
-                );
-              },
-              buttonText: "Update",
-            ),
+            // ConfirmationButton(
+            //   onPressed: () {
+            //     setPosition(
+            //       widget.marker.point.latitude.toString(),
+            //       widget.marker.point.longitude.toString(),
+            //     );
+            //     setHeight(
+            //       widget.marker.point.latitude.toString(),
+            //       widget.marker.point.longitude.toString(),
+            //     );
+            //   },
+            //   buttonText: "Update",
+            // ),
             ConfirmationButton(
                 onPressed: () {
+                  // if (lat != "" && long != "") {
                   setPosition(widget.marker.point.latitude.toString(),
                       widget.marker.point.longitude.toString());
-                  if (gateHeight != "") {
+                  // }
+                  if (gateHeight.length > 0) {
                     setHeight(widget.marker.point.latitude.toString(),
                         widget.marker.point.longitude.toString());
                   }
