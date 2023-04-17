@@ -14,6 +14,12 @@ class ActionCenterViewModel extends ChangeNotifier {
   late var actionItems = fetchToDoItems();
   final _authProvider = GetIt.I<GateMateAuth>();
 
+  /// Load action items from remote server
+  void refresh() {
+    actionItems = fetchToDoItems();
+    notifyListeners();
+  }
+
   /// TODO: This currently doesn't work, but I think it has something to do
   ///  with the server.
   Future<ActionItem> createToDoItem(String title) async {
