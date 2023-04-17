@@ -453,7 +453,9 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                     ConfirmationButton(
                         buttonText: 'No, Don\'t Create Field',
                         onPressed: () => {
-                              addFieldModel.deleteField(fieldID),
+                              _authProvider.getAuthToken().then(((value) =>
+                                  addFieldModel.deleteField(
+                                      fieldID, value.toString()))),
                               setState(() {
                                 polygonList.clear();
                                 polygon0List.clear();
