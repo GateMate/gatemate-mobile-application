@@ -14,7 +14,7 @@ void main() {
           '"d3NHVV8VmcmVeK1fmYQn"],"ne_point":"36.1|-94.1","nw_point":"36.1|-94.2",'
           '"se_point":"36.0|-94.1","sw_point":"36.0|-94.2","user_id":3}';
 
-      final field = Field.fromDirectionalJson(jsonDecode(fieldJson));
+      final field = Field.fromDirectionalJson('Yx2Z', jsonDecode(fieldJson));
 
       expect(field.name, equals('test_field'));
       expect(field.gateIds[1], equals('ex2UkYGSgkXDBN7TcKdO'));
@@ -28,6 +28,7 @@ void main() {
     'Three-vertex field should return null southwest vertex, but others properly',
     () {
       final field = Field(
+        id: '1',
         name: 'test',
         gateIds: ['first', 'second'],
         vertices: [LatLng(3.0, 4.0), LatLng(1.0, 2.0), LatLng(5.0, 6.0)],

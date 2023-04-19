@@ -2,6 +2,9 @@ import 'package:latlong2/latlong.dart';
 import 'package:logger/logger.dart';
 
 class Field {
+  /// Document ID from app server
+  final String id;
+
   /// User-defined field display name
   final String name;
 
@@ -28,6 +31,7 @@ class Field {
   LatLng? get southwestCoord => _getDirectionalVertex(3);
 
   Field({
+    required this.id,
     required this.name,
     this.vertices = const [],
     this.gateIds = const [],
@@ -38,7 +42,7 @@ class Field {
   ///
   /// A different factory implementation could be written for fields with an
   /// arbitrary number of vertices.
-  factory Field.fromDirectionalJson(Map<String, dynamic> json) {
+  factory Field.fromDirectionalJson(String id, Map<String, dynamic> json) {
     final List gates = json['gates'];
 
     final northeastVertex = _decodeLatLng(json['ne_point']);
@@ -47,6 +51,7 @@ class Field {
     final southwestVertex = _decodeLatLng(json['sw_point']);
 
     return Field(
+      id: id,
       name: json['field_name'],
       gateIds: gates.cast<String>(),
       vertices: [

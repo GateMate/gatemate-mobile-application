@@ -91,7 +91,7 @@ class FieldsViewModel extends ChangeNotifier {
 
       // Decode field from JSON response and append to list of fields
       final jsonField = jsonDecode(response.body);
-      fields.add(Field.fromDirectionalJson(jsonField));
+      fields.add(Field.fromDirectionalJson(fieldId, jsonField));
     }
 
     // Close HTTP client
