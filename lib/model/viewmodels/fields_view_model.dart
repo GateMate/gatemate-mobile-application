@@ -29,6 +29,10 @@ class FieldsViewModel extends ChangeNotifier {
     });
   }
 
+  void refresh() {
+    allFields = fetchFields();
+  }
+
   Future<Map<String, Field>> fetchFields() async {
     String authToken;
     try {
