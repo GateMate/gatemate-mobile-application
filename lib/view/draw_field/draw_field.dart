@@ -54,6 +54,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
   final polyLong3Controller = TextEditingController();
   final polyLat4Controller = TextEditingController();
   final polyLong4Controller = TextEditingController();
+  final fieldNameController = TextEditingController();
   late var poly1LatLng;
   late var poly2LatLng;
   late var poly3LatLng;
@@ -85,6 +86,9 @@ class _AddFieldRoute extends State<AddFieldRoute> {
       () {},
     );
     polyLong4Controller.addListener(
+      () {},
+    );
+    fieldNameController.addListener(
       () {},
     );
     _checkLoginStatus();
@@ -537,117 +541,151 @@ class _AddFieldRoute extends State<AddFieldRoute> {
               const SizedBox(height: 20),
               Column(
                 children: [
-                  const Text(
-                    'Enter Latitude and Longitude Values for 4 Points to Create a Field Within Those Points:',
-                    style: TextStyle(fontSize: 20),
-                    textAlign: TextAlign.center,
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: ListTile(
-                          contentPadding:
-                              EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                          subtitle: CustomInputField(
-                            inputController: polyLat1Controller,
-                            hintText: "NW Lat 1",
-                            obscureText: false,
-                            prefixIcon: Icon(Icons.my_location),
-                          ),
-                        ),
-                      ),
-                      Expanded(
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    child: Row(
+                      children: [
+                        Expanded(
                           child: ListTile(
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                        subtitle: CustomInputField(
-                          inputController: polyLong1Controller,
-                          hintText: "NW Long 1",
-                          obscureText: false,
-                          prefixIcon: Icon(Icons.my_location),
-                        ),
-                      ))
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: ListTile(
-                          contentPadding:
-                              EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                          subtitle: CustomInputField(
-                              inputController: polyLat2Controller,
-                              hintText: "NE Lat 2",
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 0, vertical: 0),
+                            subtitle: CustomInputField(
+                              inputController: fieldNameController,
+                              hintText: "Enter a Field Name",
                               obscureText: false,
-                              prefixIcon: Icon(Icons.my_location)),
+                              prefixIcon: Icon(Icons.text_fields),
+                            ),
+                          ),
                         ),
-                      ),
-                      Expanded(
-                          child: ListTile(
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                        subtitle: CustomInputField(
-                          inputController: polyLong2Controller,
-                          hintText: "NE Long 2",
-                          obscureText: false,
-                          prefixIcon: Icon(Icons.my_location),
-                        ),
-                      ))
-                    ],
+                      ],
+                    ),
                   ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: ListTile(
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                    child: Text(
+                      'Enter Latitude and Longitude Values for 4 Points to Create a Field Within Those Points:',
+                      style: TextStyle(fontSize: 20),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: ListTile(
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 0, vertical: 0),
+                            subtitle: CustomInputField(
+                              inputController: polyLat1Controller,
+                              hintText: "NW Lat 1",
+                              obscureText: false,
+                              prefixIcon: Icon(Icons.my_location),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                            child: ListTile(
                           contentPadding:
                               EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                           subtitle: CustomInputField(
-                            inputController: polyLat3Controller,
-                            hintText: "SE Lat 3",
+                            inputController: polyLong1Controller,
+                            hintText: "NW Long 1",
                             obscureText: false,
                             prefixIcon: Icon(Icons.my_location),
                           ),
-                        ),
-                      ),
-                      Expanded(
-                          child: ListTile(
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                        subtitle: CustomInputField(
-                          inputController: polyLong3Controller,
-                          hintText: "SE Long 3",
-                          obscureText: false,
-                          prefixIcon: Icon(Icons.my_location),
-                        ),
-                      ))
-                    ],
+                        ))
+                      ],
+                    ),
                   ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: ListTile(
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: ListTile(
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 0, vertical: 0),
+                            subtitle: CustomInputField(
+                                inputController: polyLat2Controller,
+                                hintText: "NE Lat 2",
+                                obscureText: false,
+                                prefixIcon: Icon(Icons.my_location)),
+                          ),
+                        ),
+                        Expanded(
+                            child: ListTile(
                           contentPadding:
                               EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                           subtitle: CustomInputField(
-                            inputController: polyLat4Controller,
-                            hintText: "SW Lat 4",
+                            inputController: polyLong2Controller,
+                            hintText: "NE Long 2",
                             obscureText: false,
                             prefixIcon: Icon(Icons.my_location),
                           ),
-                        ),
-                      ),
-                      Expanded(
+                        ))
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                    child: Row(
+                      children: [
+                        Expanded(
                           child: ListTile(
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                        subtitle: CustomInputField(
-                          inputController: polyLong4Controller,
-                          hintText: "SW Long 4",
-                          obscureText: false,
-                          prefixIcon: Icon(Icons.my_location),
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 0, vertical: 0),
+                            subtitle: CustomInputField(
+                              inputController: polyLat3Controller,
+                              hintText: "SE Lat 3",
+                              obscureText: false,
+                              prefixIcon: Icon(Icons.my_location),
+                            ),
+                          ),
                         ),
-                      ))
-                    ],
+                        Expanded(
+                            child: ListTile(
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                          subtitle: CustomInputField(
+                            inputController: polyLong3Controller,
+                            hintText: "SE Long 3",
+                            obscureText: false,
+                            prefixIcon: Icon(Icons.my_location),
+                          ),
+                        ))
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: ListTile(
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 0, vertical: 0),
+                            subtitle: CustomInputField(
+                              inputController: polyLat4Controller,
+                              hintText: "SW Lat 4",
+                              obscureText: false,
+                              prefixIcon: Icon(Icons.my_location),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                            child: ListTile(
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                          subtitle: CustomInputField(
+                            inputController: polyLong4Controller,
+                            hintText: "SW Long 4",
+                            obscureText: false,
+                            prefixIcon: Icon(Icons.my_location),
+                          ),
+                        ))
+                      ],
+                    ),
                   ),
                 ],
               ),

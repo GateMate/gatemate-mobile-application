@@ -24,8 +24,9 @@ class GateManagementViewModel extends ChangeNotifier {
     String gateHeight,
     String token,
   ) async {
-    getGateID(latitude, longitude, token)
-        .then((value) => updateHeight(latitude, longitude, gateHeight, token),);
+    getGateID(latitude, longitude, token).then(
+      (value) => updateHeight(latitude, longitude, gateHeight, token),
+    );
   }
 
   updateHeight(
@@ -111,12 +112,14 @@ class GateManagementViewModel extends ChangeNotifier {
     var jsonDecodeGates = (jsonDecode(gateData.body) as Map).map(
         (key, value) => MapEntry(key as String, value as Map<String, dynamic>));
 
-    for (var gateID in jsonDecodeGates.entries) {
-      if (gateID.value['lat'].toString() == latitude &&
-          gateID.value['long'].toString() == longitude) {
-        print((gateID.value['height']).toString());
-        height = (gateID.value['height']).toString();
-        return height;
+    for (var gateID; gateID < jsonDecodeGates.entries.length; gateID++) {
+      if (gateID < 10) {
+        if (gateID.value['lat'].toString() == latitude &&
+            gateID.value['long'].toString() == longitude) {
+          print((gateID.value['height']).toString());
+          height = (gateID.value['height']).toString();
+          return height;
+        }
       }
     }
   }
@@ -131,52 +134,48 @@ class GateManagementViewModel extends ChangeNotifier {
       return;
     }
 
+    print(currentField.gateIds);
+
     // TODO: You can access the current field's list of gate id's using
     //  currentField.gateIds. Should be able to send those id's to app server
 
-    // need to get the field so we can get gates from the given field
-    // var fieldData = await http.post(
-    //     Uri.parse('https://todo-proukhgi3a-uc.a.run.app/getField'),
-    //     headers: <String, String>{
-    //       'Content-Type': 'application/json; charset=UTF-8',
-    //     },
-    //     body: jsonEncode(<String, String>{
-    //       "fieldID": "NrxKA24m0xQ4w5GptET2",
-    //       "auth_token": token
-    //     }));
+    var gateData;
+    if (currentField.gateIds.isNotEmpty) {
+      for (var g in currentField.gateIds) {
+        gateData = await http.post(
+            Uri.parse('https://todo-proukhgi3a-uc.a.run.app/getGates'),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+              'Authorization': token,
+            },
+            body: jsonEncode(<String, String>{"gateID": g}));
 
-    // var fields = (jsonDecode(fieldData.body) as Map)
-    //     .map((key, value) => MapEntry(key as String, value as String));
+        print(gateData.body);
 
-    // print(fields);
+        Map<String, dynamic> data = jsonDecode(gateData.body);
+        print(data);
 
-    // var gateData = await http
-    // .get(Uri.parse('https://todo-proukhgi3a-uc.a.run.app/getGates'));
-
-    var gateData = await http.post(
-        Uri.parse('https://todo-proukhgi3a-uc.a.run.app/getGates'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': token,
-        },
-        body: jsonEncode(<String, String>{"gateID": gateDocId}));
-
-    Map<String, dynamic> data = jsonDecode(gateData.body);
+        for (var d in data.entries) {
+          markers.add(Marker(
+              point: LatLng(double.parse('${d.value['lat']!}'),
+                  double.parse('${d.value['long']!}')),
+              builder: (_) =>
+                  const Icon(Icons.roller_shades_outlined, size: 25)));
+        }
+      }
+    }
 
     // print(data);
 
-    for (var g in data.entries) {
-      // print(g.value['lat']);
-      //put max so that it'd stop going to oblivion
-      if (markers.length < 10) {
-        print(g.value['lat']!);
-        markers.add(Marker(
-            point: LatLng(double.parse('${g.value['lat']!}'),
-                double.parse('${g.value['long']!}')),
-            builder: (_) =>
-                const Icon(Icons.roller_shades_outlined, size: 25)));
-      }
-    }
+    // for (var g in data.entries) {
+    //   // print(g.value['lat']);
+
+    //   print(g.value['lat']!);
+    //   markers.add(Marker(
+    //       point: LatLng(double.parse('${g.value['lat']!}'),
+    //           double.parse('${g.value['long']!}')),
+    //       builder: (_) => const Icon(Icons.roller_shades_outlined, size: 25)));
+    // }
     // print(markers.length);
     return markers;
   }
