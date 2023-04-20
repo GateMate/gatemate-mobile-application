@@ -15,6 +15,14 @@ class ActionCenterView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Action Center'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              GetIt.I<ActionCenterViewModel>().refresh();
+            },
+            icon: const Icon(Icons.refresh),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),

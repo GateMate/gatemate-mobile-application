@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 import 'package:workmanager/workmanager.dart';
 
 import '../../model/firebase/gatemate_auth.dart';
+import '../settings/field_selection_row.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -230,36 +231,3 @@ class NavigationDrawer extends StatelessWidget {
   }
 }
 
-class FieldSelectionDropdown extends StatelessWidget {
-  const FieldSelectionDropdown({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    var theme = Theme.of(context);
-    var fieldsViewModel = context.watch<FieldsViewModel>();
-
-    return DropdownButton<String>(
-      value: fieldsViewModel.currentFieldSelection,
-      items: _mapSetToDropdownMenu(fieldsViewModel.fieldNamesPlaceholder),
-      onChanged: (String? value) {
-        if (value != null) {
-          fieldsViewModel.selectField(value);
-        }
-      },
-      iconSize: 28,
-      underline: Container(
-        height: 2,
-        color: theme.colorScheme.primary,
-      ),
-    );
-  }
-}
-
-List<DropdownMenuItem<String>> _mapSetToDropdownMenu(Set<String> items) {
-  return items.map<DropdownMenuItem<String>>((String value) {
-    return DropdownMenuItem<String>(
-      value: value,
-      child: Text(value),
-    );
-  }).toList();
-}
