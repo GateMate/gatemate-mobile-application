@@ -125,6 +125,15 @@ class GateManagementViewModel extends ChangeNotifier {
     // markers.clear();
     final currentField = _fieldsViewModel.currentFieldSelection;
 
+    if (currentField == null) {
+      // TODO: What to do if no field is currently selected?
+      //  Could enforce choosing a field before leaving home screen.
+      return;
+    }
+
+    // TODO: You can access the current field's list of gate id's using
+    //  currentField.gateIds. Should be able to send those id's to app server
+
     // need to get the field so we can get gates from the given field
     // var fieldData = await http.post(
     //     Uri.parse('https://todo-proukhgi3a-uc.a.run.app/getField'),
