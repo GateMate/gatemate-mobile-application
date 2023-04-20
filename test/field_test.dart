@@ -28,7 +28,6 @@ void main() {
     'Three-vertex field should return null southwest vertex, but others properly',
     () {
       final field = Field(
-        id: '1',
         name: 'test',
         gateIds: ['first', 'second'],
         vertices: [LatLng(3.0, 4.0), LatLng(1.0, 2.0), LatLng(5.0, 6.0)],

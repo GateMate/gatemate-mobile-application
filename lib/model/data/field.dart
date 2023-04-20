@@ -3,7 +3,7 @@ import 'package:logger/logger.dart';
 
 class Field {
   /// Document ID from app server
-  final String id;
+  String? id;
 
   /// User-defined field display name
   final String name;
@@ -31,8 +31,8 @@ class Field {
   LatLng? get southwestCoord => _getDirectionalVertex(3);
 
   Field({
-    required this.id,
     required this.name,
+    this.id,
     this.vertices = const [],
     this.gateIds = const [],
   });
