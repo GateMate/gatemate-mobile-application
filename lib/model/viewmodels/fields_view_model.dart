@@ -11,33 +11,25 @@ import 'package:logger/logger.dart';
 import '../data/field.dart';
 
 class FieldsViewModel extends ChangeNotifier {
-  // TODO: REMOVE
-  var fieldNamesPlaceholder = {'Field 1', 'Field B', 'Field of Real Numbers'};
-  var currentFieldSelection = 'Field 1';
-
-  // late Future<List<Field>> allFields; // TODO: "late" could cause issues
-  // late currentFieldSelection;
+  late Future<Map<String, Field>> allFields;
+  Field? currentFieldSelection;
 
   final _authProvider = GetIt.I<GateMateAuth>();
 
   FieldsViewModel() {
-    // allFields = fetchFields();
-    // TODO: Initialize current field
+    allFields = fetchFields();
   }
 
-  void addField(String fieldName) {
-    fieldNamesPlaceholder.add(fieldName);
-    notifyListeners();
-  }
-
-  void selectField(String fieldName) {
-    if (fieldNamesPlaceholder.contains(fieldName)) {
-      currentFieldSelection = fieldName;
+  void selectField(String fieldId) {
+    allFields.then((fields) {
+      if (fields.containsKey(fieldId)) {
+        currentFieldSelection = fields[fieldId];
+      }
       notifyListeners();
-    }
+    });
   }
 
-  Future<List<Field>> fetchFields() async {
+  Future<Map<String, Field>> fetchFields() async {
     String authToken;
     try {
       authToken = await _authProvider.getAuthToken();
@@ -70,7 +62,7 @@ class FieldsViewModel extends ChangeNotifier {
     final List<dynamic> decodedFieldIds = jsonDecode(fieldsResponse.body);
 
     // Time to get field object for each field ID
-    final List<Field> fields = [];
+    final Map<String, Field> fields = {};
     for (var fieldId in decodedFieldIds.cast<String>()) {
       // Build and send HTTP request using persistent client from before
       final endpoint = '/getField?fieldID=$fieldId';
@@ -91,7 +83,7 @@ class FieldsViewModel extends ChangeNotifier {
 
       // Decode field from JSON response and append to list of fields
       final jsonField = jsonDecode(response.body);
-      fields.add(Field.fromDirectionalJson(fieldId, jsonField));
+      fields[fieldId] = Field.fromDirectionalJson(fieldId, jsonField);
     }
 
     // Close HTTP client

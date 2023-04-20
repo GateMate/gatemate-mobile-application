@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:gatemate_mobile/model/firebase/gatemate_auth.dart';
 import 'package:gatemate_mobile/model/viewmodels/action_center_view_model.dart';
+import 'package:gatemate_mobile/model/viewmodels/fields_view_model.dart';
 import 'package:gatemate_mobile/view/home/home.dart';
 import 'package:get_it/get_it.dart';
 import 'package:workmanager/workmanager.dart';
@@ -22,6 +23,7 @@ void main() async {
   getIt.registerLazySingleton<ActionCenterViewModel>(
     () => ActionCenterViewModel(),
   );
+  getIt.registerLazySingleton<FieldsViewModel>(() => FieldsViewModel());
 
   // flutter_local_notifications initialization
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -57,7 +59,7 @@ void main() async {
     callbackDispatcher,
     isInDebugMode: true,
   );
-  
+
   // TODO: Move task registration to FieldViewModel initialization;
   //       register a task for EACH field.
   // TODO: Cancel tasks upon signout (or check for credentials?)

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:gatemate_mobile/model/viewmodels/fields_view_model.dart';
+import 'package:get_it/get_it.dart';
+import 'package:logger/logger.dart';
 
+import '../../model/data/field.dart';
 import '../draw_field/draw_field.dart';
 
 class FieldSelectionRow extends StatelessWidget {
@@ -9,7 +13,6 @@ class FieldSelectionRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Pass this to widget builders instead of doing this each time
     var theme = Theme.of(context);
 
     return Column(
@@ -21,14 +24,13 @@ class FieldSelectionRow extends StatelessWidget {
         ),
         Row(
           children: [
-            // const FieldSelectionDropdown(),
+            const FieldSelectionDropdown(),
             IconButton(
               icon: Icon(
                 Icons.add_circle,
                 color: theme.colorScheme.primary,
               ),
               onPressed: () {
-                // TODO
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -45,36 +47,80 @@ class FieldSelectionRow extends StatelessWidget {
   }
 }
 
-// class FieldSelectionDropdown extends StatelessWidget {
-//   const FieldSelectionDropdown({super.key});
+class FieldSelectionDropdown extends StatefulWidget {
+  const FieldSelectionDropdown({super.key});
 
-//   @override
-//   Widget build(BuildContext context) {
-//     var theme = Theme.of(context);
-//     var fieldsViewModel = context.watch<FieldsViewModel>();
+  @override
+  State<FieldSelectionDropdown> createState() => _FieldSelectionDropdownState();
+}
 
-//     return DropdownButton<String>(
-//       value: fieldsViewModel.currentFieldSelection?.name ?? 'No field selected' ,
-//       items: _mapSetToDropdownMenu(fieldsViewModel.allFields),
-//       onChanged: (String? value) {
-//         if (value != null) {
-//           fieldsViewModel.selectField(value);
-//         }
-//       },
-//       iconSize: 28,
-//       underline: Container(
-//         height: 2,
-//         color: theme.colorScheme.primary,
-//       ),
-//     );
-//   }
-// }
+class _FieldSelectionDropdownState extends State<FieldSelectionDropdown> {
+  final _viewModel = GetIt.I<FieldsViewModel>();
 
-List<DropdownMenuItem<String>> _mapSetToDropdownMenu(Set<String> items) {
-  return items.map<DropdownMenuItem<String>>((String value) {
-    return DropdownMenuItem<String>(
-      value: value,
-      child: Text(value),
+  @override
+  void initState() {
+    super.initState();
+    _viewModel.addListener(_updateFieldDropdown);
+  }
+
+  @override
+  void dispose() {
+    _viewModel.removeListener(_updateFieldDropdown);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var theme = Theme.of(context);
+
+    return FutureBuilder(
+      future: _viewModel.allFields,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return DropdownButton<String>(
+            value: _viewModel.currentFieldSelection?.id,
+            items: _mapFieldsToDropdown(snapshot.data!),
+            onChanged: (String? value) {
+              if (value != null) {
+                _viewModel.selectField(value);
+              }
+            },
+            iconSize: 28,
+            underline: Container(
+              height: 2,
+              color: theme.colorScheme.primary,
+            ),
+          );
+        } else if (snapshot.hasError) {
+          final errorMessage =
+              'Error accessing viewmodel in fields selection dropdown:\n'
+              '${snapshot.error}';
+
+          Logger().e(errorMessage);
+          throw Exception(errorMessage);
+        }
+
+        return const CircularProgressIndicator();
+      },
     );
-  }).toList();
+  }
+
+  void _updateFieldDropdown() {
+    setState(() {});
+  }
+}
+
+List<DropdownMenuItem<String>> _mapFieldsToDropdown(Map<String, Field> fields) {
+  List<DropdownMenuItem<String>> menuItems = [];
+
+  fields.forEach((key, value) {
+    menuItems.add(
+      DropdownMenuItem(
+        value: value.id,
+        child: Text(value.name),
+      ),
+    );
+  });
+
+  return menuItems;
 }

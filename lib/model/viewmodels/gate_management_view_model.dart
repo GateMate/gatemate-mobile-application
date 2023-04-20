@@ -15,18 +15,25 @@ class GateManagementViewModel extends ChangeNotifier {
   List<Marker> markers = [];
   var gateHeight = 0.0;
   var idToUpdate = "";
-  FieldsViewModel _fieldsViewModel = FieldsViewModel();
-  var field = "";
+  final _fieldsViewModel = GetIt.I<FieldsViewModel>();
   var gateDocId = "";
 
-  void setGateHeight(String latitude, String longitude, String gateHeight,
-      String token) async {
+  void setGateHeight(
+    String latitude,
+    String longitude,
+    String gateHeight,
+    String token,
+  ) async {
     getGateID(latitude, longitude, token)
-        .then((value) => updateHeight(latitude, longitude, gateHeight, token));
+        .then((value) => updateHeight(latitude, longitude, gateHeight, token),);
   }
 
-  updateHeight(String latitude, String longitude, String gateHeight,
-      String token) async {
+  updateHeight(
+    String latitude,
+    String longitude,
+    String gateHeight,
+    String token,
+  ) async {
     await http.post(
         Uri.parse('https://todo-proukhgi3a-uc.a.run.app/setGateHeight'),
         headers: <String, String>{
@@ -37,8 +44,13 @@ class GateManagementViewModel extends ChangeNotifier {
             <String, String>{"height": gateHeight, "gateID": gateDocId}));
   }
 
-  void setPosition(String latitude, String longitude, String newLat,
-      String newLong, String token) async {
+  void setPosition(
+    String latitude,
+    String longitude,
+    String newLat,
+    String newLong,
+    String token,
+  ) async {
     getGateID(latitude, longitude, token)
         .then((value) => updatePosition(newLat, newLong, token));
   }
@@ -111,7 +123,7 @@ class GateManagementViewModel extends ChangeNotifier {
 
   getGates(String token) async {
     // markers.clear();
-    field = _fieldsViewModel.currentFieldSelection;
+    final currentField = _fieldsViewModel.currentFieldSelection;
 
     // need to get the field so we can get gates from the given field
     // var fieldData = await http.post(
