@@ -122,13 +122,9 @@ class NavigationDrawer extends StatelessWidget {
               color: Theme.of(context).colorScheme.primary,
             ),
             // TODO: Populate with data from Firebase authentication
-            accountName: Text("Jia Di"),
+            accountName: Text("Welcome"),
             // Text(_authProvider.currentUser!.displayName.toString()),
             accountEmail: Text(_authProvider.currentUser!.email.toString()),
-            currentAccountPicture: const CircleAvatar(
-              backgroundColor: Colors.white,
-              child: Text("jdi"),
-            ),
           ),
           const Text(
             'Current Field Selection: ',
@@ -184,6 +180,20 @@ class NavigationDrawer extends StatelessWidget {
             trailing: const Icon(Icons.arrow_forward_ios),
           ),
           ListTile(
+            title: const Text('Manage Multiple Gates'),
+            onTap: () {
+              // Update the state of the app
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MultipleGateManagementRoute()),
+              );
+              // Then close the drawer
+              // Navigator.pop(context);
+            },
+            trailing: const Icon(Icons.arrow_forward_ios),
+          ),
+          ListTile(
             title: const Text('Settings'),
             onTap: () {
               // Update the state of the app
@@ -198,33 +208,6 @@ class NavigationDrawer extends StatelessWidget {
             },
             trailing: const Icon(Icons.arrow_forward_ios),
           ),
-          ListTile(
-            title: const Text('Manage Multiple Gates'),
-            onTap: () {
-              // Update the state of the app
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => MultipleGateManagementRoute()),
-              );
-              // Then close the drawer
-              // Navigator.pop(context);
-            },
-            trailing: const Icon(Icons.arrow_forward_ios),
-          ),
-          // ListTile(
-          //   title: const Text('Add Field'),
-          //   onTap: () {
-          //     // Update the state of the app
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(builder: (context) => const AddFieldRoute()),
-          //     );
-          //     // Then close the drawer
-          //     // Navigator.pop(context);
-          //   },
-          //   trailing: const Icon(Icons.arrow_forward_ios),
-          // ),
         ],
       ),
     );

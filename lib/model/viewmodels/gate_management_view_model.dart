@@ -166,7 +166,10 @@ class GateManagementViewModel extends ChangeNotifier {
               'Content-Type': 'application/json; charset=UTF-8',
               'Authorization': token,
             },
-            body: jsonEncode(<String, String>{"gateID": g}));
+            body: jsonEncode(<String, String>{
+              "gateID": g,
+              "fieldID": "${currentField.id}"
+            }));
 
         // print(gateData.body);
 

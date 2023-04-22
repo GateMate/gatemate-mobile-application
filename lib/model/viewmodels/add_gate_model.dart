@@ -4,10 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:http/http.dart' as http;
+import 'package:gatemate_mobile/model/viewmodels/fields_view_model.dart';
+import 'package:get_it/get_it.dart';
 
 int markerId = 0;
 
 class AddGateModel extends ChangeNotifier {
+  final _fieldsViewModel = GetIt.I<FieldsViewModel>();
   // int markerId = 0;
   List<Marker> markers = [
     // Marker(
@@ -29,18 +32,26 @@ class AddGateModel extends ChangeNotifier {
 
   //not yet accounting fields NEED TO UPDATE TO GET CORRECT FIELDID INSTEAD OF HARD CODE!!!!!!!
   addToFB(Marker m, String token) async {
-    var response = await http.post(
-        Uri.parse('https://todo-proukhgi3a-uc.a.run.app/addGate'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': token,
-        },
-        body: jsonEncode(<String, String>{
-          "fieldID": "1UXmjyGgW5Yup1vF8Uco",
-          "gateLocation": "${m.point.latitude}" + "|" + "${m.point.longitude}"
-        }));
+    final currentField = _fieldsViewModel.currentFieldSelection;
 
-    print(response.body);
+    if (currentField == null) {
+      // TODO: What to do if no field is currently selected?
+      //  Could enforce choosing a field before leaving home screen.
+      return;
+    } else {
+      var response = await http.post(
+          Uri.parse('https://todo-proukhgi3a-uc.a.run.app/addGate'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': token,
+          },
+          body: jsonEncode(<String, String>{
+            "fieldID": "${currentField.id}",
+            "gateLocation": "${m.point.latitude}|${m.point.longitude}"
+          }));
+
+      print(response.body);
+    }
   }
 
   getMarkers() {
