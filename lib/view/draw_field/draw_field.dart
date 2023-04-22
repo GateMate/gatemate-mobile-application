@@ -9,6 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gatemate_mobile/model/add_field.dart';
 import 'package:gatemate_mobile/model/firebase/gatemate_auth.dart';
 import 'package:gatemate_mobile/model/viewmodels/add_gate_model.dart';
+import 'package:gatemate_mobile/model/viewmodels/fields_view_model.dart';
 import 'package:gatemate_mobile/view/login/login.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
@@ -55,6 +56,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
   final polyLat4Controller = TextEditingController();
   final polyLong4Controller = TextEditingController();
   final fieldNameController = TextEditingController();
+  final _fieldsViewModel = FieldsViewModel();
   late var poly1LatLng;
   late var poly2LatLng;
   late var poly3LatLng;
@@ -208,7 +210,8 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                   markers.elementAt(2).point.longitude.toString(),
               'se': markers.elementAt(3).point.latitude.toString() +
                   "|" +
-                  markers.elementAt(3).point.longitude.toString()
+                  markers.elementAt(3).point.longitude.toString(),
+              'fieldName': fieldNameController.text.toString(),
             }))
         .then((value) {
       // getField(token);
@@ -217,6 +220,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
       fieldID = responseBody['fieldID'].toString();
 
       print("GIMME FIELD ID" + fieldID);
+      _fieldsViewModel.refresh();
 
       drawSquares(token, fieldID);
     });

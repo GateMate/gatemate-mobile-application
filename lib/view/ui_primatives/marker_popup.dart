@@ -193,7 +193,6 @@ class _MarkerPopupState extends State<MarkerPopup> {
             // ),
             ConfirmationButton(
                 onPressed: () {
-                  // if (lat != "" && long != "") {
                   setPosition(widget.marker.point.latitude.toString(),
                       widget.marker.point.longitude.toString());
                   // }
@@ -202,7 +201,8 @@ class _MarkerPopupState extends State<MarkerPopup> {
                         widget.marker.point.longitude.toString());
                   }
                 },
-                buttonText: "Update")
+                buttonText: "Update"),
+            ConfirmationButton(onPressed: () {}, buttonText: "Delete")
           ],
         ),
       ),

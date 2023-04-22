@@ -112,15 +112,24 @@ class GateManagementViewModel extends ChangeNotifier {
     var jsonDecodeGates = (jsonDecode(gateData.body) as Map).map(
         (key, value) => MapEntry(key as String, value as Map<String, dynamic>));
 
-    for (var gateID; gateID < jsonDecodeGates.entries.length; gateID++) {
-      if (gateID < 10) {
-        if (gateID.value['lat'].toString() == latitude &&
-            gateID.value['long'].toString() == longitude) {
-          print((gateID.value['height']).toString());
-          height = (gateID.value['height']).toString();
-          return height;
-        }
+    // print(jsonDecodeGates[1]!.entries.toString());
+
+    // var i = 0;
+    for (var i; i < jsonDecodeGates.entries.length; i++) {
+      if (i < 10) {
+        jsonDecodeGates[i]!
+            .entries
+            .forEach((element) => print(element.value['lat']));
       }
+
+      // if (i < 10) {
+      //   if (i.value['lat'].toString() == latitude &&
+      //       i.value['long'].toString() == longitude) {
+      //     print((i.value['height']).toString());
+      //     height = (i.value['height']).toString();
+      //     return height;
+      //   }
+      // }
     }
   }
 
@@ -134,7 +143,7 @@ class GateManagementViewModel extends ChangeNotifier {
       return;
     }
 
-    print(currentField.gateIds);
+    // print(currentField.gateIds);
 
     // TODO: You can access the current field's list of gate id's using
     //  currentField.gateIds. Should be able to send those id's to app server
@@ -150,10 +159,10 @@ class GateManagementViewModel extends ChangeNotifier {
             },
             body: jsonEncode(<String, String>{"gateID": g}));
 
-        print(gateData.body);
+        // print(gateData.body);
 
         Map<String, dynamic> data = jsonDecode(gateData.body);
-        print(data);
+        // print(data);
 
         for (var d in data.entries) {
           markers.add(Marker(
