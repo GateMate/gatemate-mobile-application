@@ -114,23 +114,32 @@ class GateManagementViewModel extends ChangeNotifier {
 
     // print(jsonDecodeGates[1]!.entries.toString());
 
-    // var i = 0;
-    for (var i; i < jsonDecodeGates.entries.length; i++) {
-      if (i < 10) {
-        jsonDecodeGates[i]!
-            .entries
-            .forEach((element) => print(element.value['lat']));
+    for (var gates in jsonDecodeGates.entries) {
+      if (gates.value['lat'].toString() == latitude &&
+          gates.value['long'].toString() == longitude) {
+        print((gates.value['height']).toString());
+        height = (gates.value['height']).toString();
+        return height;
       }
-
-      // if (i < 10) {
-      //   if (i.value['lat'].toString() == latitude &&
-      //       i.value['long'].toString() == longitude) {
-      //     print((i.value['height']).toString());
-      //     height = (i.value['height']).toString();
-      //     return height;
-      //   }
-      // }
     }
+
+    // var i = 0;
+    // for (var i; i < jsonDecodeGates.entries.length; i++) {
+    //   // if (i < 10) {
+    //   //   jsonDecodeGates[i]!
+    //   //       .entries
+    //   //       .forEach((element) => print(element.value['lat']));
+    //   // }
+
+    //   if (i < 10) {
+    //     if (i.value['lat'].toString() == latitude &&
+    //         i.value['long'].toString() == longitude) {
+    //       print((i.value['height']).toString());
+    //       height = (i.value['height']).toString();
+    //       return height;
+    //     }
+    //   }
+    // }
   }
 
   getGates(String token) async {

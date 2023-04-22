@@ -8,6 +8,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:gatemate_mobile/model/data/gate.dart';
+import 'package:gatemate_mobile/model/viewmodels/gate_management_view_model.dart';
+import 'package:gatemate_mobile/view/gate_management/gate_management_view.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
@@ -17,47 +19,10 @@ int markerId = 0;
 
 class ManageMultipleGatesViewModel extends ChangeNotifier {
   final _db = FirebaseFirestore.instance;
+
   List<Marker> markers = [];
   var gateHeight = 0.0;
   var idToUpdate = "";
-
-  // void setGateHeight(
-  //     String latitude, String longitude, String gateHeight) async {
-  //   print("HERE");
-  //   FirebaseFirestore.instance
-  //       .collection("gates_test")
-  //       .where('lat', isEqualTo: latitude)
-  //       .where('long', isEqualTo: longitude)
-  //       .get()
-  //       .then((value) {
-  //     value.docs.forEach((element) async {
-  //       print(element.id);
-  //       DocumentSnapshot ds = (await FirebaseFirestore.instance
-  //               .collection("gates_test")
-  //               .doc(element.id))
-  //           .update({"gate_height": gateHeight}) as DocumentSnapshot<Object?>;
-  //       // return ds;
-  //     });
-  //   });
-
-  //   createAlbum(gateHeight);
-  // }
-
-  // Future<http.Response> createAlbum(String height) async {
-  //   if (kDebugMode) {
-  //     // ignore: prefer_interpolation_to_compose_strings
-  //     print("HEIGHT" + height);
-  //   }
-  //   return await http.post(
-  //     Uri.parse('http://10.0.2.2:5000/setGateHeight'),
-  //     headers: <String, String>{
-  //       'Content-Type': 'application/json; charset=UTF-8',
-  //     },
-  //     body: jsonEncode(<String, String>{
-  //       'height': height,
-  //     }),
-  //   );
-  // }
 
   Future<List<Marker>> getGates() async {
     final snapshot = await _db.collection("gates_test").get();

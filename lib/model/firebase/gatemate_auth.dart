@@ -64,7 +64,7 @@ class GateMateAuth extends ChangeNotifier {
       Logger().e(errorMessage);
       throw const GateMateAuthException(errorMessage);
     }
-    userSnapshot.getIdToken().then((value) => print(value));
+    // userSnapshot.getIdToken().then((value) => print(value));
 
     return userSnapshot.getIdToken();
   }
