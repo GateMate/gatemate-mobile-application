@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hexcolor/hexcolor.dart';
 
 class ConfirmationButton extends StatelessWidget {
   final Function()? onPressed;
