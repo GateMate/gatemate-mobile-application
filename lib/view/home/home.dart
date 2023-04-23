@@ -34,11 +34,13 @@ class _HomeViewState extends State<HomeView> {
     // initialized.
     _checkLoginStatus();
     _authProvider.addListener(_checkLoginStatus);
+    _fieldsViewmodel.addListener(_refreshTiles);
   }
 
   @override
   void dispose() {
     _authProvider.removeListener(_checkLoginStatus);
+    _fieldsViewmodel.removeListener(_refreshTiles);
     super.dispose();
   }
 
@@ -48,69 +50,70 @@ class _HomeViewState extends State<HomeView> {
       appBar: AppBar(
         title: const Text('GateMate Home'),
       ),
-      body: ChangeNotifierProvider(
-        create: (context) => _fieldsViewmodel,
-        child: FutureBuilder(
-          future: _fieldsViewmodel.allFields,
-          builder: (context, snapshot) {
-            // === Error retrieving data: throw exception ===
-            if (snapshot.hasError) {
-              final errorMessage =
-                  'Error displaying fields grid!\n${snapshot.error}';
+      body: FutureBuilder(
+        future: _fieldsViewmodel.allFields,
+        builder: (context, snapshot) {
+          // === Error retrieving data: throw exception ===
+          if (snapshot.hasError) {
+            final errorMessage =
+                'Error displaying fields grid!\n${snapshot.error}';
 
-              Logger().e(errorMessage);
-              throw Exception(errorMessage);
-            }
+            Logger().e(errorMessage);
+            throw Exception(errorMessage);
+          }
 
-            // === Data not yet received: show progress indicator ===
-            if (!snapshot.hasData) {
-              return const Center(child: CircularProgressIndicator());
-            }
+          // === Data not yet received: show progress indicator ===
+          if (!snapshot.hasData) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-            final selectedField = _fieldsViewmodel.currentFieldSelection;
+          final selectedField = _fieldsViewmodel.currentFieldSelection;
 
-            // === Data retrieved successfully ===
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                ),
-                itemCount: snapshot.data!.length,
-                itemBuilder: ((context, index) {
-                  // Access field corresponding to this grid tile
-                  final field = snapshot.data?.entries.elementAt(index).value;
-                  if (field == null) return null;
-
-                  // Determine if this is the currently selected field
-                  var isSelection = false;
-                  if (selectedField != null && field.id == selectedField.id) {
-                    isSelection = true;
-                  }
-
-                  return Padding(
-                    padding: const EdgeInsets.all(6.0),
-                    child: FieldGridTile(
-                      fieldName: field.name,
-                      isSelection: isSelection,
-                      onTap: () {
-                        final fieldId = field.id;
-                        if (fieldId != null) {
-                          _fieldsViewmodel.selectField(fieldId);
-                        }
-                      },
-                    ),
-                  );
-                }),
+          // === Data retrieved successfully ===
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
               ),
-            );
-          },
-        ),
+              itemCount: snapshot.data!.length,
+              itemBuilder: ((context, index) {
+                // Access field corresponding to this grid tile
+                final field = snapshot.data?.entries.elementAt(index).value;
+                if (field == null) return null;
+
+                // Determine if this is the currently selected field
+                var isSelection = false;
+                if (selectedField != null && field.id == selectedField.id) {
+                  isSelection = true;
+                }
+
+                return Padding(
+                  padding: const EdgeInsets.all(6.0),
+                  child: FieldGridTile(
+                    fieldName: field.name,
+                    isSelection: isSelection,
+                    onTap: () {
+                      final fieldId = field.id;
+                      if (fieldId != null) {
+                        _fieldsViewmodel.selectField(fieldId);
+                      }
+                    },
+                  ),
+                );
+              }),
+            ),
+          );
+        },
       ),
       drawer: const Drawer(
         child: NavigationDrawer(),
       ),
     );
+  }
+
+  void _refreshTiles() {
+    setState(() {});
   }
 
   void _checkLoginStatus() {
