@@ -116,14 +116,22 @@ class _NewActionDialogState extends State<NewActionDialog> {
     void Function()? onSubmit;
     if (!_submitting) {
       onSubmit = () {
-        // TODO: This is broken. Probably just remove this, it's useless
         if (_inputTextController.text.trim().isNotEmpty) {
-          GetIt.I<ActionCenterViewModel>().createToDoItem(
-            _inputTextController.text,
-          );
+          final actionCenterViewmodel = GetIt.I<ActionCenterViewModel>();
+
+          // Used to show progress indicator
           setState(() {
             _submitting = true;
           });
+
+          actionCenterViewmodel
+              .createToDoItem(
+                _inputTextController.text,
+              )
+              .then(
+                (_) => actionCenterViewmodel.refresh(),
+              );
+              
           // TODO: Loading animation
         } else {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

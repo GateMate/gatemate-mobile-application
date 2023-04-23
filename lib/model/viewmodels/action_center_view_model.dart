@@ -20,8 +20,6 @@ class ActionCenterViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// TODO: This currently doesn't work, but I think it has something to do
-  ///  with the server.
   Future<ActionItem> createToDoItem(String title) async {
     String authToken;
     try {
