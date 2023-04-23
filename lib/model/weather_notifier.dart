@@ -82,6 +82,8 @@ class WeatherNotifier {
     final sharedPreferences = await SharedPreferences.getInstance();
     final lastNotificationId = sharedPreferences.getInt(preferencesKey);
 
+    // TODO: I think it may be possible for multiple processes to create a race
+    //  condition when accessing this shared preferences value
     final notificationId =
         lastNotificationId == null ? 0 : lastNotificationId + 1;
     sharedPreferences.setInt(preferencesKey, notificationId);
