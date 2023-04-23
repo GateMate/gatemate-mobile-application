@@ -67,26 +67,42 @@ class _HomeViewState extends State<HomeView> {
               return const Center(child: CircularProgressIndicator());
             }
 
-            // === Data retrieved successfully ===
-            return GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-              ),
-              itemCount: snapshot.data!.length,
-              itemBuilder: ((context, index) {
-                final field = snapshot.data?.entries.elementAt(index).value;
-                if (field == null) return null;
+            final selectedField = _fieldsViewmodel.currentFieldSelection;
 
-                return FieldGridTile(
-                  fieldName: field.name,
-                  onTap: () {
-                    final fieldId = field.id;
-                    if (fieldId != null) {
-                      _fieldsViewmodel.selectField(fieldId);
-                    }
-                  },
-                );
-              }),
+            // === Data retrieved successfully ===
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                ),
+                itemCount: snapshot.data!.length,
+                itemBuilder: ((context, index) {
+                  // Access field corresponding to this grid tile
+                  final field = snapshot.data?.entries.elementAt(index).value;
+                  if (field == null) return null;
+
+                  // Determine if this is the currently selected field
+                  var isSelection = false;
+                  if (selectedField != null && field.id == selectedField.id) {
+                    isSelection = true;
+                  }
+
+                  return Padding(
+                    padding: const EdgeInsets.all(6.0),
+                    child: FieldGridTile(
+                      fieldName: field.name,
+                      isSelection: isSelection,
+                      onTap: () {
+                        final fieldId = field.id;
+                        if (fieldId != null) {
+                          _fieldsViewmodel.selectField(fieldId);
+                        }
+                      },
+                    ),
+                  );
+                }),
+              ),
             );
           },
         ),
