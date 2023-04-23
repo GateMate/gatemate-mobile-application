@@ -22,12 +22,16 @@ class GateManagementRoute extends StatefulWidget {
 }
 
 class _GateManagementState extends State<GateManagementRoute> {
-  GateManagementViewModel _gateManagementViewModel = GateManagementViewModel();
+  final _gateManagementViewModel = GateManagementViewModel();
   final _authProvider = GetIt.I<GateMateAuth>();
-  String user = "";
+
+  final LatLng _center = LatLng(36.06889761358809, -94.17477200170791);
+  final PopupController _popupController = PopupController();
+
+  int polyId = 0;
 
   @override
-  void InitState() {
+  void initState() {
     super.initState();
     _checkLoginStatus();
     _authProvider.addListener(_checkLoginStatus);
@@ -38,11 +42,6 @@ class _GateManagementState extends State<GateManagementRoute> {
     _authProvider.removeListener(_checkLoginStatus);
     super.dispose();
   }
-
-  int polyId = 0;
-
-  final LatLng _center = LatLng(36.06889761358809, -94.17477200170791);
-  final PopupController _popupController = PopupController();
 
   void _checkLoginStatus() {
     // TODO: Ensure 'null' is the correct thing to check for
@@ -124,14 +123,15 @@ class _GateManagementState extends State<GateManagementRoute> {
                       //   ],
                       // )),
                       PopupMarkerLayerWidget(
-                          options: PopupMarkerLayerOptions(
-                        popupController: _popupController,
-                        markers: [
-                          for (int i = 0; i < markers.length; i++) markers[i]
-                        ],
-                        popupBuilder: (BuildContext context, Marker marker) =>
-                            MarkerPopup(marker),
-                      )),
+                        options: PopupMarkerLayerOptions(
+                          popupController: _popupController,
+                          markers: [
+                            for (int i = 0; i < markers.length; i++) markers[i]
+                          ],
+                          popupBuilder: (BuildContext context, Marker marker) =>
+                              MarkerPopup(marker),
+                        ),
+                      ),
                     ],
                   ),
                 ),
