@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:hexcolor/hexcolor.dart';
 
 class ConfirmationButton extends StatelessWidget {
   final Function()? onPressed;
   final String buttonText;
+  final Color? color;
 
   const ConfirmationButton({
     super.key,
     required this.onPressed,
     required this.buttonText,
+    this.color,
   });
 
   @override
   Widget build(BuildContext context) {
+    final defaultColor = Theme.of(context).colorScheme.tertiary;
+
     return GestureDetector(
       onTap: onPressed,
       child: Padding(
@@ -21,7 +24,7 @@ class ConfirmationButton extends StatelessWidget {
           padding: const EdgeInsets.all(20),
           width: double.infinity,
           decoration: BoxDecoration(
-            color: HexColor('#44564a'),
+            color: color ?? defaultColor,
             borderRadius: BorderRadius.circular(30),
           ),
           child: Text(

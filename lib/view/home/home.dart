@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:gatemate_mobile/model/viewmodels/fields_view_model.dart';
 import 'package:gatemate_mobile/view/action_center/action_center_view.dart';
@@ -9,11 +7,12 @@ import 'package:gatemate_mobile/view/login/login.dart';
 import 'package:gatemate_mobile/view/manage_multiple_gates/manage_multiple_gates.dart';
 import 'package:gatemate_mobile/view/settings/settings_view.dart';
 import 'package:get_it/get_it.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
-import 'package:workmanager/workmanager.dart';
 
 import '../../model/firebase/gatemate_auth.dart';
 import '../settings/field_selection_row.dart';
+import 'field_grid_tile.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -24,6 +23,7 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   final _authProvider = GetIt.I<GateMateAuth>();
+  final _fieldsViewmodel = GetIt.I<FieldsViewModel>();
 
   @override
   void initState() {
@@ -34,11 +34,13 @@ class _HomeViewState extends State<HomeView> {
     // initialized.
     _checkLoginStatus();
     _authProvider.addListener(_checkLoginStatus);
+    _fieldsViewmodel.addListener(_refreshTiles);
   }
 
   @override
   void dispose() {
     _authProvider.removeListener(_checkLoginStatus);
+    _fieldsViewmodel.removeListener(_refreshTiles);
     super.dispose();
   }
 
@@ -48,32 +50,61 @@ class _HomeViewState extends State<HomeView> {
       appBar: AppBar(
         title: const Text('GateMate Home'),
       ),
-      body: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Center(
-            child: ElevatedButton(
-              onPressed: _authProvider.signOut,
-              child: const Text('Sign Out'),
-            ),
-          ),
-          const SizedBox(width: 10),
-          Center(
-            child: ElevatedButton(
-              onPressed: () async {
-                Workmanager().registerOneOffTask(
-                  'field-2',
-                  'weather-fetching-test-task',
-                  inputData: {
-                    'latitude': 8.0,
-                    'longitude': 170.1,
-                  },
+      body: FutureBuilder(
+        future: _fieldsViewmodel.allFields,
+        builder: (context, snapshot) {
+          // === Error retrieving data: throw exception ===
+          if (snapshot.hasError) {
+            final errorMessage =
+                'Error displaying fields grid!\n${snapshot.error}';
+
+            Logger().e(errorMessage);
+            throw Exception(errorMessage);
+          }
+
+          // === Data not yet received: show progress indicator ===
+          if (!snapshot.hasData) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          final selectedField = _fieldsViewmodel.currentFieldSelection;
+
+          // === Data retrieved successfully ===
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+              ),
+              itemCount: snapshot.data!.length,
+              itemBuilder: ((context, index) {
+                // Access field corresponding to this grid tile
+                final field = snapshot.data?.entries.elementAt(index).value;
+                if (field == null) return null;
+
+                // Determine if this is the currently selected field
+                var isSelection = false;
+                if (selectedField != null && field.id == selectedField.id) {
+                  isSelection = true;
+                }
+
+                return Padding(
+                  padding: const EdgeInsets.all(6.0),
+                  child: FieldGridTile(
+                    fieldName: field.name,
+                    isSelection: isSelection,
+                    onTap: () {
+                      final fieldId = field.id;
+                      if (fieldId != null) {
+                        _fieldsViewmodel.selectField(fieldId);
+                      }
+                    },
+                  ),
                 );
-              },
-              child: const Text('Notification Test'),
+              }),
             ),
-          ),
-        ],
+          );
+        },
       ),
       drawer: const Drawer(
         child: NavigationDrawer(),
@@ -81,8 +112,11 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
+  void _refreshTiles() {
+    setState(() {});
+  }
+
   void _checkLoginStatus() {
-    // TODO: Ensure 'null' is the correct thing to check for
     if (_authProvider.currentUser == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.pushReplacement(
@@ -92,8 +126,6 @@ class _HomeViewState extends State<HomeView> {
           ),
         );
       });
-    } else {
-      // TODO: Either do something here or remove "else"
     }
   }
 }
@@ -103,28 +135,18 @@ class NavigationDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      // TODO: Should not be creating a new instance of viewmodel here
-      // TODO: Use GetIt
-      create: (context) => FieldsViewModel(),
-      child: _drawer(context),
-    );
-  }
+    final authProvider = GetIt.I<GateMateAuth>();
 
-  Widget _drawer(BuildContext context) {
-    final _authProvider = GetIt.I<GateMateAuth>();
     return Drawer(
       elevation: 16.0,
       child: Column(
-        children: <Widget>[
+        children: [
           UserAccountsDrawerHeader(
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.primary,
             ),
-            // TODO: Populate with data from Firebase authentication
-            accountName: Text("Welcome"),
-            // Text(_authProvider.currentUser!.displayName.toString()),
-            accountEmail: Text(_authProvider.currentUser!.email.toString()),
+            accountName: const Text("Welcome"),
+            accountEmail: Text(authProvider.currentUser!.email.toString()),
           ),
           const Text(
             'Current Field Selection: ',
@@ -135,81 +157,81 @@ class NavigationDrawer extends StatelessWidget {
             color: Colors.green[700],
             thickness: 2.0,
           ),
-          ListTile(
-            title: const Text('Action Center'),
-            onTap: () {
-              // Update the state of the app
-              // ...
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const ActionCenterView(),
-                ),
-              );
-            },
-            trailing: const Icon(Icons.arrow_forward_ios),
-          ),
-          ListTile(
-            title: const Text('Add Gate'),
-            onTap: () {
-              // Update the state of the app
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AddGateView(),
-                ),
-              );
-              // Then close the drawer
-              // Navigator.pop(context);
-            },
-            trailing: const Icon(Icons.arrow_forward_ios),
-          ),
-          ListTile(
-            title: const Text('Gate Management'),
-            onTap: () {
-              // Update the state of the app
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => GateManagementRoute(),
-                ),
-              );
-              // Then close the drawer
-              // Navigator.pop(context);
-            },
-            trailing: const Icon(Icons.arrow_forward_ios),
-          ),
-          ListTile(
-            title: const Text('Manage Multiple Gates'),
-            onTap: () {
-              // Update the state of the app
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => MultipleGateManagementRoute()),
-              );
-              // Then close the drawer
-              // Navigator.pop(context);
-            },
-            trailing: const Icon(Icons.arrow_forward_ios),
-          ),
-          ListTile(
-            title: const Text('Settings'),
-            onTap: () {
-              // Update the state of the app
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const SettingsView(),
-                ),
-              );
-              // Then close the drawer
-              // Navigator.pop(context);
-            },
-            trailing: const Icon(Icons.arrow_forward_ios),
-          ),
+          Flexible(child: _routeOptions(context)),
         ],
       ),
+    );
+  }
+
+  Widget _routeOptions(BuildContext context) {
+    return ListView(
+      children: [
+        ListTile(
+          title: const Text('Action Center'),
+          onTap: () {
+            // Update the state of the app
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ActionCenterView(),
+              ),
+            );
+          },
+          trailing: const Icon(Icons.arrow_forward_ios),
+        ),
+        ListTile(
+          title: const Text('Add Gate'),
+          onTap: () {
+            // Update the state of the app
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const AddGateView(),
+              ),
+            );
+          },
+          trailing: const Icon(Icons.arrow_forward_ios),
+        ),
+        ListTile(
+          title: const Text('Gate Management'),
+          onTap: () {
+            // Update the state of the app
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => GateManagementRoute(),
+              ),
+            );
+          },
+          trailing: const Icon(Icons.arrow_forward_ios),
+        ),
+        ListTile(
+          title: const Text('Manage Multiple Gates'),
+          onTap: () {
+            // Update the state of the app
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MultipleGateManagementRoute(),
+              ),
+            );
+          },
+          trailing: const Icon(Icons.arrow_forward_ios),
+        ),
+        ListTile(
+          title: const Text('Settings'),
+          onTap: () {
+            // Update the state of the app
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const SettingsView(),
+              ),
+            );
+          },
+          trailing: const Icon(Icons.arrow_forward_ios),
+        ),
+      ],
     );
   }
 }

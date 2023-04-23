@@ -61,7 +61,7 @@ void main() async {
   );
 
   // TODO: Move task registration to FieldViewModel initialization;
-  //       register a task for EACH field.
+  //  register a task for EACH field.
   // TODO: Cancel tasks upon signout (or check for credentials?)
 
   // Start app
