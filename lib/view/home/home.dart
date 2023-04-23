@@ -7,10 +7,12 @@ import 'package:gatemate_mobile/view/login/login.dart';
 import 'package:gatemate_mobile/view/manage_multiple_gates/manage_multiple_gates.dart';
 import 'package:gatemate_mobile/view/settings/settings_view.dart';
 import 'package:get_it/get_it.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
 import '../../model/firebase/gatemate_auth.dart';
 import '../settings/field_selection_row.dart';
+import 'field_grid_tile.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -48,21 +50,47 @@ class _HomeViewState extends State<HomeView> {
       ),
       body: ChangeNotifierProvider(
         create: (context) => _fieldsViewmodel,
-        child: Placeholder(),
+        child: FutureBuilder(
+          future: _fieldsViewmodel.allFields,
+          builder: (context, snapshot) {
+            // === Error retrieving data: throw exception ===
+            if (snapshot.hasError) {
+              final errorMessage =
+                  'Error displaying fields grid!\n${snapshot.error}';
+
+              Logger().e(errorMessage);
+              throw Exception(errorMessage);
+            }
+
+            // === Data not yet received: show progress indicator ===
+            if (!snapshot.hasData) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            // === Data retrieved successfully ===
+            return GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+              ),
+              itemCount: snapshot.data!.length,
+              itemBuilder: ((context, index) {
+                final field = snapshot.data?.entries.elementAt(index).value;
+                if (field == null) return null;
+
+                return FieldGridTile(
+                  fieldName: field.name,
+                  onTap: () {
+                    final fieldId = field.id;
+                    if (fieldId != null) {
+                      _fieldsViewmodel.selectField(fieldId);
+                    }
+                  },
+                );
+              }),
+            );
+          },
+        ),
       ),
-      // ElevatedButton(
-      //   onPressed: () async {
-      //     Workmanager().registerOneOffTask(
-      //       'field-2',
-      //       'weather-fetching-test-task',
-      //       inputData: {
-      //         'latitude': 8.0,
-      //         'longitude': 170.1,
-      //       },
-      //     );
-      //   },
-      //   child: const Text('Notification Test'),
-      // ),
       drawer: const Drawer(
         child: NavigationDrawer(),
       ),
@@ -70,7 +98,6 @@ class _HomeViewState extends State<HomeView> {
   }
 
   void _checkLoginStatus() {
-    // TODO: Ensure 'null' is the correct thing to check for
     if (_authProvider.currentUser == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.pushReplacement(
@@ -80,8 +107,6 @@ class _HomeViewState extends State<HomeView> {
           ),
         );
       });
-    } else {
-      // TODO: Either do something here or remove "else"
     }
   }
 }
