@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gatemate_mobile/model/viewmodels/fields_view_model.dart';
 import 'package:gatemate_mobile/view/settings/water_level_row.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 import 'field_selection_row.dart';
@@ -17,6 +18,14 @@ class SettingsView extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Settings'),
+          actions: [
+            IconButton(
+              onPressed: () {
+                GetIt.I<FieldsViewModel>().refresh();
+              },
+              icon: const Icon(Icons.refresh),
+            )
+          ],
         ),
         body: Padding(
           padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
