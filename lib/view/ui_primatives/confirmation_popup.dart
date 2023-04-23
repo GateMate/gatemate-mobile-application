@@ -36,31 +36,33 @@ class _ConfirmationPopupState extends State<ConfirmationPopup> {
                         borderRadius: BorderRadius.circular(40),
                       ),
                       elevation: 16,
-                      child: ListView(
-                        shrinkWrap: true,
-                        children: <Widget>[
-                          const SizedBox(height: 20),
-                          const Center(
-                            child: Text(
-                              'Are you sure you want to raise this gate?',
-                              style: TextStyle(fontSize: 20),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          Column(
-                            children: [
-                              ConfirmationButton(
-                                buttonText: "Yes, Raise Gate",
-                                onPressed: () => Navigator.pop(context),
+                      child: Expanded(
+                        child: ListView(
+                          shrinkWrap: true,
+                          children: <Widget>[
+                            const SizedBox(height: 20),
+                            const Center(
+                              child: Text(
+                                'Are you sure you want to raise this gate?',
+                                style: TextStyle(fontSize: 20),
+                                textAlign: TextAlign.center,
                               ),
-                              ConfirmationButton(
-                                buttonText: 'No, Don\'t Raise the gate',
-                                onPressed: () => Navigator.pop(context),
-                              )
-                            ],
-                          ),
-                          const SizedBox(height: 20),
-                        ],
+                            ),
+                            Column(
+                              children: [
+                                ConfirmationButton(
+                                  buttonText: "Yes, Raise Gate",
+                                  onPressed: () => Navigator.pop(context),
+                                ),
+                                ConfirmationButton(
+                                  buttonText: 'No, Don\'t Raise the gate',
+                                  onPressed: () => Navigator.pop(context),
+                                )
+                              ],
+                            ),
+                            const SizedBox(height: 20),
+                          ],
+                        ),
                       ),
                     );
                   },
@@ -80,7 +82,8 @@ class _ConfirmationPopupState extends State<ConfirmationPopup> {
                         borderRadius: BorderRadius.circular(40),
                       ),
                       elevation: 16,
-                      child: ListView(
+                      child: Expanded(
+                          child: ListView(
                         shrinkWrap: true,
                         children: <Widget>[
                           const SizedBox(height: 20),
@@ -105,7 +108,7 @@ class _ConfirmationPopupState extends State<ConfirmationPopup> {
                           ),
                           const SizedBox(height: 20),
                         ],
-                      ),
+                      )),
                     );
                   },
                 );

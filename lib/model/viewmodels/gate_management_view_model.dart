@@ -69,36 +69,6 @@ class GateManagementViewModel extends ChangeNotifier {
         }));
   }
 
-  getGateID(String latitude, String longitude, String token) async {
-    var gateData = await http.post(
-        Uri.parse('https://todo-proukhgi3a-uc.a.run.app/getGates'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': token,
-        },
-        body: jsonEncode(<String, String>{"gateID": gateDocId}));
-    // var gateData = await http
-    //     .get(Uri.parse('https://todo-proukhgi3a-uc.a.run.app/getGates'))
-    //     .then((value) => (jsonDecode(value.body) as Map).map((key, value) =>
-    //         MapEntry(key as String, value as Map<String, dynamic>)));
-
-    var jsonDecodeGates = (jsonDecode(gateData.body) as Map).map(
-        (key, value) => MapEntry(key as String, value as Map<String, dynamic>));
-
-    for (var gateID in jsonDecodeGates.entries) {
-      if (gateID.value['lat'].toString() == latitude &&
-          gateID.value['long'].toString() == longitude) {
-        gateDocId = gateID.key;
-      }
-    }
-    // for (var gateID in gateData.entries) {
-    //   if (gateID.value['lat'].toString() == latitude &&
-    //       gateID.value['long'].toString() == longitude) {
-    //     gateDocId = gateID.key;
-    //   }
-    // }
-  }
-
   getGateHeight(String latitude, String longitude, String token) async {
     var height = "";
 
@@ -160,16 +130,14 @@ class GateManagementViewModel extends ChangeNotifier {
     var gateData;
     if (currentField.gateIds.isNotEmpty) {
       for (var g in currentField.gateIds) {
-        gateData = await http.post(
-            Uri.parse('https://todo-proukhgi3a-uc.a.run.app/getGates'),
-            headers: <String, String>{
-              'Content-Type': 'application/json; charset=UTF-8',
-              'Authorization': token,
-            },
-            body: jsonEncode(<String, String>{
-              "gateID": g,
-              "fieldID": "${currentField.id}"
-            }));
+        gateData = await http.get(
+          Uri.parse(
+              'https://todo-proukhgi3a-uc.a.run.app/getGates?fieldID=${currentField.id}'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': token,
+          },
+        );
 
         // print(gateData.body);
 
@@ -199,5 +167,36 @@ class GateManagementViewModel extends ChangeNotifier {
     // }
     // print(markers.length);
     return markers;
+  }
+
+  getGateID(String latitude, String longitude, String token) async {
+    var gateData = await http.get(
+      Uri.parse(
+          'https://todo-proukhgi3a-uc.a.run.app/getGates?fieldID=${_fieldsViewModel.currentFieldSelection?.id}'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': token,
+      },
+    );
+    // var gateData = await http
+    //     .get(Uri.parse('https://todo-proukhgi3a-uc.a.run.app/getGates'))
+    //     .then((value) => (jsonDecode(value.body) as Map).map((key, value) =>
+    //         MapEntry(key as String, value as Map<String, dynamic>)));
+
+    var jsonDecodeGates = (jsonDecode(gateData.body) as Map).map(
+        (key, value) => MapEntry(key as String, value as Map<String, dynamic>));
+
+    for (var gateID in jsonDecodeGates.entries) {
+      if (gateID.value['lat'].toString() == latitude &&
+          gateID.value['long'].toString() == longitude) {
+        gateDocId = gateID.key;
+      }
+    }
+    // for (var gateID in gateData.entries) {
+    //   if (gateID.value['lat'].toString() == latitude &&
+    //       gateID.value['long'].toString() == longitude) {
+    //     gateDocId = gateID.key;
+    //   }
+    // }
   }
 }
