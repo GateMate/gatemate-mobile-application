@@ -110,8 +110,8 @@ class GateManagementViewModel extends ChangeNotifier {
 
   void deleteGates(String token, String latitude, String longitude) async {
     // final currentField = _fieldsViewModel.currentFieldSelection;
-    getGateID(latitude, longitude, token).then((value) =>
-        {print(value.toString()), deleteGate(value.toString(), token)});
+    getGateID(latitude, longitude, token)
+        .then((value) => {print(gateDocId), deleteGate(gateDocId, token)});
   }
 
   deleteGate(String gateID, String token) async {
@@ -180,9 +180,17 @@ class GateManagementViewModel extends ChangeNotifier {
   }
 
   getGateID(String latitude, String longitude, String token) async {
+    final currentField = _fieldsViewModel.currentFieldSelection;
+
+    if (currentField == null) {
+      // TODO: What to do if no field is currently selected?
+      //  Could enforce choosing a field before leaving home screen.
+      return;
+    }
+
     var gateData = await http.get(
       Uri.parse(
-          'https://todo-proukhgi3a-uc.a.run.app/getGates?fieldID=${_fieldsViewModel.currentFieldSelection?.id}'),
+          'https://todo-proukhgi3a-uc.a.run.app/getGates?fieldID=${currentField.id}'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': token,
