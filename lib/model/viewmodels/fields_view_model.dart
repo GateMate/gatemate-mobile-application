@@ -31,7 +31,9 @@ class FieldsViewModel extends ChangeNotifier {
 
   void refresh() {
     allFields = fetchFields();
-    allFields.then((value) => notifyListeners);
+    allFields.then((value) {
+      notifyListeners();
+    });
   }
 
   Future<Map<String, Field>> fetchFields() async {

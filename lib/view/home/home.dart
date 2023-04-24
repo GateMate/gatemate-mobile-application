@@ -8,7 +8,6 @@ import 'package:gatemate_mobile/view/manage_multiple_gates/manage_multiple_gates
 import 'package:gatemate_mobile/view/settings/settings_view.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
-import 'package:provider/provider.dart';
 
 import '../../model/firebase/gatemate_auth.dart';
 import '../settings/field_selection_row.dart';
