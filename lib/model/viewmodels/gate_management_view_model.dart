@@ -18,12 +18,8 @@ class GateManagementViewModel extends ChangeNotifier {
   final _fieldsViewModel = GetIt.I<FieldsViewModel>();
   var gateDocId = "";
 
-  void setGateHeight(
-    String latitude,
-    String longitude,
-    String gateHeight,
-    String token,
-  ) async {
+  void setGateHeight(String latitude, String longitude, String gateHeight,
+      String token) async {
     getGateID(latitude, longitude, token).then(
       (value) => updateHeight(latitude, longitude, gateHeight, token),
     );
@@ -112,6 +108,22 @@ class GateManagementViewModel extends ChangeNotifier {
     // }
   }
 
+  void deleteGates(String token, String latitude, String longitude) async {
+    // final currentField = _fieldsViewModel.currentFieldSelection;
+    getGateID(latitude, longitude, token).then((value) =>
+        {print(value.toString()), deleteGate(value.toString(), token)});
+  }
+
+  deleteGate(String gateID, String token) async {
+    var deletedGate = http.get(
+      Uri.parse(
+          'https://todo-proukhgi3a-uc.a.run.app/deleteGate?gateID=${gateID}'),
+      headers: <String, String>{
+        'Authorization': token,
+      },
+    );
+  }
+
   getGates(String token) async {
     // markers.clear();
     final currentField = _fieldsViewModel.currentFieldSelection;
@@ -138,8 +150,6 @@ class GateManagementViewModel extends ChangeNotifier {
             'Authorization': token,
           },
         );
-
-        // print(gateData.body);
 
         Map<String, dynamic> data = jsonDecode(gateData.body);
         // print(data);

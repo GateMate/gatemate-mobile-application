@@ -230,6 +230,15 @@ class NavigationDrawer extends StatelessWidget {
           },
           trailing: const Icon(Icons.arrow_forward_ios),
         ),
+        ListTile(
+          title: const Text('Sign out'),
+          onTap: () {
+            // Update the state of the app
+            GetIt.I<GateMateAuth>().signOut();
+            Navigator.pop(context);
+          },
+          trailing: const Icon(Icons.logout),
+        ),
       ],
     );
   }
