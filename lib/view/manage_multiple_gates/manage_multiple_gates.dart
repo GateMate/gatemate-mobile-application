@@ -133,8 +133,8 @@ class _MultipleGateManagementState extends State<MultipleGateManagementRoute> {
                               setHeight(m.point.latitude.toString(),
                                   m.point.longitude.toString()),
                             },
-                          selectedMarkers = [],
-                          selectedMarkerColors = [],
+                          selectedMarkers.clear(),
+                          selectedMarkerColors.clear(),
                           Navigator.pop(context),
                           Fluttertoast.showToast(
                               msg: "Gates Updated Successfully!",
@@ -150,8 +150,8 @@ class _MultipleGateManagementState extends State<MultipleGateManagementRoute> {
                       ConfirmationButton(
                           buttonText: 'Cancel',
                           onPressed: () => {
-                                selectedMarkers = [],
-                                selectedMarkerColors = [],
+                                selectedMarkers.clear(),
+                                selectedMarkerColors.clear(),
                                 Navigator.pop(context),
                               }),
                     ],
@@ -255,8 +255,8 @@ class _MultipleGateManagementState extends State<MultipleGateManagementRoute> {
                                 print(selectedMarkers);
                               }
                             } else {
-                              selectedMarkers = [];
-                              selectedMarkerColors = [];
+                              selectedMarkers.clear();
+                              selectedMarkerColors.clear();
                             }
                             return Text("");
                           },

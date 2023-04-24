@@ -114,6 +114,11 @@ class _MarkerPopupState extends State<MarkerPopup> {
         latitude, longitude, newLat, newLong, token);
   }
 
+  deleteGate(String latitude, String longitude) {
+    _authProvider.getAuthToken().then((value) => _gateManagementViewModel
+        .deleteGates(value.toString(), latitude, longitude));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -202,7 +207,12 @@ class _MarkerPopupState extends State<MarkerPopup> {
                   }
                 },
                 buttonText: "Update"),
-            ConfirmationButton(onPressed: () {}, buttonText: "Delete")
+            ConfirmationButton(
+                onPressed: () {
+                  deleteGate(widget.marker.point.latitude.toString(),
+                      widget.marker.point.longitude.toString());
+                },
+                buttonText: "Delete")
           ],
         ),
       ),
