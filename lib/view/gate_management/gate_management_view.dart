@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_arcgis/flutter_map_arcgis.dart';
 import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
+import 'package:gatemate_mobile/model/firebase/gatemate_auth.dart';
+import 'package:gatemate_mobile/model/viewmodels/gate_management_view_model.dart';
+import 'package:gatemate_mobile/view/login/login.dart';
+import 'package:get_it/get_it.dart';
 import 'package:latlong2/latlong.dart';
 
-import '../../model/gate_management_view_model.dart';
 import '../ui_primatives/marker_popup.dart';
 
 late int _markerIdValue;
 // Set<Marker> _markers = HashSet<Marker>();
+late List<Marker> markers = [];
 
 class GateManagementRoute extends StatefulWidget {
   GateManagementRoute({super.key});
@@ -18,21 +22,57 @@ class GateManagementRoute extends StatefulWidget {
 }
 
 class _GateManagementState extends State<GateManagementRoute> {
-  @override
-  void InitState() {
-    super.initState();
-  }
-  // GateManagementRoute({super.key});
-
-  GateManagementViewModel _gateManagementViewModel = GateManagementViewModel();
-  // final Set<Marker> markers = Set();
-  int polyId = 0;
+  final _gateManagementViewModel = GetIt.I<GateManagementViewModel>();
+  final _authProvider = GetIt.I<GateMateAuth>();
 
   final LatLng _center = LatLng(36.06889761358809, -94.17477200170791);
   final PopupController _popupController = PopupController();
 
+  int polyId = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkLoginStatus();
+    _authProvider.addListener(_checkLoginStatus);
+  }
+
+  @override
+  void dispose() {
+    _authProvider.removeListener(_checkLoginStatus);
+    super.dispose();
+  }
+
+  void _checkLoginStatus() {
+    // TODO: Ensure 'null' is the correct thing to check for
+    if (_authProvider.currentUser == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const LoginView(),
+          ),
+        );
+      });
+    } else {
+      // TODO: Either do something here or remove "else"
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    _authProvider.getAuthToken().then(
+          (value) =>
+              _gateManagementViewModel.getGates(value.toString()).then((value) {
+            if (mounted) {
+              setState(() {
+                markers = value;
+              });
+            }
+          }),
+        );
+
+    // _gateManagementViewModel.getGates();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Gate Management'),
@@ -52,7 +92,9 @@ class _GateManagementState extends State<GateManagementRoute> {
                       maxZoom: 18,
                       zoom: 9.0,
                       plugins: [EsriPlugin()],
-                      onTap: (_, __) => _popupController.hideAllPopups(),
+                      onTap: (_, __) {
+                        _popupController.hideAllPopups();
+                      },
                     ),
                     nonRotatedChildren: [
                       AttributionWidget.defaultWidget(
@@ -84,16 +126,10 @@ class _GateManagementState extends State<GateManagementRoute> {
                         options: PopupMarkerLayerOptions(
                           popupController: _popupController,
                           markers: [
-                            for (int i = 0;
-                                i < _gateManagementViewModel.markers.length;
-                                i++)
-                              _gateManagementViewModel.markers[i]
+                            for (int i = 0; i < markers.length; i++) markers[i]
                           ],
-                          // markerRotateAlignment:
-                          //     PopupMarkerLayerOptions.rotationAlignmentFor(
-                          //         AnchorAlign.top),
                           popupBuilder: (BuildContext context, Marker marker) =>
-                              ExamplePopup(marker),
+                              MarkerPopup(marker),
                         ),
                       ),
                     ],

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:gatemate_mobile/model/action_center_view_model.dart';
-import 'package:provider/provider.dart';
+import 'package:gatemate_mobile/model/viewmodels/action_center_view_model.dart';
+import 'package:get_it/get_it.dart';
 
-class ActionCenterRoute extends StatelessWidget {
-  const ActionCenterRoute({super.key});
+class ActionCenterView extends StatelessWidget {
+  const ActionCenterView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,31 +12,36 @@ class ActionCenterRoute extends StatelessWidget {
       color: theme.colorScheme.onPrimaryContainer,
     );
 
-    return ChangeNotifierProvider(
-      create: (context) => ActionCenterViewModel(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Action Center'),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
-          child: NotificationsList(style: style),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: ((context) {
-                return const NewActionDialog();
-              }),
-              barrierDismissible: true,
-            );
-          },
-          child: Icon(
-            Icons.add_rounded,
-            color: theme.colorScheme.onTertiary,
-            size: 36,
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Action Center'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              GetIt.I<ActionCenterViewModel>().refresh();
+            },
+            icon: const Icon(Icons.refresh),
           ),
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
+        child: NotificationsList(style: style),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: ((context) {
+              return const NewActionDialog();
+            }),
+            barrierDismissible: true,
+          );
+        },
+        child: Icon(
+          Icons.add_rounded,
+          color: theme.colorScheme.onTertiary,
+          size: 36,
         ),
       ),
     );
@@ -112,10 +117,21 @@ class _NewActionDialogState extends State<NewActionDialog> {
     if (!_submitting) {
       onSubmit = () {
         if (_inputTextController.text.trim().isNotEmpty) {
-          createToDoItem(_inputTextController.text);
+          final actionCenterViewmodel = GetIt.I<ActionCenterViewModel>();
+
+          // Used to show progress indicator
           setState(() {
             _submitting = true;
           });
+
+          actionCenterViewmodel
+              .createToDoItem(
+                _inputTextController.text,
+              )
+              .then(
+                (_) => actionCenterViewmodel.refresh(),
+              );
+              
           // TODO: Loading animation
         } else {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -136,7 +152,7 @@ class _NewActionDialogState extends State<NewActionDialog> {
   }
 }
 
-class NotificationsList extends StatelessWidget {
+class NotificationsList extends StatefulWidget {
   const NotificationsList({
     Key? key,
     required this.style,
@@ -145,8 +161,27 @@ class NotificationsList extends StatelessWidget {
   final TextStyle? style;
 
   @override
+  State<NotificationsList> createState() => _NotificationsListState();
+}
+
+class _NotificationsListState extends State<NotificationsList> {
+  final _viewModel = GetIt.I<ActionCenterViewModel>();
+
+  @override
+  void initState() {
+    super.initState();
+    _viewModel.addListener(_updateNotificationsList);
+  }
+
+  @override
+  void dispose() {
+    _viewModel.removeListener(_updateNotificationsList);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    var actionItems = context.watch<ActionCenterViewModel>().actionItems;
+    var actionItems = _viewModel.actionItems;
 
     return FutureBuilder(
       future: actionItems,
@@ -156,10 +191,16 @@ class NotificationsList extends StatelessWidget {
           return ListView.builder(
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
-              return Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(snapshot.data![index].title, style: style),
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      snapshot.data![index].title,
+                      style: widget.style,
+                    ),
+                  ),
                 ),
               );
             },
@@ -172,5 +213,9 @@ class NotificationsList extends StatelessWidget {
         return const Center(child: CircularProgressIndicator());
       },
     );
+  }
+
+  void _updateNotificationsList() {
+    setState(() {});
   }
 }
