@@ -4,7 +4,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:gatemate_mobile/model/firebase/gatemate_auth.dart';
 import 'package:gatemate_mobile/model/viewmodels/action_center_view_model.dart';
 import 'package:gatemate_mobile/model/viewmodels/fields_view_model.dart';
-import 'package:gatemate_mobile/view/home/home.dart';
 import 'package:gatemate_mobile/view/login/login.dart';
 import 'package:get_it/get_it.dart';
 import 'package:workmanager/workmanager.dart';
@@ -58,7 +57,7 @@ void main() async {
   // TODO: Setup for iOS use of Workmanager has not been accomplished
   Workmanager().initialize(
     callbackDispatcher,
-    isInDebugMode: true,
+    isInDebugMode: false,
   );
 
   // TODO: Move task registration to FieldViewModel initialization;
