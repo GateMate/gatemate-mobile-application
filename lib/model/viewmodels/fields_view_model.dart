@@ -7,6 +7,7 @@ import 'package:gatemate_mobile/model/firebase/gatemate_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
+import 'package:workmanager/workmanager.dart';
 
 import '../data/field.dart';
 
@@ -18,6 +19,7 @@ class FieldsViewModel extends ChangeNotifier {
 
   FieldsViewModel() {
     allFields = fetchFields();
+    allFields.then((value) => _scheduleWeatherTasks(value));
   }
 
   void selectField(String fieldId) {
@@ -124,5 +126,28 @@ class FieldsViewModel extends ChangeNotifier {
         },
       );
     }
+  }
+
+  void _scheduleWeatherTasks(Map<String, Field> allFields) async {
+    allFields.forEach((id, field) {
+      final latitude = field.northeastCoord?.latitude;
+      final longitude = field.northeastCoord?.longitude;
+
+      if (latitude == null || longitude == null) {
+        Logger().w('No northeast coordinate for field id=${field.id}');
+        return;
+      }
+
+      // TODO: Could allow user to select frequency
+      Workmanager().registerPeriodicTask(
+        'Field_$id',
+        'gatemate-weather-notification-service',
+        frequency: const Duration(hours: 3),
+        inputData: {
+          'latitude': latitude,
+          'longitude': longitude,
+        },
+      );
+    });
   }
 }
