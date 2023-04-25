@@ -15,41 +15,37 @@ class SettingsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Change this to use GetIt instead of creating a new viewmodel
-    return ChangeNotifierProvider(
-      create: (context) => FieldsViewModel(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Settings'),
-          actions: [
-            IconButton(
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Settings'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              GetIt.I<FieldsViewModel>().refresh();
+            },
+            icon: const Icon(Icons.refresh),
+          )
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
+        child: ListView(
+          // crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const FieldSelectionRow(),
+            const HorizontalDivider(),
+            const WaterLevelRow(),
+            const HorizontalDivider(),
+            const NotificationSettingsRow(),
+            const HorizontalDivider(),
+            ConfirmationButton(
               onPressed: () {
-                GetIt.I<FieldsViewModel>().refresh();
+                GetIt.I<GateMateAuth>().signOut();
+                Navigator.pop(context);
               },
-              icon: const Icon(Icons.refresh),
-            )
+              buttonText: 'Sign Out',
+            ),
           ],
-        ),
-        body: Padding(
-          padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
-          child: ListView(
-            // crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const FieldSelectionRow(),
-              const HorizontalDivider(),
-              const WaterLevelRow(),
-              const HorizontalDivider(),
-              const NotificationSettingsRow(),
-              const HorizontalDivider(),
-              ConfirmationButton(
-                onPressed: () {
-                  GetIt.I<GateMateAuth>().signOut();
-                  Navigator.pop(context);
-                },
-                buttonText: 'Sign Out',
-              ),
-            ],
-          ),
         ),
       ),
     );
