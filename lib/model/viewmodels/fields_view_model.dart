@@ -128,6 +128,8 @@ class FieldsViewModel extends ChangeNotifier {
     }
   }
 
+  /// Schedules a task that periodically checks for significant precipiation.
+  /// Silently fails if no northeast coordinate (vertices[0]) is present.
   void _scheduleWeatherTasks(Map<String, Field> allFields) async {
     allFields.forEach((id, field) {
       final latitude = field.northeastCoord?.latitude;
