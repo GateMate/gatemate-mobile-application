@@ -79,6 +79,10 @@ class _LoginMenuState extends State<_LoginMenu> {
   void initState() {
     super.initState();
 
+    // Manually check login status because the below listener will only trigger
+    // upon a change in status, which may not occur when this widget is
+    // initialized.
+    _checkLoginStatus();
     _authProvider.addListener(_checkLoginStatus);
   }
 
@@ -211,14 +215,14 @@ class _LoginMenuState extends State<_LoginMenu> {
 
   void _checkLoginStatus() {
     if (_authProvider.currentUser != null) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const HomeView(),
-        ),
-      );
-    } else {
-      // TODO: Either do something here or remove "else"
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const HomeView(),
+          ),
+        );
+      });
     }
   }
 
