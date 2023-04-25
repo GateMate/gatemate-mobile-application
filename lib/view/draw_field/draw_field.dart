@@ -32,7 +32,7 @@ class AddFieldRoute extends StatefulWidget {
 }
 
 class _AddFieldRoute extends State<AddFieldRoute> {
-  AddFieldModel addFieldModel = AddFieldModel();
+  final addFieldModel = AddFieldModel();
   final _authProvider = GetIt.I<GateMateAuth>();
   final LatLng _center = LatLng(36.06889761358809, -94.17477200170791);
   final PopupController _popupController = PopupController();
@@ -56,7 +56,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
   final polyLat4Controller = TextEditingController();
   final polyLong4Controller = TextEditingController();
   final fieldNameController = TextEditingController();
-  final _fieldsViewModel = FieldsViewModel();
+  final _fieldsViewModel = GetIt.I<FieldsViewModel>();
   late var poly1LatLng;
   late var poly2LatLng;
   late var poly3LatLng;

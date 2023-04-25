@@ -29,14 +29,13 @@ class MultipleGateManagementRoute extends StatefulWidget {
 }
 
 class _MultipleGateManagementState extends State<MultipleGateManagementRoute> {
-  ManageMultipleGatesViewModel _manageMultipleGatesViewModel =
-      ManageMultipleGatesViewModel();
-  GateManagementViewModel _gateManagementViewModel = GateManagementViewModel();
+  final _manageMultipleGatesViewModel = ManageMultipleGatesViewModel();
+  final _gateManagementViewModel = GetIt.I<GateManagementViewModel>();
   final _authProvider = GetIt.I<GateMateAuth>();
   final gateHeightController = TextEditingController();
 
   @override
-  void InitState() {
+  void initState() {
     super.initState();
     gateHeightController.addListener(
       () {},

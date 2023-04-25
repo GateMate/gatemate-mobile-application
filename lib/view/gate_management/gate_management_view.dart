@@ -22,7 +22,7 @@ class GateManagementRoute extends StatefulWidget {
 }
 
 class _GateManagementState extends State<GateManagementRoute> {
-  final _gateManagementViewModel = GateManagementViewModel();
+  final _gateManagementViewModel = GetIt.I<GateManagementViewModel>();
   final _authProvider = GetIt.I<GateMateAuth>();
 
   final LatLng _center = LatLng(36.06889761358809, -94.17477200170791);

@@ -4,6 +4,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:gatemate_mobile/model/firebase/gatemate_auth.dart';
 import 'package:gatemate_mobile/model/viewmodels/action_center_view_model.dart';
 import 'package:gatemate_mobile/model/viewmodels/fields_view_model.dart';
+import 'package:gatemate_mobile/model/viewmodels/gate_management_view_model.dart';
 import 'package:gatemate_mobile/view/login/login.dart';
 import 'package:get_it/get_it.dart';
 import 'package:workmanager/workmanager.dart';
@@ -24,6 +25,7 @@ void main() async {
     () => ActionCenterViewModel(),
   );
   getIt.registerLazySingleton<FieldsViewModel>(() => FieldsViewModel());
+  getIt.registerLazySingleton<GateManagementViewModel>(() => GateManagementViewModel());
 
   // flutter_local_notifications initialization
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
