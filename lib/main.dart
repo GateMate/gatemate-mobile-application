@@ -57,7 +57,7 @@ void main() async {
   // TODO: Setup for iOS use of Workmanager has not been accomplished
   Workmanager().initialize(
     callbackDispatcher,
-    isInDebugMode: true,
+    isInDebugMode: false,
   );
 
   // TODO: Move task registration to FieldViewModel initialization;
