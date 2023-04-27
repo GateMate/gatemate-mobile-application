@@ -778,80 +778,77 @@ class _AddFieldRoute extends State<AddFieldRoute> {
         ),
         body: Stack(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Flexible(
-                    child: FlutterMap(
-                      options: MapOptions(
-                        center: LatLng(36.133512, -94.121556),
-                        allowPanningOnScrollingParent: false,
-                        // center: LatLng(47.925812, 106.919831),
-                        maxZoom: 18,
-                        zoom: 9.0,
-                        onTap: (tapPosition, point) {
-                          setState(() {
-                            var gate = Marker(
-                              point: point,
-                              builder: (_) => const Icon(
-                                Icons.roller_shades_outlined,
-                                size: 25,
-                              ),
-                            );
-                            gates.add(gate);
-                            _authProvider.getAuthToken().then(
-                                  (value) => addFieldModel.addToFB(
-                                    gate,
-                                    fieldID,
-                                    value.toString(),
-                                  ),
-                                );
-                          });
-                        },
-                        plugins: [EsriPlugin()],
-                      ),
-                      //   )
-                      // ],
-                      children: [
-                        TileLayerWidget(
-                          options: TileLayerOptions(
-                            urlTemplate:
-                                'https://services.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}?apiKey=AAPK9832e94d28094f39a7c33300e31ddd28P3dyFrvyoHAnYo3etV-ZrnsdZdCGXg2nG7HmfduCx6PE8v2IAVVOnSbtncioU578',
-                            subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
-                            tileProvider: NonCachingNetworkTileProvider(),
-                            // backgroundColor: Colors.transparent,
-                          ),
-                        ),
-                        PolygonLayerWidget(
-                          options: PolygonLayerOptions(
-                            polygons: polygons +
-                                [
-                                  Polygon(
-                                    points: polygonList,
-                                    borderStrokeWidth: 5.0,
-                                    borderColor: Colors.black,
-                                  ),
-                                ],
-                          ),
-                        ),
-                        MarkerLayerWidget(
-                          options: MarkerLayerOptions(markers: markers + gates),
-                        ),
-                        Container(
-                          alignment: Alignment.bottomRight,
-                          padding: const EdgeInsets.all(10.0),
-                          child: _getFab(),
-                        ),
-                        Container(
-                          alignment: Alignment.topCenter,
-                          child: getText(),
-                        ),
-                      ],
+            Column(
+              children: [
+                Container(
+                  alignment: Alignment.topCenter,
+                  child: getText(),
+                ),
+                Flexible(
+                  child: FlutterMap(
+                    options: MapOptions(
+                      center: LatLng(36.133512, -94.121556),
+                      allowPanningOnScrollingParent: false,
+                      // center: LatLng(47.925812, 106.919831),
+                      maxZoom: 18,
+                      zoom: 9.0,
+                      onTap: (tapPosition, point) {
+                        setState(() {
+                          var gate = Marker(
+                            point: point,
+                            builder: (_) => const Icon(
+                              Icons.roller_shades_outlined,
+                              size: 25,
+                            ),
+                          );
+                          gates.add(gate);
+                          _authProvider.getAuthToken().then(
+                                (value) => addFieldModel.addToFB(
+                                  gate,
+                                  fieldID,
+                                  value.toString(),
+                                ),
+                              );
+                        });
+                      },
+                      plugins: [EsriPlugin()],
                     ),
+                    //   )
+                    // ],
+                    children: [
+                      TileLayerWidget(
+                        options: TileLayerOptions(
+                          urlTemplate:
+                              'https://services.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}?apiKey=AAPK9832e94d28094f39a7c33300e31ddd28P3dyFrvyoHAnYo3etV-ZrnsdZdCGXg2nG7HmfduCx6PE8v2IAVVOnSbtncioU578',
+                          subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+                          tileProvider: NonCachingNetworkTileProvider(),
+                          // backgroundColor: Colors.transparent,
+                        ),
+                      ),
+                      PolygonLayerWidget(
+                        options: PolygonLayerOptions(
+                          polygons: polygons +
+                              [
+                                Polygon(
+                                  points: polygonList,
+                                  borderStrokeWidth: 5.0,
+                                  borderColor: Colors.black,
+                                ),
+                              ],
+                        ),
+                      ),
+                      MarkerLayerWidget(
+                        options: MarkerLayerOptions(markers: markers + gates),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
+            ),
+            Container(
+              alignment: Alignment.bottomRight,
+              padding: const EdgeInsets.all(10.0),
+              child: _getFab(),
             ),
           ],
         ),
