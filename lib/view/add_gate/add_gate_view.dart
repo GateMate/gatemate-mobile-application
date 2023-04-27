@@ -111,72 +111,69 @@ class _AddGateState extends State<AddGateView> {
             borderRadius: BorderRadius.circular(40),
           ),
           elevation: 16,
-          child: Expanded(
-            child: ListView(
-              shrinkWrap: true,
-              children: <Widget>[
-                const SizedBox(height: 20),
-                Column(
-                  children: [
-                    const Text(
-                      'Enter the Latitude and Longitude To Add a Gate Marker at that Location:',
-                      style: TextStyle(fontSize: 20),
-                      textAlign: TextAlign.center,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: ListTile(
-                              contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 0,
-                                vertical: 0,
-                              ),
-                              subtitle: CustomInputField(
-                                inputController: addMarkerLatController,
-                                hintText: "Lat",
-                                obscureText: false,
-                                prefixIcon: const Icon(Icons.my_location),
-                              ),
+          child: ListView(
+            shrinkWrap: true,
+            children: [
+              const SizedBox(height: 20),
+              Column(
+                children: [
+                  const Text(
+                    'Enter the Latitude and Longitude To Add a Gate Marker at that Location:',
+                    style: TextStyle(fontSize: 20),
+                    textAlign: TextAlign.center,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: ListTile(
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 0,
+                              vertical: 0,
+                            ),
+                            subtitle: CustomInputField(
+                              inputController: addMarkerLatController,
+                              hintText: "Lat",
+                              obscureText: false,
+                              prefixIcon: const Icon(Icons.my_location),
                             ),
                           ),
-                          const SizedBox(width: 6),
-                          Expanded(
-                            child: ListTile(
-                              contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 0,
-                                vertical: 0,
-                              ),
-                              subtitle: CustomInputField(
-                                inputController: addMarkerLongController,
-                                hintText: "Long",
-                                obscureText: false,
-                                prefixIcon: const Icon(Icons.my_location),
-                              ),
+                        ),
+                        const SizedBox(width: 6),
+                        Expanded(
+                          child: ListTile(
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 0,
+                              vertical: 0,
+                            ),
+                            subtitle: CustomInputField(
+                              inputController: addMarkerLongController,
+                              hintText: "Long",
+                              obscureText: false,
+                              prefixIcon: const Icon(Icons.my_location),
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                Column(
-                  children: [
-                    ConfirmationButton(
-                      buttonText: 'Add Gate',
-                      onPressed: () => setState(
-                        () {
-                          addMarker();
-                          Navigator.pop(context);
-                        },
-                      ),
+                  ),
+                ],
+              ),
+              Column(
+                children: [
+                  ConfirmationButton(
+                    buttonText: 'Add Gate',
+                    onPressed: () => setState(
+                      () {
+                        addMarker();
+                        Navigator.pop(context);
+                      },
                     ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-              ],
-            ),
+                  ),
+                ],
+              ),
+            ],
           ),
         );
       },
