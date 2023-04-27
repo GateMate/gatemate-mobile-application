@@ -99,8 +99,7 @@ class _MultipleGateManagementState extends State<MultipleGateManagementRoute> {
                 borderRadius: BorderRadius.circular(40),
               ),
               elevation: 16,
-              child: Expanded(
-                  child: ListView(shrinkWrap: true, children: <Widget>[
+              child: ListView(shrinkWrap: true, children: <Widget>[
                 const SizedBox(height: 20),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -156,7 +155,7 @@ class _MultipleGateManagementState extends State<MultipleGateManagementRoute> {
                     ],
                   ),
                 ),
-              ])));
+              ]));
         });
   }
 
