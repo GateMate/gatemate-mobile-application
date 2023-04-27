@@ -241,21 +241,28 @@ class _MultipleGateManagementState extends State<MultipleGateManagementRoute> {
                           //     MarkerPopup(marker),
                           selectedMarkerBuilder: (context, marker) {
                             print("TAP");
-                            if (selectedMarkers.length < 3) {
-                              if (selectedMarkers.contains(marker) == false) {
-                                selectedMarkers.add(marker);
-                                selectedMarkerColors.add(Marker(
-                                  builder: (_) => const Icon(
-                                      Icons.roller_shades_outlined,
-                                      color: Colors.red,
-                                      size: 25),
-                                  point: marker.point,
-                                ));
-                                print(selectedMarkers);
+                            if (selectedMarkerColors.contains(marker)) {
+                              for (int i = 0;
+                                  i < selectedMarkerColors.length;
+                                  i++) {
+                                if (selectedMarkerColors[i].point ==
+                                    marker.point) {
+                                  selectedMarkerColors.removeAt(i);
+                                  selectedMarkers.removeAt(i);
+                                }
                               }
+                            }
+                            if (selectedMarkers.contains(marker)) {
+                              print(selectedMarkers);
                             } else {
-                              selectedMarkers.clear();
-                              selectedMarkerColors.clear();
+                              selectedMarkers.add(marker);
+                              selectedMarkerColors.add(Marker(
+                                builder: (_) => const Icon(
+                                    Icons.roller_shades_outlined,
+                                    color: Colors.red,
+                                    size: 25),
+                                point: marker.point,
+                              ));
                             }
                             return Text("");
                           },

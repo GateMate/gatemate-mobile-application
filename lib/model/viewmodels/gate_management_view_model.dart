@@ -158,8 +158,7 @@ class GateManagementViewModel extends ChangeNotifier {
           markers.add(Marker(
               point: LatLng(double.parse('${d.value['lat']!}'),
                   double.parse('${d.value['long']!}')),
-              builder: (_) =>
-                  const Icon(Icons.roller_shades_outlined, size: 25)));
+              builder: (_) => Icon(Icons.roller_shades_outlined, size: 25)));
         }
       }
     }
