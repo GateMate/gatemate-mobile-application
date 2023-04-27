@@ -72,9 +72,14 @@ class _AddGateState extends State<AddGateView> {
 
   void addMarker() {
     var m = Marker(
-      builder: (_) => const Icon(Icons.roller_shades_outlined, size: 25),
-      point: LatLng(double.parse(addMarkerLatController.text),
-          double.parse(addMarkerLongController.text)),
+      builder: (_) => const Icon(
+        Icons.roller_shades_outlined,
+        size: 25,
+      ),
+      point: LatLng(
+        double.parse(addMarkerLatController.text),
+        double.parse(addMarkerLongController.text),
+      ),
     );
     setState(
       () {
@@ -87,13 +92,14 @@ class _AddGateState extends State<AddGateView> {
         .then((value) => {addGateModel.addToFB(m, value.toString())});
 
     Fluttertoast.showToast(
-        msg: "Gate Marker Added Successfully!",
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.green[400],
-        textColor: Colors.white,
-        fontSize: 16.0);
+      msg: "Gate Marker Added Successfully!",
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.CENTER,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.green[400],
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
   }
 
   void markerToAddDialog() {
@@ -110,39 +116,51 @@ class _AddGateState extends State<AddGateView> {
               shrinkWrap: true,
               children: <Widget>[
                 const SizedBox(height: 20),
-                Column(children: [
-                  const Text(
-                    'Enter the Latitude and Longitude To Add a Gate Marker at that Location:',
-                    style: TextStyle(fontSize: 20),
-                    textAlign: TextAlign.center,
-                  ),
-                  Row(children: [
-                    Expanded(
-                      child: ListTile(
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                        subtitle: CustomInputField(
-                          inputController: addMarkerLatController,
-                          hintText: "Lat",
-                          obscureText: false,
-                          prefixIcon: Icon(Icons.my_location),
-                        ),
+                Column(
+                  children: [
+                    const Text(
+                      'Enter the Latitude and Longitude To Add a Gate Marker at that Location:',
+                      style: TextStyle(fontSize: 20),
+                      textAlign: TextAlign.center,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: ListTile(
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 0,
+                                vertical: 0,
+                              ),
+                              subtitle: CustomInputField(
+                                inputController: addMarkerLatController,
+                                hintText: "Lat",
+                                obscureText: false,
+                                prefixIcon: const Icon(Icons.my_location),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          Expanded(
+                            child: ListTile(
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 0,
+                                vertical: 0,
+                              ),
+                              subtitle: CustomInputField(
+                                inputController: addMarkerLongController,
+                                hintText: "Long",
+                                obscureText: false,
+                                prefixIcon: const Icon(Icons.my_location),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    Expanded(
-                      child: ListTile(
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                        subtitle: CustomInputField(
-                          inputController: addMarkerLongController,
-                          hintText: "Long",
-                          obscureText: false,
-                          prefixIcon: Icon(Icons.my_location),
-                        ),
-                      ),
-                    ),
-                  ]),
-                ]),
+                  ],
+                ),
                 Column(
                   children: [
                     ConfirmationButton(
@@ -179,76 +197,72 @@ class _AddGateState extends State<AddGateView> {
         ),
         body: Stack(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Flexible(
-                    child: FlutterMap(
-                      options: MapOptions(
-                        center: LatLng(36.133512, -94.121556),
-                        // center: LatLng(47.925812, 106.919831),
-                        maxZoom: 18,
-                        zoom: 9.0,
-                        plugins: [EsriPlugin()],
+            Column(
+              children: [
+                Container(
+                  alignment: Alignment.bottomCenter,
+                  child: const Text(
+                    'Tap the "+" to add a gate marker or click an existing marker to view details',
+                    style: TextStyle(fontSize: 20),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                Flexible(
+                  child: FlutterMap(
+                    options: MapOptions(
+                      center: LatLng(36.133512, -94.121556),
+                      // center: LatLng(47.925812, 106.919831),
+                      maxZoom: 18,
+                      zoom: 9.0,
+                      plugins: [EsriPlugin()],
+                    ),
+                    children: [
+                      TileLayerWidget(
+                        options: TileLayerOptions(
+                          urlTemplate:
+                              'https://services.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}?apiKey=AAPK9832e94d28094f39a7c33300e31ddd28P3dyFrvyoHAnYo3etV-ZrnsdZdCGXg2nG7HmfduCx6PE8v2IAVVOnSbtncioU578',
+                          subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+                          tileProvider: NonCachingNetworkTileProvider(),
+                          backgroundColor: Colors.transparent,
+                        ),
                       ),
-                      children: [
-                        TileLayerWidget(
-                          options: TileLayerOptions(
-                            urlTemplate:
-                                'https://services.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}?apiKey=AAPK9832e94d28094f39a7c33300e31ddd28P3dyFrvyoHAnYo3etV-ZrnsdZdCGXg2nG7HmfduCx6PE8v2IAVVOnSbtncioU578',
-                            subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
-                            tileProvider: NonCachingNetworkTileProvider(),
-                            backgroundColor: Colors.transparent,
-                          ),
+                      PopupMarkerLayerWidget(
+                        options: PopupMarkerLayerOptions(
+                          popupController: _popupController,
+                          markers: [
+                            for (int i = 0;
+                                i < addGateModel.markers.length;
+                                i++)
+                              addGateModel.markers[i]
+                          ],
+                          popupBuilder: (BuildContext context, Marker marker) =>
+                              viewPopup(marker),
                         ),
-                        PopupMarkerLayerWidget(
-                          options: PopupMarkerLayerOptions(
-                            popupController: _popupController,
-                            markers: [
-                              for (int i = 0;
-                                  i < addGateModel.markers.length;
-                                  i++)
-                                addGateModel.markers[i]
-                            ],
-                            popupBuilder:
-                                (BuildContext context, Marker marker) =>
-                                    viewPopup(marker),
-                          ),
-                        ),
-                        Container(
-                          alignment: Alignment.bottomRight,
-                          padding: const EdgeInsets.all(10.0),
-                          child: FloatingActionButton(
-                            onPressed: () {
-                              addMarkerLatController.clear();
-                              addMarkerLongController.clear();
-                              markerToAddDialog();
-                            },
-                            backgroundColor: Colors.green[400],
-                            child: const Icon(Icons.add),
-                          ),
-                        ),
-                        // MarkerLayerOptions(
-                        //   markers: [
-                        //     for (int i = 0;
-                        //         i < addGateModel.markers.length;
-                        //         i++)
-                        //       addGateModel.markers[i]
-                        //   ],
-                        // ),
-                      ],
-                    ),
+                      ),
+                      // MarkerLayerOptions(
+                      //   markers: [
+                      //     for (int i = 0;
+                      //         i < addGateModel.markers.length;
+                      //         i++)
+                      //       addGateModel.markers[i]
+                      //   ],
+                      // ),
+                    ],
                   ),
-                  Container(
-                    alignment: Alignment.bottomCenter,
-                    child: const Text(
-                      'Tap the "+" to add a gate marker or click an existing marker to view details',
-                      style: TextStyle(fontSize: 20),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ],
+                ),
+              ],
+            ),
+            Container(
+              alignment: Alignment.bottomRight,
+              padding: const EdgeInsets.all(10.0),
+              child: FloatingActionButton(
+                onPressed: () {
+                  addMarkerLatController.clear();
+                  addMarkerLongController.clear();
+                  markerToAddDialog();
+                },
+                backgroundColor: Colors.green[400],
+                child: const Icon(Icons.add),
               ),
             ),
           ],
