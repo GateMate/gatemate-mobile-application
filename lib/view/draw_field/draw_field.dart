@@ -448,46 +448,49 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                           addFieldModel.setMarkers(poly4LatLng);
                           Navigator.pop(context);
                           Fluttertoast.showToast(
-                              msg: "Field Added Successfully!",
-                              toastLength: Toast.LENGTH_LONG,
-                              gravity: ToastGravity.CENTER,
-                              timeInSecForIosWeb: 1,
-                              backgroundColor: Colors.green[400],
-                              textColor: Colors.white,
-                              fontSize: 16.0);
+                            msg: "Field Added Successfully!",
+                            toastLength: Toast.LENGTH_LONG,
+                            gravity: ToastGravity.CENTER,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Colors.green[400],
+                            textColor: Colors.white,
+                            fontSize: 16.0,
+                          );
                         },
                       ),
                     ),
                     ConfirmationButton(
-                        buttonText: 'No, Don\'t Create Field',
-                        onPressed: () => {
-                              _authProvider.getAuthToken().then(((value) =>
-                                  addFieldModel.deleteField(
-                                      fieldID, value.toString()))),
-                              setState(() {
-                                polygonList.clear();
-                                polygon0List.clear();
-                                polygon1List.clear();
-                                polygon2List.clear();
-                                polygon3List.clear();
-                                markers.clear();
-                                gates.clear();
-                                polygons.clear();
-                                poly0List.clear();
-                                poly1List.clear();
-                                poly2List.clear();
-                                poly3List.clear();
-                                polyLat1Controller.clear();
-                                polyLat2Controller.clear();
-                                polyLat3Controller.clear();
-                                polyLat4Controller.clear();
-                                polyLong1Controller.clear();
-                                polyLong2Controller.clear();
-                                polyLong3Controller.clear();
-                                polyLong4Controller.clear();
-                              }),
-                              Navigator.pop(context),
-                            }),
+                      buttonText: 'No, Don\'t Create Field',
+                      onPressed: () => {
+                        _authProvider.getAuthToken().then(
+                              ((value) => addFieldModel.deleteField(
+                                  fieldID, value.toString())),
+                            ),
+                        setState(() {
+                          polygonList.clear();
+                          polygon0List.clear();
+                          polygon1List.clear();
+                          polygon2List.clear();
+                          polygon3List.clear();
+                          markers.clear();
+                          gates.clear();
+                          polygons.clear();
+                          poly0List.clear();
+                          poly1List.clear();
+                          poly2List.clear();
+                          poly3List.clear();
+                          polyLat1Controller.clear();
+                          polyLat2Controller.clear();
+                          polyLat3Controller.clear();
+                          polyLat4Controller.clear();
+                          polyLong1Controller.clear();
+                          polyLong2Controller.clear();
+                          polyLong3Controller.clear();
+                          polyLong4Controller.clear();
+                        }),
+                        Navigator.pop(context),
+                      },
+                    ),
                   ],
                 ),
               ]));
@@ -720,11 +723,12 @@ class _AddFieldRoute extends State<AddFieldRoute> {
     return ChangeNotifierProvider(
       create: (context) => AddGateModel(),
       child: Scaffold(
-          appBar: AppBar(
-            title: const Text('Add Field'),
-            backgroundColor: Colors.green[700],
-          ),
-          body: Stack(children: [
+        appBar: AppBar(
+          title: const Text('Add Field'),
+          backgroundColor: Colors.green[700],
+        ),
+        body: Stack(
+          children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
@@ -740,14 +744,20 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                         onTap: (tapPosition, point) {
                           setState(() {
                             var gate = Marker(
-                                point: point,
-                                builder: (_) => const Icon(
-                                    Icons.roller_shades_outlined,
-                                    size: 25));
+                              point: point,
+                              builder: (_) => const Icon(
+                                Icons.roller_shades_outlined,
+                                size: 25,
+                              ),
+                            );
                             gates.add(gate);
-                            _authProvider.getAuthToken().then(((value) =>
-                                addFieldModel.addToFB(
-                                    gate, fieldID, value.toString())));
+                            _authProvider.getAuthToken().then(
+                                  (value) => addFieldModel.addToFB(
+                                    gate,
+                                    fieldID,
+                                    value.toString(),
+                                  ),
+                                );
                           });
                         },
                         plugins: [EsriPlugin()],
@@ -769,15 +779,16 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                             polygons: polygons +
                                 [
                                   Polygon(
-                                      points: polygonList,
-                                      borderStrokeWidth: 5.0,
-                                      borderColor: Colors.black),
+                                    points: polygonList,
+                                    borderStrokeWidth: 5.0,
+                                    borderColor: Colors.black,
+                                  ),
                                 ],
                           ),
                         ),
                         MarkerLayerWidget(
-                            options:
-                                MarkerLayerOptions(markers: markers + gates)),
+                          options: MarkerLayerOptions(markers: markers + gates),
+                        ),
                         Container(
                           alignment: Alignment.bottomRight,
                           padding: const EdgeInsets.all(10.0),
@@ -793,30 +804,39 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                 ],
               ),
             ),
-          ])),
+          ],
+        ),
+      ),
     );
   }
 
   List<Polygon> getPoints(List<LatLng> list, Color color) {
     polyEditor = PolyEditor(
-        pointIcon: const Icon(
-          Icons.lens,
-          size: 15,
-          color: Colors.orange,
-        ),
-        points: [
-          for (int p = 0; p < list.length; p = p + 4)
-            {
-              setState(() {
-                polygons.add(Polygon(points: <LatLng>[
-                  list[p],
-                  list[p + 1],
-                  list[p + 2],
-                  list[p + 3]
-                ], color: color, isFilled: true));
-              }),
-            },
-        ]);
+      pointIcon: const Icon(
+        Icons.lens,
+        size: 15,
+        color: Colors.orange,
+      ),
+      points: [
+        for (int p = 0; p < list.length; p = p + 4)
+          {
+            setState(() {
+              polygons.add(
+                Polygon(
+                  points: <LatLng>[
+                    list[p],
+                    list[p + 1],
+                    list[p + 2],
+                    list[p + 3],
+                  ],
+                  color: color,
+                  isFilled: true,
+                ),
+              );
+            }),
+          },
+      ],
+    );
 
     return polygons;
   }
