@@ -409,8 +409,7 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                 borderRadius: BorderRadius.circular(40),
               ),
               elevation: 16,
-              child: Expanded(
-                  child: ListView(shrinkWrap: true, children: <Widget>[
+              child: ListView(shrinkWrap: true, children: <Widget>[
                 const SizedBox(height: 20),
                 const Center(
                   child: Text(
@@ -449,49 +448,52 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                           addFieldModel.setMarkers(poly4LatLng);
                           Navigator.pop(context);
                           Fluttertoast.showToast(
-                              msg: "Field Added Successfully!",
-                              toastLength: Toast.LENGTH_LONG,
-                              gravity: ToastGravity.CENTER,
-                              timeInSecForIosWeb: 1,
-                              backgroundColor: Colors.green[400],
-                              textColor: Colors.white,
-                              fontSize: 16.0);
+                            msg: "Field Added Successfully!",
+                            toastLength: Toast.LENGTH_LONG,
+                            gravity: ToastGravity.CENTER,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Colors.green[400],
+                            textColor: Colors.white,
+                            fontSize: 16.0,
+                          );
                         },
                       ),
                     ),
                     ConfirmationButton(
-                        buttonText: 'No, Don\'t Create Field',
-                        onPressed: () => {
-                              _authProvider.getAuthToken().then(((value) =>
-                                  addFieldModel.deleteField(
-                                      fieldID, value.toString()))),
-                              setState(() {
-                                polygonList.clear();
-                                polygon0List.clear();
-                                polygon1List.clear();
-                                polygon2List.clear();
-                                polygon3List.clear();
-                                markers.clear();
-                                gates.clear();
-                                polygons.clear();
-                                poly0List.clear();
-                                poly1List.clear();
-                                poly2List.clear();
-                                poly3List.clear();
-                                polyLat1Controller.clear();
-                                polyLat2Controller.clear();
-                                polyLat3Controller.clear();
-                                polyLat4Controller.clear();
-                                polyLong1Controller.clear();
-                                polyLong2Controller.clear();
-                                polyLong3Controller.clear();
-                                polyLong4Controller.clear();
-                              }),
-                              Navigator.pop(context),
-                            }),
+                      buttonText: 'No, Don\'t Create Field',
+                      onPressed: () => {
+                        _authProvider.getAuthToken().then(
+                              ((value) => addFieldModel.deleteField(
+                                  fieldID, value.toString())),
+                            ),
+                        setState(() {
+                          polygonList.clear();
+                          polygon0List.clear();
+                          polygon1List.clear();
+                          polygon2List.clear();
+                          polygon3List.clear();
+                          markers.clear();
+                          gates.clear();
+                          polygons.clear();
+                          poly0List.clear();
+                          poly1List.clear();
+                          poly2List.clear();
+                          poly3List.clear();
+                          polyLat1Controller.clear();
+                          polyLat2Controller.clear();
+                          polyLat3Controller.clear();
+                          polyLat4Controller.clear();
+                          polyLong1Controller.clear();
+                          polyLong2Controller.clear();
+                          polyLong3Controller.clear();
+                          polyLong4Controller.clear();
+                        }),
+                        Navigator.pop(context),
+                      },
+                    ),
                   ],
                 ),
-              ])));
+              ]));
         });
   }
 
@@ -540,183 +542,175 @@ class _AddFieldRoute extends State<AddFieldRoute> {
             borderRadius: BorderRadius.circular(40),
           ),
           elevation: 16,
-          child: Expanded(
-            child: ListView(
-              shrinkWrap: true,
-              children: <Widget>[
-                const SizedBox(height: 20),
-                Column(
-                  children: [
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: ListTile(
-                              contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 0, vertical: 0),
-                              subtitle: CustomInputField(
-                                inputController: fieldNameController,
-                                hintText: "Enter a Field Name",
-                                obscureText: false,
-                                prefixIcon: Icon(Icons.text_fields),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                      child: Text(
-                        'Enter Latitude and Longitude Values for 4 Points to Create a Field Within Those Points:',
-                        style: TextStyle(fontSize: 20),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: ListTile(
-                              contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 0, vertical: 0),
-                              subtitle: CustomInputField(
-                                inputController: polyLat1Controller,
-                                hintText: "NW Lat 1",
-                                obscureText: false,
-                                prefixIcon: Icon(Icons.my_location),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                              child: ListTile(
+          child: ListView(
+            shrinkWrap: true,
+            children: <Widget>[
+              const SizedBox(height: 20),
+              Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: ListTile(
                             contentPadding: EdgeInsets.symmetric(
                                 horizontal: 0, vertical: 0),
                             subtitle: CustomInputField(
-                              inputController: polyLong1Controller,
-                              hintText: "NW Long 1",
+                              inputController: fieldNameController,
+                              hintText: "Enter a Field Name",
                               obscureText: false,
-                              prefixIcon: Icon(Icons.my_location),
-                            ),
-                          ))
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: ListTile(
-                              contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 0, vertical: 0),
-                              subtitle: CustomInputField(
-                                  inputController: polyLat2Controller,
-                                  hintText: "NE Lat 2",
-                                  obscureText: false,
-                                  prefixIcon: Icon(Icons.my_location)),
+                              prefixIcon: Icon(Icons.text_fields),
                             ),
                           ),
-                          Expanded(
-                              child: ListTile(
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                    child: Text(
+                      'Enter Latitude and Longitude Values for 4 Points to Create a Field Within Those Points:',
+                      style: TextStyle(fontSize: 20),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: ListTile(
                             contentPadding: EdgeInsets.symmetric(
                                 horizontal: 0, vertical: 0),
                             subtitle: CustomInputField(
-                              inputController: polyLong2Controller,
-                              hintText: "NE Long 2",
+                              inputController: polyLat1Controller,
+                              hintText: "NW Lat 1",
                               obscureText: false,
                               prefixIcon: Icon(Icons.my_location),
                             ),
-                          ))
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                      child: Row(
-                        children: [
-                          Expanded(
+                          ),
+                        ),
+                        Expanded(
                             child: ListTile(
-                              contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 0, vertical: 0),
-                              subtitle: CustomInputField(
-                                inputController: polyLat3Controller,
-                                hintText: "SE Lat 3",
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                          subtitle: CustomInputField(
+                            inputController: polyLong1Controller,
+                            hintText: "NW Long 1",
+                            obscureText: false,
+                            prefixIcon: Icon(Icons.my_location),
+                          ),
+                        ))
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: ListTile(
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 0, vertical: 0),
+                            subtitle: CustomInputField(
+                                inputController: polyLat2Controller,
+                                hintText: "NE Lat 2",
                                 obscureText: false,
-                                prefixIcon: Icon(Icons.my_location),
-                              ),
-                            ),
+                                prefixIcon: Icon(Icons.my_location)),
                           ),
-                          Expanded(
-                              child: ListTile(
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 0, vertical: 0),
-                            subtitle: CustomInputField(
-                              inputController: polyLong3Controller,
-                              hintText: "SE Long 3",
-                              obscureText: false,
-                              prefixIcon: Icon(Icons.my_location),
-                            ),
-                          ))
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                      child: Row(
-                        children: [
-                          Expanded(
+                        ),
+                        Expanded(
                             child: ListTile(
-                              contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 0, vertical: 0),
-                              subtitle: CustomInputField(
-                                inputController: polyLat4Controller,
-                                hintText: "SW Lat 4",
-                                obscureText: false,
-                                prefixIcon: Icon(Icons.my_location),
-                              ),
-                            ),
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                          subtitle: CustomInputField(
+                            inputController: polyLong2Controller,
+                            hintText: "NE Long 2",
+                            obscureText: false,
+                            prefixIcon: Icon(Icons.my_location),
                           ),
-                          Expanded(
-                              child: ListTile(
+                        ))
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: ListTile(
                             contentPadding: EdgeInsets.symmetric(
                                 horizontal: 0, vertical: 0),
                             subtitle: CustomInputField(
-                              inputController: polyLong4Controller,
-                              hintText: "SW Long 4",
+                              inputController: polyLat3Controller,
+                              hintText: "SE Lat 3",
                               obscureText: false,
                               prefixIcon: Icon(Icons.my_location),
                             ),
-                          ))
-                        ],
-                      ),
+                          ),
+                        ),
+                        Expanded(
+                            child: ListTile(
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                          subtitle: CustomInputField(
+                            inputController: polyLong3Controller,
+                            hintText: "SE Long 3",
+                            obscureText: false,
+                            prefixIcon: Icon(Icons.my_location),
+                          ),
+                        ))
+                      ],
                     ),
-                  ],
-                ),
-                Column(
-                  children: [
-                    ConfirmationButton(
-                      buttonText: 'Add Field',
-                      onPressed: () => setState(
-                        () {
-                          createPolygon();
-                          Navigator.pop(context);
-                        },
-                      ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: ListTile(
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 0, vertical: 0),
+                            subtitle: CustomInputField(
+                              inputController: polyLat4Controller,
+                              hintText: "SW Lat 4",
+                              obscureText: false,
+                              prefixIcon: Icon(Icons.my_location),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                            child: ListTile(
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                          subtitle: CustomInputField(
+                            inputController: polyLong4Controller,
+                            hintText: "SW Long 4",
+                            obscureText: false,
+                            prefixIcon: Icon(Icons.my_location),
+                          ),
+                        ))
+                      ],
                     ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-              ],
-            ),
+                  ),
+                ],
+              ),
+              Column(
+                children: [
+                  ConfirmationButton(
+                    buttonText: 'Add Field',
+                    onPressed: () => setState(
+                      () {
+                        createPolygon();
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+            ],
           ),
         );
       },
@@ -729,11 +723,12 @@ class _AddFieldRoute extends State<AddFieldRoute> {
     return ChangeNotifierProvider(
       create: (context) => AddGateModel(),
       child: Scaffold(
-          appBar: AppBar(
-            title: const Text('Add Field'),
-            backgroundColor: Colors.green[700],
-          ),
-          body: Stack(children: [
+        appBar: AppBar(
+          title: const Text('Add Field'),
+          backgroundColor: Colors.green[700],
+        ),
+        body: Stack(
+          children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
@@ -749,14 +744,20 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                         onTap: (tapPosition, point) {
                           setState(() {
                             var gate = Marker(
-                                point: point,
-                                builder: (_) => const Icon(
-                                    Icons.roller_shades_outlined,
-                                    size: 25));
+                              point: point,
+                              builder: (_) => const Icon(
+                                Icons.roller_shades_outlined,
+                                size: 25,
+                              ),
+                            );
                             gates.add(gate);
-                            _authProvider.getAuthToken().then(((value) =>
-                                addFieldModel.addToFB(
-                                    gate, fieldID, value.toString())));
+                            _authProvider.getAuthToken().then(
+                                  (value) => addFieldModel.addToFB(
+                                    gate,
+                                    fieldID,
+                                    value.toString(),
+                                  ),
+                                );
                           });
                         },
                         plugins: [EsriPlugin()],
@@ -778,15 +779,16 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                             polygons: polygons +
                                 [
                                   Polygon(
-                                      points: polygonList,
-                                      borderStrokeWidth: 5.0,
-                                      borderColor: Colors.black),
+                                    points: polygonList,
+                                    borderStrokeWidth: 5.0,
+                                    borderColor: Colors.black,
+                                  ),
                                 ],
                           ),
                         ),
                         MarkerLayerWidget(
-                            options:
-                                MarkerLayerOptions(markers: markers + gates)),
+                          options: MarkerLayerOptions(markers: markers + gates),
+                        ),
                         Container(
                           alignment: Alignment.bottomRight,
                           padding: const EdgeInsets.all(10.0),
@@ -802,30 +804,39 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                 ],
               ),
             ),
-          ])),
+          ],
+        ),
+      ),
     );
   }
 
   List<Polygon> getPoints(List<LatLng> list, Color color) {
     polyEditor = PolyEditor(
-        pointIcon: const Icon(
-          Icons.lens,
-          size: 15,
-          color: Colors.orange,
-        ),
-        points: [
-          for (int p = 0; p < list.length; p = p + 4)
-            {
-              setState(() {
-                polygons.add(Polygon(points: <LatLng>[
-                  list[p],
-                  list[p + 1],
-                  list[p + 2],
-                  list[p + 3]
-                ], color: color, isFilled: true));
-              }),
-            },
-        ]);
+      pointIcon: const Icon(
+        Icons.lens,
+        size: 15,
+        color: Colors.orange,
+      ),
+      points: [
+        for (int p = 0; p < list.length; p = p + 4)
+          {
+            setState(() {
+              polygons.add(
+                Polygon(
+                  points: <LatLng>[
+                    list[p],
+                    list[p + 1],
+                    list[p + 2],
+                    list[p + 3],
+                  ],
+                  color: color,
+                  isFilled: true,
+                ),
+              );
+            }),
+          },
+      ],
+    );
 
     return polygons;
   }
