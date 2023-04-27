@@ -99,18 +99,17 @@ class _MultipleGateManagementState extends State<MultipleGateManagementRoute> {
                 borderRadius: BorderRadius.circular(40),
               ),
               elevation: 16,
-              child: Expanded(
-                  child: ListView(shrinkWrap: true, children: <Widget>[
+              child: ListView(shrinkWrap: true, children: <Widget>[
                 const SizedBox(height: 20),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
                   child: Column(
                     children: [
-                      Text("Currently selected gates: "),
+                      const Text("Currently selected gates: "),
                       for (var g in selectedMarkers)
                         Text("Gate: ${g.point.latitude}, ${g.point.longitude}"),
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: SizedBox(
                           height: 35,
                           child: CustomInputField(
@@ -156,7 +155,7 @@ class _MultipleGateManagementState extends State<MultipleGateManagementRoute> {
                     ],
                   ),
                 ),
-              ])));
+              ]));
         });
   }
 
@@ -180,114 +179,112 @@ class _MultipleGateManagementState extends State<MultipleGateManagementRoute> {
       ),
       body: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                Flexible(
-                  child: FlutterMap(
-                    options: MapOptions(
-                      center: LatLng(36.133512, -94.121556),
-                      // center: LatLng(47.925812, 106.919831),
-                      maxZoom: 18,
-                      zoom: 9.0,
-                      plugins: [EsriPlugin()],
-                      onTap: (_, __) {
-                        _popupController.hideAllPopups();
-                      },
-                    ),
-                    nonRotatedChildren: [
-                      AttributionWidget.defaultWidget(
-                        source: '',
-                        onSourceTapped: null,
-                      ),
-                    ],
-                    // layers: [
-                    children: [
-                      TileLayerWidget(
-                        options: TileLayerOptions(
-                          urlTemplate:
-                              'https://services.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}?apiKey=AAPK9832e94d28094f39a7c33300e31ddd28P3dyFrvyoHAnYo3etV-ZrnsdZdCGXg2nG7HmfduCx6PE8v2IAVVOnSbtncioU578',
-                          subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
-                          tileProvider: NonCachingNetworkTileProvider(),
-                          backgroundColor: Colors.transparent,
-                        ),
-                      ),
-                      // MarkerLayerWidget(
-                      //     options: MarkerLayerOptions(
-                      //   markers: [
-                      //     for (int i = 0;
-                      //         i < _manageMultipleGatesViewModel.markers.length;
-                      //         i++)
-                      //       _manageMultipleGatesViewModel.markers[i],
-                      //     // for (int i = 0; i < selectedMarkerColors.length; i++)
-                      //     //   selectedMarkerColors[i]
-                      //   ],
-                      // )),
-                      PopupMarkerLayerWidget(
-                        options: PopupMarkerLayerOptions(
-                          popupController: _popupController,
-                          markers: [
-                            for (int i = 0; i < markers.length; i++) markers[i],
-                            for (int i = 0;
-                                i < selectedMarkerColors.length;
-                                i++)
-                              selectedMarkerColors[i]
-                          ],
-                          // markerRotateAlignment:
-                          //     PopupMarkerLayerOptions.rotationAlignmentFor(
-                          //         AnchorAlign.top),
-                          // popupBuilder: (BuildContext context, Marker marker) =>
-                          //     MarkerPopup(marker),
-                          selectedMarkerBuilder: (context, marker) {
-                            print("TAP");
-                            if (selectedMarkers.length < 3) {
-                              if (selectedMarkers.contains(marker) == false) {
-                                selectedMarkers.add(marker);
-                                selectedMarkerColors.add(Marker(
-                                  builder: (_) => const Icon(
-                                      Icons.roller_shades_outlined,
-                                      color: Colors.red,
-                                      size: 25),
-                                  point: marker.point,
-                                ));
-                                print(selectedMarkers);
-                              }
-                            } else {
-                              selectedMarkers.clear();
-                              selectedMarkerColors.clear();
-                            }
-                            return Text("");
-                          },
-                        ),
-                      ),
-                      Container(
-                        alignment: Alignment.topCenter,
-                        child: const Text(
-                          'Tap on markers to update heights of multiple gates at once.',
-                          style: TextStyle(fontSize: 20),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      Container(
-                        alignment: Alignment.bottomCenter,
-                        child: FloatingActionButton.extended(
-                          onPressed: () {
-                            for (var m in selectedMarkers) {
-                              print(m.point);
-                            }
-                            updateHeightDialog();
-                            // Add your onPressed code here!
-                          },
-                          label: Text('Change Gate Heights'),
-                          icon: Icon(Icons.height),
-                          backgroundColor: Colors.green[700],
-                        ),
-                      ),
-                    ],
-                  ),
+          Column(
+            children: [
+              Container(
+                alignment: Alignment.topCenter,
+                child: const Text(
+                  'Tap on markers to update heights of multiple gates at once.',
+                  style: TextStyle(fontSize: 20),
+                  textAlign: TextAlign.center,
                 ),
-              ],
+              ),
+              Flexible(
+                child: FlutterMap(
+                  options: MapOptions(
+                    center: LatLng(36.133512, -94.121556),
+                    // center: LatLng(47.925812, 106.919831),
+                    maxZoom: 18,
+                    zoom: 9.0,
+                    plugins: [EsriPlugin()],
+                    onTap: (_, __) {
+                      _popupController.hideAllPopups();
+                    },
+                  ),
+                  nonRotatedChildren: [
+                    AttributionWidget.defaultWidget(
+                      source: '',
+                      onSourceTapped: null,
+                    ),
+                  ],
+                  // layers: [
+                  children: [
+                    TileLayerWidget(
+                      options: TileLayerOptions(
+                        urlTemplate:
+                            'https://services.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}?apiKey=AAPK9832e94d28094f39a7c33300e31ddd28P3dyFrvyoHAnYo3etV-ZrnsdZdCGXg2nG7HmfduCx6PE8v2IAVVOnSbtncioU578',
+                        subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+                        tileProvider: NonCachingNetworkTileProvider(),
+                        backgroundColor: Colors.transparent,
+                      ),
+                    ),
+                    // MarkerLayerWidget(
+                    //     options: MarkerLayerOptions(
+                    //   markers: [
+                    //     for (int i = 0;
+                    //         i < _manageMultipleGatesViewModel.markers.length;
+                    //         i++)
+                    //       _manageMultipleGatesViewModel.markers[i],
+                    //     // for (int i = 0; i < selectedMarkerColors.length; i++)
+                    //     //   selectedMarkerColors[i]
+                    //   ],
+                    // )),
+                    PopupMarkerLayerWidget(
+                      options: PopupMarkerLayerOptions(
+                        popupController: _popupController,
+                        markers: [
+                          for (int i = 0; i < markers.length; i++) markers[i],
+                          for (int i = 0; i < selectedMarkerColors.length; i++)
+                            selectedMarkerColors[i]
+                        ],
+                        // markerRotateAlignment:
+                        //     PopupMarkerLayerOptions.rotationAlignmentFor(
+                        //         AnchorAlign.top),
+                        // popupBuilder: (BuildContext context, Marker marker) =>
+                        //     MarkerPopup(marker),
+                        selectedMarkerBuilder: (context, marker) {
+                          print("TAP");
+                          if (selectedMarkers.length < 3) {
+                            if (selectedMarkers.contains(marker) == false) {
+                              selectedMarkers.add(marker);
+                              selectedMarkerColors.add(
+                                Marker(
+                                  builder: (_) => const Icon(
+                                    Icons.roller_shades_outlined,
+                                    color: Colors.red,
+                                    size: 25,
+                                  ),
+                                  point: marker.point,
+                                ),
+                              );
+                              print(selectedMarkers);
+                            }
+                          } else {
+                            selectedMarkers.clear();
+                            selectedMarkerColors.clear();
+                          }
+                          return const Text("");
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          Container(
+            padding: const EdgeInsets.only(bottom: 8),
+            alignment: Alignment.bottomCenter,
+            child: FloatingActionButton.extended(
+              onPressed: () {
+                for (var m in selectedMarkers) {
+                  print(m.point);
+                }
+                updateHeightDialog();
+              },
+              label: const Text('Change Gate Heights'),
+              icon: const Icon(Icons.height),
+              backgroundColor: Colors.green[700],
             ),
           ),
         ],

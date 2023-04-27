@@ -405,11 +405,13 @@ class _AddFieldRoute extends State<AddFieldRoute> {
         context: context,
         builder: (context) {
           return Dialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(40),
-              ),
-              elevation: 16,
-              child: ListView(shrinkWrap: true, children: <Widget>[
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(40),
+            ),
+            elevation: 16,
+            child: ListView(
+              shrinkWrap: true,
+              children: <Widget>[
                 const SizedBox(height: 20),
                 const Center(
                   child: Text(
@@ -493,7 +495,9 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                     ),
                   ],
                 ),
-              ]));
+              ],
+            ),
+          );
         });
   }
 
@@ -544,23 +548,28 @@ class _AddFieldRoute extends State<AddFieldRoute> {
           elevation: 16,
           child: ListView(
             shrinkWrap: true,
-            children: <Widget>[
+            children: [
               const SizedBox(height: 20),
               Column(
                 children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 10,
+                    ),
                     child: Row(
                       children: [
                         Expanded(
                           child: ListTile(
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 0, vertical: 0),
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 0,
+                              vertical: 0,
+                            ),
                             subtitle: CustomInputField(
                               inputController: fieldNameController,
                               hintText: "Enter a Field Name",
                               obscureText: false,
-                              prefixIcon: Icon(Icons.text_fields),
+                              prefixIcon: const Icon(Icons.text_fields),
                             ),
                           ),
                         ),
@@ -568,7 +577,10 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                     ),
                   ),
                   const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 0,
+                    ),
                     child: Text(
                       'Enter Latitude and Longitude Values for 4 Points to Create a Field Within Those Points:',
                       style: TextStyle(fontSize: 20),
@@ -576,121 +588,153 @@ class _AddFieldRoute extends State<AddFieldRoute> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 0,
+                    ),
                     child: Row(
                       children: [
                         Expanded(
                           child: ListTile(
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 0, vertical: 0),
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 0,
+                              vertical: 0,
+                            ),
                             subtitle: CustomInputField(
                               inputController: polyLat1Controller,
                               hintText: "NW Lat 1",
                               obscureText: false,
-                              prefixIcon: Icon(Icons.my_location),
+                              prefixIcon: const Icon(Icons.my_location),
                             ),
                           ),
                         ),
                         Expanded(
                             child: ListTile(
-                          contentPadding:
-                              EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 0,
+                            vertical: 0,
+                          ),
                           subtitle: CustomInputField(
                             inputController: polyLong1Controller,
                             hintText: "NW Long 1",
                             obscureText: false,
-                            prefixIcon: Icon(Icons.my_location),
+                            prefixIcon: const Icon(Icons.my_location),
                           ),
                         ))
                       ],
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 0,
+                    ),
                     child: Row(
                       children: [
                         Expanded(
                           child: ListTile(
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 0, vertical: 0),
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 0,
+                              vertical: 0,
+                            ),
                             subtitle: CustomInputField(
-                                inputController: polyLat2Controller,
-                                hintText: "NE Lat 2",
-                                obscureText: false,
-                                prefixIcon: Icon(Icons.my_location)),
+                              inputController: polyLat2Controller,
+                              hintText: "NE Lat 2",
+                              obscureText: false,
+                              prefixIcon: const Icon(Icons.my_location),
+                            ),
                           ),
                         ),
                         Expanded(
-                            child: ListTile(
-                          contentPadding:
-                              EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                          subtitle: CustomInputField(
-                            inputController: polyLong2Controller,
-                            hintText: "NE Long 2",
-                            obscureText: false,
-                            prefixIcon: Icon(Icons.my_location),
+                          child: ListTile(
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 0,
+                              vertical: 0,
+                            ),
+                            subtitle: CustomInputField(
+                              inputController: polyLong2Controller,
+                              hintText: "NE Long 2",
+                              obscureText: false,
+                              prefixIcon: const Icon(Icons.my_location),
+                            ),
                           ),
-                        ))
+                        ),
                       ],
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 0,
+                    ),
                     child: Row(
                       children: [
                         Expanded(
                           child: ListTile(
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 0, vertical: 0),
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 0,
+                              vertical: 0,
+                            ),
                             subtitle: CustomInputField(
                               inputController: polyLat3Controller,
                               hintText: "SE Lat 3",
                               obscureText: false,
-                              prefixIcon: Icon(Icons.my_location),
+                              prefixIcon: const Icon(Icons.my_location),
                             ),
                           ),
                         ),
                         Expanded(
-                            child: ListTile(
-                          contentPadding:
-                              EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                          subtitle: CustomInputField(
-                            inputController: polyLong3Controller,
-                            hintText: "SE Long 3",
-                            obscureText: false,
-                            prefixIcon: Icon(Icons.my_location),
+                          child: ListTile(
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 0,
+                              vertical: 0,
+                            ),
+                            subtitle: CustomInputField(
+                              inputController: polyLong3Controller,
+                              hintText: "SE Long 3",
+                              obscureText: false,
+                              prefixIcon: const Icon(Icons.my_location),
+                            ),
                           ),
-                        ))
+                        ),
                       ],
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 0,
+                    ),
                     child: Row(
                       children: [
                         Expanded(
                           child: ListTile(
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 0, vertical: 0),
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 0,
+                              vertical: 0,
+                            ),
                             subtitle: CustomInputField(
                               inputController: polyLat4Controller,
                               hintText: "SW Lat 4",
                               obscureText: false,
-                              prefixIcon: Icon(Icons.my_location),
+                              prefixIcon: const Icon(Icons.my_location),
                             ),
                           ),
                         ),
                         Expanded(
-                            child: ListTile(
-                          contentPadding:
-                              EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                          subtitle: CustomInputField(
-                            inputController: polyLong4Controller,
-                            hintText: "SW Long 4",
-                            obscureText: false,
-                            prefixIcon: Icon(Icons.my_location),
+                          child: ListTile(
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 0,
+                              vertical: 0,
+                            ),
+                            subtitle: CustomInputField(
+                              inputController: polyLong4Controller,
+                              hintText: "SW Long 4",
+                              obscureText: false,
+                              prefixIcon: const Icon(Icons.my_location),
+                            ),
                           ),
-                        ))
+                        ),
                       ],
                     ),
                   ),
@@ -729,80 +773,77 @@ class _AddFieldRoute extends State<AddFieldRoute> {
         ),
         body: Stack(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Flexible(
-                    child: FlutterMap(
-                      options: MapOptions(
-                        center: LatLng(36.133512, -94.121556),
-                        allowPanningOnScrollingParent: false,
-                        // center: LatLng(47.925812, 106.919831),
-                        maxZoom: 18,
-                        zoom: 9.0,
-                        onTap: (tapPosition, point) {
-                          setState(() {
-                            var gate = Marker(
-                              point: point,
-                              builder: (_) => const Icon(
-                                Icons.roller_shades_outlined,
-                                size: 25,
-                              ),
-                            );
-                            gates.add(gate);
-                            _authProvider.getAuthToken().then(
-                                  (value) => addFieldModel.addToFB(
-                                    gate,
-                                    fieldID,
-                                    value.toString(),
-                                  ),
-                                );
-                          });
-                        },
-                        plugins: [EsriPlugin()],
-                      ),
-                      //   )
-                      // ],
-                      children: [
-                        TileLayerWidget(
-                          options: TileLayerOptions(
-                            urlTemplate:
-                                'https://services.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}?apiKey=AAPK9832e94d28094f39a7c33300e31ddd28P3dyFrvyoHAnYo3etV-ZrnsdZdCGXg2nG7HmfduCx6PE8v2IAVVOnSbtncioU578',
-                            subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
-                            tileProvider: NonCachingNetworkTileProvider(),
-                            // backgroundColor: Colors.transparent,
-                          ),
-                        ),
-                        PolygonLayerWidget(
-                          options: PolygonLayerOptions(
-                            polygons: polygons +
-                                [
-                                  Polygon(
-                                    points: polygonList,
-                                    borderStrokeWidth: 5.0,
-                                    borderColor: Colors.black,
-                                  ),
-                                ],
-                          ),
-                        ),
-                        MarkerLayerWidget(
-                          options: MarkerLayerOptions(markers: markers + gates),
-                        ),
-                        Container(
-                          alignment: Alignment.bottomRight,
-                          padding: const EdgeInsets.all(10.0),
-                          child: _getFab(),
-                        ),
-                        Container(
-                          alignment: Alignment.topCenter,
-                          child: getText(),
-                        ),
-                      ],
+            Column(
+              children: [
+                Container(
+                  alignment: Alignment.topCenter,
+                  child: getText(),
+                ),
+                Flexible(
+                  child: FlutterMap(
+                    options: MapOptions(
+                      center: LatLng(36.133512, -94.121556),
+                      allowPanningOnScrollingParent: false,
+                      // center: LatLng(47.925812, 106.919831),
+                      maxZoom: 18,
+                      zoom: 9.0,
+                      onTap: (tapPosition, point) {
+                        setState(() {
+                          var gate = Marker(
+                            point: point,
+                            builder: (_) => const Icon(
+                              Icons.roller_shades_outlined,
+                              size: 25,
+                            ),
+                          );
+                          gates.add(gate);
+                          _authProvider.getAuthToken().then(
+                                (value) => addFieldModel.addToFB(
+                                  gate,
+                                  fieldID,
+                                  value.toString(),
+                                ),
+                              );
+                        });
+                      },
+                      plugins: [EsriPlugin()],
                     ),
+                    //   )
+                    // ],
+                    children: [
+                      TileLayerWidget(
+                        options: TileLayerOptions(
+                          urlTemplate:
+                              'https://services.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}?apiKey=AAPK9832e94d28094f39a7c33300e31ddd28P3dyFrvyoHAnYo3etV-ZrnsdZdCGXg2nG7HmfduCx6PE8v2IAVVOnSbtncioU578',
+                          subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+                          tileProvider: NonCachingNetworkTileProvider(),
+                          // backgroundColor: Colors.transparent,
+                        ),
+                      ),
+                      PolygonLayerWidget(
+                        options: PolygonLayerOptions(
+                          polygons: polygons +
+                              [
+                                Polygon(
+                                  points: polygonList,
+                                  borderStrokeWidth: 5.0,
+                                  borderColor: Colors.black,
+                                ),
+                              ],
+                        ),
+                      ),
+                      MarkerLayerWidget(
+                        options: MarkerLayerOptions(markers: markers + gates),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
+            ),
+            Container(
+              alignment: Alignment.bottomRight,
+              padding: const EdgeInsets.all(10.0),
+              child: _getFab(),
             ),
           ],
         ),
