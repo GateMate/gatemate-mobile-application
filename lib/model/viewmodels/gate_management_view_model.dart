@@ -1,12 +1,12 @@
 import 'dart:convert';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:gatemate_mobile/model/firebase/gatemate_auth.dart';
 import 'package:gatemate_mobile/model/viewmodels/fields_view_model.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 int markerId = 0;
 

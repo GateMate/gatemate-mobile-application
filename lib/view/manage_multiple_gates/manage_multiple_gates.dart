@@ -12,9 +12,6 @@ import 'package:gatemate_mobile/view/ui_primatives/custom_input_field.dart';
 import 'package:get_it/get_it.dart';
 import 'package:latlong2/latlong.dart';
 
-// import '../../model/gate_management_view_model.dart';
-import '../ui_primatives/marker_popup.dart';
-
 late int _markerIdValue;
 // Set<Marker> _markers = HashSet<Marker>();
 late List<Marker> markers = [];

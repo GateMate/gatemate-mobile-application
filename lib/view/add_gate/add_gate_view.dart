@@ -13,7 +13,6 @@ import '../../model/firebase/gatemate_auth.dart';
 import '../login/login.dart';
 import '../ui_primatives/confirmation_button.dart';
 import '../ui_primatives/custom_input_field.dart';
-import '../ui_primatives/marker_popup.dart';
 
 // Set<Marker> markers = <Marker>{};
 List<Marker> markers = [];

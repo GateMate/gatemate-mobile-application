@@ -1,19 +1,12 @@
 // import 'dart:html';
 
-// import 'package:firebase_core/firebase_core.dart';
-import 'dart:convert';
-import 'dart:developer';
+import 'dart:async';
 
-import 'package:flutter/foundation.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:gatemate_mobile/model/data/gate.dart';
-import 'package:gatemate_mobile/model/viewmodels/gate_management_view_model.dart';
-import 'package:gatemate_mobile/view/gate_management/gate_management_view.dart';
-import 'dart:async';
-import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 int markerId = 0;
 
