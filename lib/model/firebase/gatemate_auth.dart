@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gatemate_mobile/main.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 
@@ -53,6 +54,7 @@ class GateMateAuth extends ChangeNotifier {
 
   void signOut() async {
     await _firebaseAuth.signOut();
+    resetAppData();
   }
 
   /// Returns Firebase authorization token. App server can identify a user with this.

@@ -15,22 +15,15 @@ import 'model/firebase/firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  initializeNotificationsPlugin();
-  
+  _initializeNotificationsPlugin();
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // Register singleton classes for entire application
-  final getIt = GetIt.instance;
-  getIt.registerSingleton(GateMateAuth());
-  getIt.registerLazySingleton<ActionCenterViewModel>(
-    () => ActionCenterViewModel(),
-  );
-  getIt.registerLazySingleton<FieldsViewModel>(() => FieldsViewModel());
-  getIt.registerLazySingleton<GateManagementViewModel>(
-    () => GateManagementViewModel(),
-  );
+  // Register singleton classes using GetIt for entire application
+  GetIt.I.registerSingleton(GateMateAuth());
+  _registerViewmodels();
 
   // TODO: Setup for iOS use of Workmanager has not been accomplished
   Workmanager().initialize(
@@ -38,7 +31,7 @@ void main() async {
     isInDebugMode: false,
   );
 
-  // TODO: Cancel tasks upon signout (or check for credentials?)
+  // TODO: Cancel tasks upon signout
 
   // Start app
   runApp(const GateMateApp());
@@ -72,11 +65,42 @@ class GateMateApp extends StatelessWidget {
   }
 }
 
+/// Should be called after sign out. Resets persistent data in viewmodels.
+void resetAppData() {
+  _resetViewmodels();
+}
+
+/// Registers business (non-authentication) viewmodels using GetIt.
+/// Viewmodels registered here should be reset upon signing out.
+void _registerViewmodels() {
+  final getIt = GetIt.instance;
+
+  getIt.registerLazySingleton<ActionCenterViewModel>(
+    () => ActionCenterViewModel(),
+  );
+  getIt.registerLazySingleton<FieldsViewModel>(
+    () => FieldsViewModel(),
+  );
+  getIt.registerLazySingleton<GateManagementViewModel>(
+    () => GateManagementViewModel(),
+  );
+}
+
+/// Resets business (non-authentication) viewmodels using GetIt.
+/// Should reset every viewmodel registered in `registerViewmodels`.
+void _resetViewmodels() {
+  final getIt = GetIt.instance;
+
+  getIt.resetLazySingleton<ActionCenterViewModel>();
+  getIt.resetLazySingleton<FieldsViewModel>();
+  getIt.resetLazySingleton<GateManagementViewModel>();
+}
+
 /// Initializes the plugin used for push notifications.
 /// Plugin: `flutter_local_notifications`
 ///
 /// TODO: Set up iOS and macOS settings
-void initializeNotificationsPlugin() async {
+void _initializeNotificationsPlugin() async {
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   // TODO: 'app_icon' needs to be added as a drawable
