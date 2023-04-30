@@ -14,6 +14,9 @@ import 'model/firebase/firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  initializeNotificationsPlugin();
+  
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -25,36 +28,9 @@ void main() async {
     () => ActionCenterViewModel(),
   );
   getIt.registerLazySingleton<FieldsViewModel>(() => FieldsViewModel());
-  getIt.registerLazySingleton<GateManagementViewModel>(() => GateManagementViewModel());
-
-  // flutter_local_notifications initialization
-  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-  // TODO: 'app_icon' needs to be added as a drawable
-  // resource to the Android head project?
-  const initializationSettingsAndroid =
-      AndroidInitializationSettings('gatemate_temp_app_icon');
-  // TODO: This may be necessary for iOS functionality
-  // https://pub.dev/packages/flutter_local_notifications#initialisation
-  // final initializeSettingsDarwin = DarwinInitializationSettings(
-  //   onDidReceiveLocalNotification: ,
-  // )
-  const initializationSettingsLinux = LinuxInitializationSettings(
-    defaultActionName: 'Open notification', // TODO: May want to change?
+  getIt.registerLazySingleton<GateManagementViewModel>(
+    () => GateManagementViewModel(),
   );
-
-  const initializationSettings = InitializationSettings(
-    android: initializationSettingsAndroid,
-    // iOS: initializationSettingsDarwin,   // TODO
-    // macOS: initializationSettingsDarwin,
-    linux: initializationSettingsLinux,
-  );
-
-  await flutterLocalNotificationsPlugin.initialize(
-    initializationSettings,
-    // onDidReceiveBackgroundNotificationResponse: ,
-  );
-
-  // TODO: Request notification permissions (iOS)
 
   // TODO: Setup for iOS use of Workmanager has not been accomplished
   Workmanager().initialize(
@@ -62,8 +38,6 @@ void main() async {
     isInDebugMode: false,
   );
 
-  // TODO: Move task registration to FieldViewModel initialization;
-  //  register a task for EACH field.
   // TODO: Cancel tasks upon signout (or check for credentials?)
 
   // Start app
@@ -96,4 +70,43 @@ class GateMateApp extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Initializes the plugin used for push notifications.
+/// Plugin: `flutter_local_notifications`
+///
+/// TODO: Set up iOS and macOS settings
+void initializeNotificationsPlugin() async {
+  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+  // TODO: 'app_icon' needs to be added as a drawable
+  // resource to the Android head project?
+
+  const initializationSettingsAndroid = AndroidInitializationSettings(
+    'gatemate_temp_app_icon',
+  );
+
+  // TODO: This may be necessary for iOS functionality
+  // https://pub.dev/packages/flutter_local_notifications#initialisation
+  // final initializeSettingsDarwin = DarwinInitializationSettings(
+  //   onDidReceiveLocalNotification: ,
+  // );
+
+  const initializationSettingsLinux = LinuxInitializationSettings(
+    defaultActionName: 'Open notification', // TODO: May want to change?
+  );
+
+  const initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+    // iOS: initializationSettingsDarwin,   // TODO
+    // macOS: initializationSettingsDarwin,
+    linux: initializationSettingsLinux,
+  );
+
+  await flutterLocalNotificationsPlugin.initialize(
+    initializationSettings,
+    // onDidReceiveBackgroundNotificationResponse: ,
+  );
+
+  // TODO: Request notification permissions (iOS)
 }
