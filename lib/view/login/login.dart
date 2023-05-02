@@ -1,12 +1,8 @@
-import 'dart:convert';
-import 'dart:developer';
-
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:gatemate_mobile/view/home/home.dart';
 import 'package:gatemate_mobile/view/ui_primatives/custom_input_field.dart';
 import 'package:get_it/get_it.dart';
-import 'package:http/http.dart' as http;
 
 import '../../model/firebase/gatemate_auth.dart';
 
@@ -194,23 +190,6 @@ class _LoginMenuState extends State<_LoginMenu> {
       // TODO: Beautify message
       _showErrorMessage(response.message);
     }
-  }
-
-  // TODO: Update
-  // Network service call to create and log userID - still working on this - unknown network error with local url-TODO
-  Future<http.Response> _createUser(String? userId) {
-    log("MAKING HTTP REQUEST");
-    return http.post(
-      Uri.parse('http://127.0.0.1:5000/siginin'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(
-        <String, String?>{
-          'user': userId,
-        },
-      ),
-    );
   }
 
   void _checkLoginStatus() {
