@@ -52,11 +52,28 @@ class FieldsViewModel extends ChangeNotifier {
     final httpClient = http.Client();
 
     // Get all field ID's
-    final fieldsResponse = await _fieldsHttpGet(
+    var fieldsResponse = await _fieldsHttpGet(
       '/getFields',
       authToken,
       httpClient: httpClient,
     );
+
+    // A certain quirk of the backend's implementation (that persists despite
+    // my objections) can require backing off and trying this request again.
+    // This is a rather awkward fix, but the next easiest change would be to
+    // restructure the entire backend (schema and server), which doesn't quite
+    // fall under my realm of responsibility (and I currently don't have the time to do
+    // it for fun). -JSB
+    if (fieldsResponse.statusCode != 200) {
+      Logger().w('Error loading fields, retrying...');
+
+      await Future.delayed(const Duration(milliseconds: 750));
+      fieldsResponse = await _fieldsHttpGet(
+        '/getFields',
+        authToken,
+        httpClient: httpClient,
+      );
+    }
 
     if (fieldsResponse.statusCode != 200) {
       final message = 'Failed to fetch fields. Response code: '
