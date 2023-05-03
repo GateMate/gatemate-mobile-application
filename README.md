@@ -10,4 +10,4 @@ A process referred to as alternate wetting and drying (AWD) aims to conserve wat
 
 ## Mobile Application
 
-![GateMate Home Screen](/blob/home_screen.png "Home Screen")
+![GateMate Home Screen](/screenshots/home_screen.png "Home Screen")
