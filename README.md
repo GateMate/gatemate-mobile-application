@@ -12,13 +12,13 @@ This project was completed for the Computer Science and Computer Engineering Cap
 
 ## Mobile Application
 
-<img src="https://github.com/GateMate/gatemate-mobile-application/blob/readme-improved/screenshots/login_screen.jpg?raw=true" height="500">
-<img src="https://github.com/GateMate/gatemate-mobile-application/blob/readme-improved/screenshots/home_screen.jpg?raw=true" height="500">
-<img src="https://github.com/GateMate/gatemate-mobile-application/blob/readme-improved/screenshots/settings_screen.jpg?raw=true" height="500">
-<img src="https://github.com/GateMate/gatemate-mobile-application/blob/readme-improved/screenshots/new_field_screen.png?raw=true" height="500">
-<img src="https://github.com/GateMate/gatemate-mobile-application/blob/readme-improved/screenshots/gate_mngmt_screen.jpg?raw=true" height="500">
-<img src="https://github.com/GateMate/gatemate-mobile-application/blob/readme-improved/screenshots/action_center_screen.jpg?raw=true" height="500">
-<img src="https://github.com/GateMate/gatemate-mobile-application/blob/readme-improved/screenshots/nav_bar.jpg?raw=true" height="500">
+<img src="https://github.com/GateMate/gatemate-mobile-application/blob/main/screenshots/login_screen.jpg?raw=true" height="500">
+<img src="https://github.com/GateMate/gatemate-mobile-application/blob/main/screenshots/home_screen.jpg?raw=true" height="500">
+<img src="https://github.com/GateMate/gatemate-mobile-application/blob/main/screenshots/settings_screen.jpg?raw=true" height="500">
+<img src="https://github.com/GateMate/gatemate-mobile-application/blob/main/screenshots/new_field_screen.png?raw=true" height="500">
+<img src="https://github.com/GateMate/gatemate-mobile-application/blob/main/screenshots/gate_mngmt_screen.jpg?raw=true" height="500">
+<img src="https://github.com/GateMate/gatemate-mobile-application/blob/main/screenshots/action_center_screen.jpg?raw=true" height="500">
+<img src="https://github.com/GateMate/gatemate-mobile-application/blob/main/screenshots/nav_bar.jpg?raw=true" height="500">
 
 ### Running the app
 
